@@ -7,6 +7,7 @@ from flask import session
 from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
+from helper import *
 
 
 app = Flask(__name__)
@@ -27,10 +28,12 @@ def register():
     return "Register!"
 
 @app.route("/logout/")
+@login_required
 def logout():
 	return "Logout!"
 
 @app.route("/profile/")
+@login_required
 def profile():
     return "Profile!"
 
