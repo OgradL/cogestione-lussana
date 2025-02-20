@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %} Cogestione Lussana {% endblock %}
+
+{% block content %}
+
+	<h1> HOME PAGE </h1>
+	testing <br> <br>
+	{% if logged %}
+		<a href="/profile"> profilo </a>
+		<br>
+	{% else %}
+		<a href="/register"> register </a>
+		<br>
+		<a href="/login"> login </a>
+		<br>
+	{% endif %}
+
+	{% if logged %}
+		<a href="/logout"> logout </a>
+		<br>
+	{% endif %}
+
+{% endblock %}

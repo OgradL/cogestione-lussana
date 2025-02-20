@@ -15,7 +15,7 @@ app.permanent_session_lifetime = timedelta(days=7)
 
 @app.route("/")
 def home():
-    return "cogestione lussana!"
+    return render_template("homepage.html")
 
 
 @app.route("/login/")

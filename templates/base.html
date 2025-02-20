@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title> {% block title%} {% endblock %} </title>																																																																																																																																																																																																		 </title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+		<!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
+		<meta name="google-signin-client_id" content="767317081882-rn7qiemb4kpgvooo7q9dp099m7ca3kn2.apps.googleusercontent.com">
+		-->
+	</head>
+	<body>
+		<div class="header">
+			<strong> Cogestione Lussana </strong>
+
+			<a href="/"> home </a>
+			<a href="/profile"> profilo </a>
+		</div>
+
+		<div class="content">
+			{% block content%}
+			{% endblock %}
+		</div>
+
+		<div class="footer">
+			
+			<h1> footER</h1>
+
+		</div>
+		
+	</body>
+</html>
