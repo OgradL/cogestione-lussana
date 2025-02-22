@@ -8,11 +8,13 @@ from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
 from helper import *
+from db import user, corso
 
 
 app = Flask(__name__)
 app.secret_key = "secret key"
 app.permanent_session_lifetime = timedelta(days=7)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
 
 @app.route("/")
 def home():
