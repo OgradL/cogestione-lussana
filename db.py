@@ -1,10 +1,10 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Column, Float, ForeignKey
-from app import app
+import app
 
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(app.app)
 
 class user(db.Model):
     id = Column(Integer, primary_key=True)
@@ -14,6 +14,7 @@ class user(db.Model):
     fascia4 = Column(Integer)
     fascia5 = Column(Integer)
     fascia6 = Column(Integer)
+
 
 
 class corso(db.Model):

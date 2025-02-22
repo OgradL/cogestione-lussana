@@ -8,7 +8,7 @@ from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
 from helper import *
-from db import user, corso
+import db
 
 
 app = Flask(__name__)
