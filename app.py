@@ -4,6 +4,7 @@ from flask import redirect, url_for
 from flask import render_template
 from flask import request, jsonify, json
 from flask import session
+from flask import flash
 from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -43,10 +44,41 @@ def execute():
     elif request.method == "GET":
         return render_template("admin.html")
     return "idk"
-    
 
+# azioni
+
+@app.route("/iscrizione/<id_corso>", methods=["POST"])
+@login_required
+def iscrizione(id_corso):
+    
+    print("iscritto a", id_corso)
+    
+    return Response([str(id_corso).encode()])
+
+@app.route("/corso/<id_corso>", methods=["GET"])
+def info_corso(id_corso):
+    # get the data from db
+    return render_template("corso.html", data=db.corso(id=1,
+                                                       titolo="prova corsoo",
+                                                       descrizione="descrizione bella",
+                                                       posti_totali=50,
+                                                       posti_occupati=20,
+                                                       aula="Ed. 2, Piano 1, aula 36",
+                                                       fascia="1"
+                                                       ))
+
+
+# profilo
+
+@app.route("/profile/")
+@login_required
+def profile():
+    return "Profile!"
+
+# accesso al profilo
 @app.route("/login/")
 def login():
+    session["email"] = "prova"
     return "Login!"
 
 @app.route("/register/")
@@ -57,11 +89,6 @@ def register():
 @login_required
 def logout():
     return "Logout!"
-
-@app.route("/profile/")
-@login_required
-def profile():
-    return "Profile!"
 
 
 if __name__ == "__main__":

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %} {{ data.titolo }} {% endblock %}
+
+{% block content %}
+
+	<h1> {{ data.titolo }} </h1>
+	<p> id: {{ data.id }} </p>
+	<p> {{ data.descrizione }} </p>
+	<p> posti: {{ data.posti_occupati }} / {{ data.posti_totali }} </p>
+	<p> aula: {{ data.aula }} </p>
+
+	<button onclick="iscrizione({{ data.id }})"> ISCRIVITI! </button>
+	
+{% endblock %}

@@ -16,3 +16,13 @@ async function send_comando() {
 	document.getElementById("result").innerText = await response.headers.get("result");
 
 }
+
+async function iscrizione(id_corso) {
+	let url = "/iscrizione/" + id_corso;
+	console.log(document.URL, url);
+	const response = await fetch(url, {
+		method:"POST"
+	});
+
+	console.log(response.status);
+}

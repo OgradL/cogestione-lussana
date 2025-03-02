@@ -18,6 +18,7 @@ class user(db.Model):
 
 class corso(db.Model):
     id = Column(Integer, primary_key=True)
+    titolo = Column(String(100))
     descrizione = Column(String(5000))
     posti_totali = Column(Integer)
     posti_occupati = Column(Integer)
