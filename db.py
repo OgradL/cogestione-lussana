@@ -1,10 +1,11 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Column, Float, ForeignKey
-import app
+import main
+from os import path
 
 
-db = SQLAlchemy(app.app)
+db = SQLAlchemy(main.app)
 
 class user(db.Model):
     id = Column(Integer, primary_key=True)
@@ -24,4 +25,9 @@ class corso(db.Model):
     posti_occupati = Column(Integer)
     aula = Column(String(100))
     fascia = Column(Integer)
+    utenti = db.relationship("user")
 
+def init_db(app, DB_NAME):
+    db.init_app(app)
+    if not path.exists(path.join(path.dirname(__file__), "instance", DB_NAME)):
+        db.create_all()

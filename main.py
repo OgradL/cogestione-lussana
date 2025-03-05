@@ -14,10 +14,12 @@ from io import StringIO
 from contextlib import redirect_stdout
 
 
+DB_NAME = "database.db"
 app = Flask(__name__)
 app.secret_key = "secret key"
 app.permanent_session_lifetime = timedelta(days=7)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+
 
 @app.route("/")
 def home():
@@ -96,4 +98,5 @@ if __name__ == "__main__":
         # db.drop_all()
         # db.init_app(app)
         # db.db.create_all()
+        db.init_db(app, DB_NAME)
         app.run(debug=True)
