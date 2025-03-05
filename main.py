@@ -60,7 +60,7 @@ def iscrizione(id_corso):
 @app.route("/corso/<id_corso>", methods=["GET"])
 def info_corso(id_corso):
     # get the data from db
-    return render_template("corso.html", data=db.corso(id=1,
+    return render_template("corso.html", data=db.corso(id=id_corso,
                                                        titolo="prova corsoo",
                                                        descrizione="descrizione bella",
                                                        posti_totali=50,
