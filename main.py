@@ -8,7 +8,7 @@ from flask import flash
 from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
-from helper import *
+from helper import login_required
 import db
 from io import StringIO
 from contextlib import redirect_stdout
@@ -95,47 +95,51 @@ def logout():
 
 
 if __name__ == "__main__":
+    corsitmp = [
+        db.corso(id=0,
+            titolo="prova corsoo",
+            descrizione="descrizione bella",
+            posti_totali=50,
+            posti_occupati=20,
+            aula="Ed. 2, Piano 1, aula 36",
+            fascia="1"
+        ),
+        db.corso(id=1,
+            titolo="corso serio",
+            descrizione="black jack",
+            posti_totali=5,
+            posti_occupati=1,
+            aula="Ed. 2, Piano 2, aula 32",
+            fascia="2"
+        ),
+        db.corso(id=2,
+            titolo="corso brutto",
+            descrizione="descrizione brutta",
+            posti_totali=10,
+            posti_occupati=0,
+            aula="Ed. 2, Piano 1, aula 36",
+            fascia="1"
+        ),
+        db.corso(id=3,
+            titolo="corso cp",
+            descrizione="ds + dp + grafi + advanced techincs",
+            posti_totali=150,
+            posti_occupati=149,
+            aula="Ed. 2, Piano 0, Laboratorio Ravasio",
+            fascia="1"
+        )
+    ]
+    
     with app.app_context():
         # db.drop_all()
         # db.init_app(app)
         # db.db.create_all()
         db.init_db(app, DB_NAME)
         
-        # db.db.session.add(db.corso(id=0,
-        #                             titolo="prova corsoo",
-        #                             descrizione="descrizione bella",
-        #                             posti_totali=50,
-        #                             posti_occupati=20,
-        #                             aula="Ed. 2, Piano 1, aula 36",
-        #                             fascia="1"
-        #                             ))
-        # db.db.session.commit()
-        # db.db.session.add(db.corso(id=1,
-        #                             titolo="corso serio",
-        #                             descrizione="black jack",
-        #                             posti_totali=5,
-        #                             posti_occupati=1,
-        #                             aula="Ed. 2, Piano 2, aula 32",
-        #                             fascia="2"
-        #                             ))
-        # db.db.session.commit()
-        # db.db.session.add(db.corso(id=2,
-        #                             titolo="corso brutto",
-        #                             descrizione="descrizione brutta",
-        #                             posti_totali=10,
-        #                             posti_occupati=0,
-        #                             aula="Ed. 2, Piano 1, aula 36",
-        #                             fascia="1"
-        #                             ))
-        # db.db.session.commit()
-        # db.db.session.add(db.corso(id=3,
-        #                             titolo="corso cp",
-        #                             descrizione="ds + dp + grafi + advanced techincs",
-        #                             posti_totali=150,
-        #                             posti_occupati=149,
-        #                             aula="Ed. 2, Piano 0, Laboratorio Ravasio",
-        #                             fascia="1"
-        #                             ))
-        # db.db.session.commit()
+        for corso in corsitmp:
+            q = db.db.session.execute(db.db.select(db.corso).filter_by(id=corso.id)).first()
+            if q is None:
+                db.db.session.execute(db.db.add(corso))
+                db.db.session.commit()
         
         app.run(debug=True)

@@ -6,11 +6,11 @@ from flask import session
 from datetime import timedelta, datetime
 
 orari_fasce = [
-	datetime.fromisoformat("2025-04-14T09:00"),
-	datetime.fromisoformat("2025-04-14T11:00"),
-	datetime.fromisoformat("2025-04-15T09:00"),
-	datetime.fromisoformat("2025-04-15T11:00"),
-	datetime.fromisoformat("2025-04-16T09:00")
+    datetime.fromisoformat("2025-04-14T09:00"),
+    datetime.fromisoformat("2025-04-14T11:00"),
+    datetime.fromisoformat("2025-04-15T09:00"),
+    datetime.fromisoformat("2025-04-15T11:00"),
+    datetime.fromisoformat("2025-04-16T09:00")
 ]
 
 def login_required(f):
