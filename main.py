@@ -102,7 +102,9 @@ if __name__ == "__main__":
             posti_totali=50,
             posti_occupati=20,
             aula="Ed. 2, Piano 1, aula 36",
-            fascia="1"
+            fascia="1",
+            organizzatori="persona 1",
+            note="nota 1"
         ),
         db.corso(id=1,
             titolo="corso serio",
@@ -110,7 +112,9 @@ if __name__ == "__main__":
             posti_totali=5,
             posti_occupati=1,
             aula="Ed. 2, Piano 2, aula 32",
-            fascia="2"
+            fascia="2",
+            organizzatori="beccia",
+            note="wooof"
         ),
         db.corso(id=2,
             titolo="corso brutto",
@@ -118,7 +122,9 @@ if __name__ == "__main__":
             posti_totali=10,
             posti_occupati=0,
             aula="Ed. 2, Piano 1, aula 36",
-            fascia="1"
+            fascia="1",
+            organizzatori="ferry",
+            note="tosta"
         ),
         db.corso(id=3,
             titolo="corso cp",
@@ -126,7 +132,9 @@ if __name__ == "__main__":
             posti_totali=150,
             posti_occupati=149,
             aula="Ed. 2, Piano 0, Laboratorio Ravasio",
-            fascia="1"
+            fascia="1",
+            organizzatori="drago",
+            note="tanta cp bella"
         )
     ]
     

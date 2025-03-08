@@ -25,6 +25,8 @@ class corso(db.Model):
     posti_occupati = Column(Integer)
     aula = Column(String(100))
     fascia = Column(Integer)
+    organizzatori = Column(String(200))
+    note = Column(String(1000))
 
 def init_db(app, DB_NAME):
     db.init_app(app)
