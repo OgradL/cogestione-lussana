@@ -49,6 +49,14 @@ def execute():
 
 # azioni
 
+@app.route("/lista-corsi/<n_fascia>", methods=["GET"])
+def lista_corsi(n_fascia):
+    corsi = db.db.session.execute(db.db.select(db.corso).filter_by(fascia=n_fascia)).all()
+    
+    # corsi = db.corso.query.filter_by(id=n_fascia).all()
+    corsi = list(map(lambda x : x[0], corsi))
+    return render_template("lista-corsi.html", fascia=n_fascia, corsi=corsi, dim=len(corsi))
+
 @app.route("/iscrizione/<id_corso>", methods=["POST"])
 @login_required
 def iscrizione(id_corso):
@@ -59,16 +67,8 @@ def iscrizione(id_corso):
 
 @app.route("/corso/<id_corso>", methods=["GET"])
 def info_corso(id_corso):
-    # get the data from db
-    return render_template("corso.html", data=db.corso(id=id_corso,
-                                                       titolo="prova corsoo",
-                                                       descrizione="descrizione bella",
-                                                       posti_totali=50,
-                                                       posti_occupati=20,
-                                                       aula="Ed. 2, Piano 1, aula 36",
-                                                       fascia="1"
-                                                       ))
-
+    corso = db.corso.query.filter_by(id=id_corso).first()
+    return render_template("corso.html", data=corso)
 
 # profilo
 
@@ -90,6 +90,7 @@ def register():
 @app.route("/logout/")
 @login_required
 def logout():
+    session.clear()
     return "Logout!"
 
 
@@ -99,4 +100,42 @@ if __name__ == "__main__":
         # db.init_app(app)
         # db.db.create_all()
         db.init_db(app, DB_NAME)
+        
+        # db.db.session.add(db.corso(id=0,
+        #                             titolo="prova corsoo",
+        #                             descrizione="descrizione bella",
+        #                             posti_totali=50,
+        #                             posti_occupati=20,
+        #                             aula="Ed. 2, Piano 1, aula 36",
+        #                             fascia="1"
+        #                             ))
+        # db.db.session.commit()
+        # db.db.session.add(db.corso(id=1,
+        #                             titolo="corso serio",
+        #                             descrizione="black jack",
+        #                             posti_totali=5,
+        #                             posti_occupati=1,
+        #                             aula="Ed. 2, Piano 2, aula 32",
+        #                             fascia="2"
+        #                             ))
+        # db.db.session.commit()
+        # db.db.session.add(db.corso(id=2,
+        #                             titolo="corso brutto",
+        #                             descrizione="descrizione brutta",
+        #                             posti_totali=10,
+        #                             posti_occupati=0,
+        #                             aula="Ed. 2, Piano 1, aula 36",
+        #                             fascia="1"
+        #                             ))
+        # db.db.session.commit()
+        # db.db.session.add(db.corso(id=3,
+        #                             titolo="corso cp",
+        #                             descrizione="ds + dp + grafi + advanced techincs",
+        #                             posti_totali=150,
+        #                             posti_occupati=149,
+        #                             aula="Ed. 2, Piano 0, Laboratorio Ravasio",
+        #                             fascia="1"
+        #                             ))
+        # db.db.session.commit()
+        
         app.run(debug=True)

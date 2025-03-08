@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %} Corsi fascia {{ fascia }} {% endblock %}
+
+{% block content %}
+
+	<table>
+	{% for corso in corsi %}
+		<tr>
+			<th> {{ corso.titolo }} </th>
+			<th> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </th>
+
+			<th> <a href="/corso/{{corso.id}}"> >> </a> </th>
+		</tr>
+	{% endfor %}
+
+	</table>
+{% endblock %}
