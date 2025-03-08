@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-{% block title %} {{ data.titolo }} {% endblock %}
+{% block title %} {{ corso.titolo }} {% endblock %}
 
 {% block content %}
 
-	<h1> {{ data.titolo }} </h1>
-	<p> id: {{ data.id }} </p>
-	<p> {{ data.descrizione }} </p>
-	<p> posti: {{ data.posti_occupati }} / {{ data.posti_totali }} </p>
-	<p> aula: {{ data.aula }} </p>
+	<a href="/lista-corsi/{{ corso.fascia }}"> <- indietro </a>
 
-	<button onclick="iscrizione({{ data.id }})"> ISCRIVITI! </button>
+	<h1> {{ corso.titolo }} </h1>
+	<p> id: {{ corso.id }} </p>
+	<p> {{ corso.descrizione }} </p>
+	<p> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </p>
+	<p> aula: {{ corso.aula }} </p>
+
+	<button onclick="iscrizione({{ corso.id }})"> ISCRIVITI! </button>
 	
 {% endblock %}

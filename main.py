@@ -68,7 +68,7 @@ def iscrizione(id_corso):
 @app.route("/corso/<id_corso>", methods=["GET"])
 def info_corso(id_corso):
     corso = db.corso.query.filter_by(id=id_corso).first()
-    return render_template("corso.html", data=corso)
+    return render_template("corso.html", corso=corso)
 
 # profilo
 
@@ -139,7 +139,7 @@ if __name__ == "__main__":
         for corso in corsitmp:
             q = db.db.session.execute(db.db.select(db.corso).filter_by(id=corso.id)).first()
             if q is None:
-                db.db.session.execute(db.db.add(corso))
+                db.db.session.add(corso)
                 db.db.session.commit()
         
         app.run(debug=True)
