@@ -24,7 +24,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 
 @app.route("/")
 def home():
-    return render_template("homepage.html")
+    logged = session.get("logged", False)
+    return render_template("homepage.html", logged=logged)
 
 @app.route("/admin", methods=["GET", "POST"])
 def execute():
@@ -140,7 +141,7 @@ def register():
 @login_required
 def logout():
     session.clear()
-    return "Logout!"
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":
