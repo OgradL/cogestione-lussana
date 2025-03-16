@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} Registrazione {% endblock %}
+
+{% block content %}
+
+	<h1> Registrazione </h1>
+
+	<h4> Attenzione: Ci si può registrare solo con la mail istituzionale (...@liceolussana.eu) </h4>
+
+	<form class="register-form" method="POST">
+		<div class="input_fields">
+			<input type="text" name="email" id="email" class="inputform" placeholder="Email" required>
+			<br>
+			<input type="text" name="name" id="name" class="inputform" placeholder="Nome" required>
+			<br>
+			<input type="text" name="lastname" id="lastname" class="inputform" placeholder="Cognome" required>
+			<br>
+			<input type="text" name="classe" id="classe" class="inputform" placeholder="es. 1A, 2B..." required>
+			<br>
+			<input type="password" name="password" id="password" class="inputform" placeholder="Password" required>
+			<br>
+		</div>
+		<button type="submit" class="outline_md_btn">
+			Submit
+		</button>
+	</form>
+
+{% endblock %}

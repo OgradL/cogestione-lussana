@@ -9,6 +9,11 @@ db = SQLAlchemy(main.app)
 
 class user(db.Model):
     id = Column(Integer, primary_key=True)
+    email = Column(String(100), unique=True)
+    nome = Column(String(50))
+    cognome = Column(String(50))
+    classe = Column(String(2))
+    password = Column(String(50))
     iscrizioni = db.relationship('iscrizione')
 
 

@@ -8,10 +8,11 @@ from flask import flash
 from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
-from helper import login_required
+from helper import login_required, EMAIL_REGEX
 import db
 from io import StringIO
 from contextlib import redirect_stdout
+import re
 
 
 DB_NAME = "database.db"
@@ -83,9 +84,38 @@ def login():
     session["email"] = "prova"
     return "Login!"
 
-@app.route("/register/")
+@app.route("/register/", methods=["GET", "POST"])
 def register():
-    return "Register!"
+    if request.method == "GET":
+        return render_template("register.html")
+    
+    nome = request.form.get("name")
+    cognome = request.form.get("lastname")
+    email = request.form.get("email")
+    classe = request.form.get("classe")
+    password = request.form.get("password")
+    
+    if re.match(EMAIL_REGEX, email) is None:
+        flash("Email non valida", 'error')
+        return render_template('register.html')
+    if not email.endswith("@liceolussana.eu"):
+        flash("Devi usare l'email istituzionale (...@liceolussana.eu)")
+        return render_template('register.html')
+    
+    # more checks
+    
+    user = db.db.session.execute(db.db.select(db.user).filter_by(email=email)).first()
+    
+    if user is not None:
+        flash("L'email è già usata", "error")
+        return render_template("register.html")
+    
+    user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
+    db.db.session.add(user)
+    db.db.session.commit()
+    
+    flash("Registrato con successo", 'success')
+    return render_template("register.html")
 
 @app.route("/logout/")
 @login_required
