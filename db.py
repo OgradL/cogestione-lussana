@@ -9,12 +9,7 @@ db = SQLAlchemy(main.app)
 
 class user(db.Model):
     id = Column(Integer, primary_key=True)
-    fascia1 = Column(Integer)
-    fascia2 = Column(Integer)
-    fascia3 = Column(Integer)
-    fascia4 = Column(Integer)
-    fascia5 = Column(Integer)
-
+    iscrizioni = db.relationship('iscrizione')
 
 
 class corso(db.Model):
@@ -27,6 +22,14 @@ class corso(db.Model):
     fascia = Column(Integer)
     organizzatori = Column(String(200))
     note = Column(String(1000))
+    iscrizioni = db.relationship('iscrizione')
+
+
+class iscrizione(db.Model):
+    id = Column(Integer, primary_key=True)
+    utente = Column(Integer, ForeignKey('user.id'))
+    corso = Column(Integer, ForeignKey('corso.id'))
+
 
 def init_db(app, DB_NAME):
     db.init_app(app)
