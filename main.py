@@ -79,10 +79,29 @@ def profile():
     return "Profile!"
 
 # accesso al profilo
-@app.route("/login/")
+@app.route("/login/", methods=["GET", "POST"])
 def login():
-    session["email"] = "prova"
-    return "Login!"
+    if request.method == "GET":
+        return render_template("login.html")
+    
+    email = request.form.get("email")
+    password = request.form.get("password")
+    
+    user = db.db.session.execute(db.db.select(db.user).filter_by(email=email)).first()
+    
+    if user is None:
+        flash("Email o password errati", 'error')
+        return render_template("login.html")
+    
+    if user[0].password != password:
+        flash("Email o password errati", 'error')
+        return render_template("login.html")
+
+    session["email"] = "email"
+    session["logged"] = True
+    
+    flash("Login effettuato con successo", 'success')
+    return redirect(url_for("home"))
 
 @app.route("/register/", methods=["GET", "POST"])
 def register():
@@ -115,7 +134,7 @@ def register():
     db.db.session.commit()
     
     flash("Registrato con successo", 'success')
-    return render_template("register.html")
+    return redirect(url_for("home"))
 
 @app.route("/logout/")
 @login_required
