@@ -59,13 +59,46 @@ def lista_corsi(n_fascia):
     corsi = list(map(lambda x : x[0], corsi))
     return render_template("lista-corsi.html", fascia=n_fascia, corsi=corsi, dim=len(corsi))
 
+@app.route("/lista-corsi/", methods=["GET"])
+def lista_corsi_help():
+    return redirect(request.url + "1")
+
 @app.route("/iscrizione/<id_corso>", methods=["POST"])
 @login_required
 def iscrizione(id_corso):
     
-    print("iscritto a", id_corso)
+    user = db.db.session.execute(db.db.select(db.user).filter_by(email=session["email"])).first()[0]
+    corso = db.db.session.execute(db.db.select(db.corso).filter_by(id=id_corso)).first()[0]
     
-    return Response([str(id_corso).encode()])
+    if corso is None:
+        flash("Il corso non esiste", 'error')
+        return redirect(request.url)
+    
+    # iscrizioni = db.db.session.execute(db.db.select(db.iscrizione).filter_by())
+    # print(user)
+    # print(user[0].iscrizioni)
+    # iscrizioni = user.iscrizioni
+
+    sel = db.db.select(db.iscrizione).join(db.user).where(db.user.email == session["email"])
+    iscrizioni = db.db.session.scalars(sel).all()
+    # iscrizioni = db.db.session.scalars(db.db.select(db.iscrizione).where(db.iscrizione.userref.email == session["email"])).all()
+    
+    #(db.db.select(db.user, db.iscrizione, db.corso).filter_by(email=session["email"])).all()
+
+    # print(iscrizioni)
+    
+    for iscrizione in iscrizioni:
+        if iscrizione.corsoref.fascia == corso.fascia:
+            flash("Sei già iscritto a un corso per questa fascia. Puoi annullare l'iscrizione dal tuo profilo", 'error')
+            return redirect("/profile")
+    
+    
+    # print("iscritto a", id_corso)
+    db.db.session.add(db.iscrizione(utente=user.id, corso=corso.id))
+    db.db.session.commit()
+    
+    flash("Iscritto con successo", 'success')
+    return redirect(request.url)
 
 @app.route("/corso/<id_corso>", methods=["GET"])
 def info_corso(id_corso):
@@ -98,7 +131,7 @@ def login():
         flash("Email o password errati", 'error')
         return render_template("login.html")
 
-    session["email"] = "email"
+    session["email"] = email
     session["logged"] = True
     
     flash("Login effettuato con successo", 'success')

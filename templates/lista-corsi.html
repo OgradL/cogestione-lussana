@@ -6,6 +6,7 @@
 	<table>
 	{% for corso in corsi %}
 		<tr>
+			<th> {{ corso.id }} </th>
 			<th> {{ corso.titolo }} </th>
 			<th> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </th>
 

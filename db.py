@@ -14,7 +14,7 @@ class user(db.Model):
     cognome = Column(String(50))
     classe = Column(String(2))
     password = Column(String(50))
-    iscrizioni = db.relationship('iscrizione')
+    iscrizioni = db.relationship('iscrizione', backref="userref", lazy=True)
 
 
 class corso(db.Model):
@@ -27,7 +27,7 @@ class corso(db.Model):
     fascia = Column(Integer)
     organizzatori = Column(String(200))
     note = Column(String(1000))
-    iscrizioni = db.relationship('iscrizione')
+    iscrizioni = db.relationship('iscrizione', backref="corsoref", lazy=True)
 
 
 class iscrizione(db.Model):
