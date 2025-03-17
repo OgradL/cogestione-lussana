@@ -244,7 +244,7 @@ def register():
         flash("L'email è già usata", "error")
         return render_template("register.html")
     
-    password = generate_password_hash(password, method="sha256")
+    password = generate_password_hash(password)
     user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
     db.db.session.add(user)
     db.db.session.commit()
