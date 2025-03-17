@@ -227,7 +227,8 @@ def register():
     cognome = request.form.get("lastname")
     email = request.form.get("email")
     classe = request.form.get("classe")
-    password = request.form.get("password")
+    password1 = request.form.get("password1")
+    password2 = request.form.get("password2")
     
     if re.match(EMAIL_REGEX, email) is None:
         flash("Email non valida", 'error')
@@ -244,7 +245,11 @@ def register():
         flash("L'email è già usata", "error")
         return render_template("register.html")
     
-    password = generate_password_hash(password)
+    if password1 != password2:
+        flash("Le password non corrispondono", 'error')
+        return render_template("register.html")
+    
+    password = generate_password_hash(password1)
     user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
     db.db.session.add(user)
     db.db.session.commit()
