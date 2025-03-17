@@ -13,7 +13,9 @@ import db
 from io import StringIO
 from contextlib import redirect_stdout
 import re
+from os import path
 from werkzeug.security import check_password_hash, generate_password_hash
+from xlsxwriter import Workbook
 
 
 DB_NAME = "database.db"
@@ -86,6 +88,49 @@ def report():
     
     
     return render_template("report.html", dati=dati)
+
+def create_xlsx_file(file_path: str, headers: dict, items: list):
+    with Workbook(file_path) as workbook:
+        worksheet = workbook.add_worksheet()
+        worksheet.write_row(row=0, col=0, data=headers.values())
+        header_keys = list(headers.keys())
+        for index, item in enumerate(items):
+            row = map(lambda field_id: item.get(field_id, ''), header_keys)
+            worksheet.write_row(row=index + 1, col=0, data=row)
+
+@app.route("/save-data/", methods=["GET"])
+def save_data():
+    date = str(datetime.now().time())
+    date = date[:date.find('.')]
+
+    file_name = path.join('.', "output-data", "dati-" + date + ".xlsx")
+    # file_name = "dati-" + date + ".xlsx"
+    
+    headers = {
+        "id" : "Id",
+        "nome" : "Nome",
+        "cognome" : "Cognome",
+        "classe" : "Classe",
+        "id_corso" : "Id corso",
+        "fascia" : "Fascia",
+    }
+    
+    items = []
+    iscrizioni = db.db.session.scalars(db.db.select(db.iscrizione)).all()
+    
+    for iscrizione in iscrizioni:
+        items.append({
+            "id" : iscrizione.id,
+            "nome" : iscrizione.userref.nome,
+            "cognome" : iscrizione.userref.cognome,
+            "classe" : iscrizione.userref.classe,
+            "id_corso" : iscrizione.corsoref.id,
+            "fascia" : iscrizione.corsoref.fascia
+        })
+    
+    create_xlsx_file(file_name, headers, items)
+    
+    return "Done!"
 
 # azioni
 
