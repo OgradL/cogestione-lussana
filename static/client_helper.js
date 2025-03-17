@@ -19,12 +19,14 @@ async function send_comando() {
 
 async function iscrizione(id_corso) {
 	let url = "/iscrizione/" + id_corso;
-	console.log(document.URL, url);
-	const response = await fetch(url, {
+	// console.log(document.URL, url);
+	await fetch(url, {
 		method:"POST"
+	}).then((res) => {
+		window.location.reload();
 	});
 
-	console.log(response.status);
+	// console.log(response.status);
 }
 
 function del_flashed_message(message) {
