@@ -116,10 +116,10 @@ def profile():
     sel = db.db.select(db.iscrizione).join(db.user).where(db.user.email == session["email"])
     iscrizioni = db.db.session.scalars(sel).all()
     
-    corsi = [dict() for _ in range(6)]
+    corsi = [dict() for _ in range(7)]
     
     for iscrizione in iscrizioni:
-        d = corsi[iscrizione.corsoref.fascia - 1]
+        d = corsi[iscrizione.corsoref.fascia]
         d["id"] = iscrizione.corsoref.id
         d["titolo"] = iscrizione.corsoref.titolo
         d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
