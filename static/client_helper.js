@@ -29,6 +29,16 @@ async function iscrizione(id_corso) {
 	// console.log(response.status);
 }
 
+async function annulla_iscrizione(id_corso) {
+	let url = "/annulla-iscrizione/" + id_corso;
+
+	await fetch(url, {
+		method:"POST"
+	}).then((ret) => {
+		window.location.reload();
+	});
+}
+
 function del_flashed_message(message) {
 	console.log(message);
 	message.parentElement.remove();
