@@ -26,3 +26,8 @@ async function iscrizione(id_corso) {
 
 	console.log(response.status);
 }
+
+function del_flashed_message(message) {
+	console.log(message);
+	message.parentElement.remove();
+}
