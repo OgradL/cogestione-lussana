@@ -110,7 +110,23 @@ def info_corso(id_corso):
 @app.route("/profile/")
 @login_required
 def profile():
-    return "Profile!"
+    
+    user = db.db.session.execute(db.db.select(db.user).filter_by(email=session["email"])).first()[0]
+    
+    sel = db.db.select(db.iscrizione).join(db.user).where(db.user.email == session["email"])
+    iscrizioni = db.db.session.scalars(sel).all()
+    
+    corsi = [dict() for _ in range(6)]
+    
+    for iscrizione in iscrizioni:
+        d = corsi[iscrizione.corsoref.fascia - 1]
+        d["id"] = iscrizione.corsoref.id
+        d["titolo"] = iscrizione.corsoref.titolo
+        d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
+        # d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({iscrizione.corsoref.id})\"> Annulla </button>"
+    
+    
+    return render_template("profile.html", corsi=corsi)
 
 # accesso al profilo
 @app.route("/login/", methods=["GET", "POST"])
