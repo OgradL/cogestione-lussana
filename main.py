@@ -63,9 +63,11 @@ def lista_corsi(n_fascia):
 def lista_corsi_help():
     return redirect(request.url + "1")
 
-@app.route("/iscrizione/<id_corso>", methods=["POST"])
+@app.route("/iscrizione/", methods=["POST"])
 @login_required
-def iscrizione(id_corso):
+def iscrizione():
+    dati = json.loads(request.data)
+    id_corso = dati["id_corso"]
     
     user = db.db.session.execute(db.db.select(db.user).filter_by(email=session["email"])).first()[0]
     corso = db.db.session.execute(db.db.select(db.corso).filter_by(id=id_corso)).first()[0]
@@ -100,15 +102,14 @@ def iscrizione(id_corso):
     flash("Iscritto con successo", 'success')
     return redirect(request.url)
 
-@app.route("/annulla-iscrizione/<id_corso>", methods=["POST"])
+@app.route("/annulla-iscrizione/", methods=["POST"])
 @login_required
-def annulla_iscrizione(id_corso):
-
+def annulla_iscrizione():
+    dati = json.loads(request.data)
+    id_corso = dati["id_corso"]
+    
     sel = db.db.select(db.iscrizione).join(db.user).where(db.user.email == session["email"] and db.corso.id == id_corso)
     iscrizione = db.db.session.scalars(sel).first()
-    
-    print(id_corso, session["email"])
-    print(iscrizione)
     
     if iscrizione is None:
         return Response([b"bad"], 404)

@@ -17,11 +17,12 @@ async function send_comando() {
 
 }
 
-async function iscrizione(id_corso) {
-	let url = "/iscrizione/" + id_corso;
+async function iscrizione(corso_id) {
+	let url = "/iscrizione/";
 	// console.log(document.URL, url);
 	await fetch(url, {
-		method:"POST"
+		method: "POST",
+		body: JSON.stringify({id_corso : corso_id})
 	}).then((res) => {
 		window.location.reload();
 	});
@@ -29,17 +30,17 @@ async function iscrizione(id_corso) {
 	// console.log(response.status);
 }
 
-async function annulla_iscrizione(id_corso) {
-	let url = "/annulla-iscrizione/" + id_corso;
+async function annulla_iscrizione(corso_id) {
+	let url = "/annulla-iscrizione/";
 
 	await fetch(url, {
-		method:"POST"
+		method: "POST",
+		body: JSON.stringify({id_corso : corso_id})
 	}).then((ret) => {
 		window.location.reload();
 	});
 }
 
 function del_flashed_message(message) {
-	console.log(message);
 	message.parentElement.remove();
 }
