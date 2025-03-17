@@ -8,7 +8,7 @@ from flask import flash
 from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
-from helper import login_required, EMAIL_REGEX
+from helper import login_required, EMAIL_REGEX, sanitize_classe
 import db
 from io import StringIO
 from contextlib import redirect_stdout
@@ -236,6 +236,12 @@ def register():
     if not email.endswith("@liceolussana.eu"):
         flash("Devi usare l'email istituzionale (...@liceolussana.eu)")
         return render_template('register.html')
+    
+    classe = sanitize_classe(classe)
+    
+    if classe is None or False:
+        flash("La classe non è valida", 'error')
+        return render_template("register.html")
     
     # more checks
     

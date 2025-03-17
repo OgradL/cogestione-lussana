@@ -23,3 +23,14 @@ def login_required(f):
         return redirect(url_for('login', next=request.path.strip("/")))
     wrapped.__name__ = f.__name__
     return wrapped
+
+def sanitize_classe(classe : str):
+    num, sez = '', ''
+    for c in classe:
+        if c.isalpha():
+            sez += c.upper()
+        elif c.isnumeric():
+            num += c
+    if len(num) == 1 and len(sez) == 1:
+        return num + sez.upper()
+    return None
