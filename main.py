@@ -68,7 +68,7 @@ def report():
         # prev = dati[iscrizione.userref.classe].get(iscrizione.corsoref.fascia)
         # print(dati[iscrizione.userref.classe], " -- ", prev)
         # print(dati["5g"])
-        print(dati)
+        # print(dati)
         dati[iscrizione.userref.classe][iscrizione.corsoref.fascia] += 1
     
     for utente in utenti:
@@ -77,7 +77,7 @@ def report():
     
     for classe in dati:
         d = dati[classe]
-        print(classe, d)
+        # print(classe, d)
         for i in range(1, 6):
             dati[classe].setdefault(i, 0)
             dati[classe][i] = round(dati[classe][i] / info_classe[classe] * 100)
@@ -113,6 +113,10 @@ def iscrizione():
         flash("Il corso non esiste", 'error')
         return redirect(request.url)
     
+    if corso.posti_occupati == corso.posti_totali:
+        flash("Il corso è pieno!", 'error')
+        return redirect(request.url)
+    
     # iscrizioni = db.db.session.execute(db.db.select(db.iscrizione).filter_by())
     # print(user)
     # print(user[0].iscrizioni)
@@ -128,12 +132,14 @@ def iscrizione():
     
     for iscrizione in iscrizioni:
         if iscrizione.corsoref.fascia == corso.fascia:
+            print("hehe")
             flash("Sei già iscritto a un corso per questa fascia. Puoi annullare l'iscrizione dal tuo profilo", 'error')
-            return redirect("/profile")
+            return redirect(request.url)
     
     
     # print("iscritto a", id_corso)
     db.db.session.add(db.iscrizione(utente=user.id, corso=corso.id))
+    corso.posti_occupati += 1
     db.db.session.commit()
     
     flash("Iscritto con successo", 'success')
@@ -145,6 +151,7 @@ def annulla_iscrizione():
     dati = json.loads(request.data)
     id_corso = dati["id_corso"]
     
+    corso = db.db.session.execute(db.db.select(db.corso).filter_by(id=id_corso)).first()[0]
     sel = db.db.select(db.iscrizione).join(db.user).where(db.user.email == session["email"] and db.corso.id == id_corso)
     iscrizione = db.db.session.scalars(sel).first()
     
@@ -152,6 +159,7 @@ def annulla_iscrizione():
         return Response([b"bad"], 404)
     
     db.db.session.delete(iscrizione)
+    corso.posti_occupati -= 1
     db.db.session.commit()
     
     return jsonify({})
