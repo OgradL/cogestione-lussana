@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %} Report iscrizioni {% endblock %}
+
+{% block content %}
+
+	<h3> <strong> Report iscrizioni </strong> </h3>
+	<br> <br>
+
+	<table>
+		<tr>
+			<th> classe </th>
+			<th> 1 </th>
+			<th> 2 </th>
+			<th> 3 </th>
+			<th> 4 </th>
+			<th> 5 </th>
+		</tr>
+		{% for classe in dati %}
+			<tr>
+				<th> {{ classe }} </th>
+				{% for fascia in range(1, 6) %}
+					<th class="
+						status-{% if dati[classe][fascia] < 40 %}red{% elif dati[classe][fascia] < 70 %}yellow{% else %}green{% endif %}
+					"> {{ dati[classe][fascia] }}% </th>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

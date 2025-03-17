@@ -31,3 +31,18 @@ body {
 	position: relative;
 	padding: 15px;
 }
+
+.status-green{
+	background-color: green;
+	color: black;
+}
+
+.status-yellow{
+	background-color: yellow;
+	color: black;
+}
+
+.status-red{
+	background-color: red;
+	color: black;
+}

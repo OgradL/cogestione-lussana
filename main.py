@@ -49,6 +49,43 @@ def execute():
         return render_template("admin.html")
     return "idk"
 
+# statistiche
+
+@app.route("/report/", methods=["GET"])
+def report():
+    dati = {}
+    info_classe = {}
+    
+    sel = db.db.select(db.iscrizione)
+    iscrizioni = db.db.session.scalars(sel).all()
+
+    sel = db.db.select(db.user)
+    utenti = db.db.session.scalars(sel).all()
+    
+    for iscrizione in iscrizioni:
+        dati.setdefault(iscrizione.userref.classe, dict())
+        dati[iscrizione.userref.classe].setdefault(iscrizione.corsoref.fascia, 0)
+        # prev = dati[iscrizione.userref.classe].get(iscrizione.corsoref.fascia)
+        # print(dati[iscrizione.userref.classe], " -- ", prev)
+        # print(dati["5g"])
+        print(dati)
+        dati[iscrizione.userref.classe][iscrizione.corsoref.fascia] += 1
+    
+    for utente in utenti:
+        info_classe.setdefault(utente.classe, 0)
+        info_classe[utente.classe] += 1
+    
+    for classe in dati:
+        d = dati[classe]
+        print(classe, d)
+        for i in range(1, 6):
+            dati[classe].setdefault(i, 0)
+            dati[classe][i] = round(dati[classe][i] / info_classe[classe] * 100)
+    
+    
+    
+    return render_template("report.html", dati=dati)
+
 # azioni
 
 @app.route("/lista-corsi/<n_fascia>", methods=["GET"])
@@ -145,7 +182,7 @@ def profile():
         # d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({iscrizione.corsoref.id})\"> Annulla </button>"
     
     
-    return render_template("profile.html", corsi=corsi)
+    return render_template("profile.html", corsi=corsi, utente=user)
 
 # accesso al profilo
 @app.route("/login/", methods=["GET", "POST"])
