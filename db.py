@@ -13,7 +13,7 @@ class user(db.Model):
     nome = Column(String(50))
     cognome = Column(String(50))
     classe = Column(String(2))
-    password = Column(String(50))
+    password = Column(String(150))
     iscrizioni = db.relationship('iscrizione', backref="userref", lazy=True)
 
 

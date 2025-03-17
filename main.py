@@ -13,6 +13,7 @@ import db
 from io import StringIO
 from contextlib import redirect_stdout
 import re
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 DB_NAME = "database.db"
@@ -132,7 +133,6 @@ def iscrizione():
     
     for iscrizione in iscrizioni:
         if iscrizione.corsoref.fascia == corso.fascia:
-            print("hehe")
             flash("Sei già iscritto a un corso per questa fascia. Puoi annullare l'iscrizione dal tuo profilo", 'error')
             return redirect(request.url)
     
@@ -207,7 +207,8 @@ def login():
         flash("Email o password errati", 'error')
         return render_template("login.html")
     
-    if user[0].password != password:
+    if not check_password_hash(user[0].password, password):
+    # if user[0].password != password:
         flash("Email o password errati", 'error')
         return render_template("login.html")
 
@@ -243,6 +244,7 @@ def register():
         flash("L'email è già usata", "error")
         return render_template("register.html")
     
+    password = generate_password_hash(password, method="sha256")
     user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
     db.db.session.add(user)
     db.db.session.commit()
