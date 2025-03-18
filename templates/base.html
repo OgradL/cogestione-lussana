@@ -16,8 +16,17 @@
 				<center>
 					<strong style="color: white; font-size: 45px"> COGESTIONE <span style="color: #00C199;">LUSSANA </span> 2025 </strong>
 					<a href="/"> HOMEPAGE </a>
-					<a href="/profile"> PROFILO </a>
 					<a href="/lista-corsi"> CORSI </a>
+					{% if logged %}
+						<a href="/profile"> PROFILO </a>
+					{% else %}
+						<a href="/register"> REGISTRATI </a>
+						<a href="/login"> LOGIN </a>
+					{% endif %}
+
+					{% if logged %}
+						<a href="/logout"> LOGOUT </a>
+					{% endif %}
 				</center>
 				
 		</div>

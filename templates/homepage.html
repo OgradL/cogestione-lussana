@@ -4,22 +4,5 @@
 {% block content %}
 
 	<h1> HomePage </h1>
-	testing <br> <br>
-	{% if logged %}
-		<a href="/profile"> profilo </a>
-		<br>
-	{% else %}
-		<a href="/register"> register </a>
-		<br>
-		<a href="/login"> login </a>
-		<br>
-	{% endif %}
-
-	{% if logged %}
-		<a href="/logout"> logout </a>
-		<br>
-	{% endif %}
-
-	<a href="/lista-corsi"> LISTA CORSI </a>
 
 {% endblock %}

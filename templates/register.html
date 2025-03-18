@@ -2,29 +2,35 @@
 {% block title %} Registrazione {% endblock %}
 
 {% block content %}
+	<center>
+		<h1> Registrazione </h1>
 
-	<h1> Registrazione </h1>
+		<h3> Attenzione: Ci si può registrare solo con la mail istituzionale (...@liceolussana.eu) </h4>
 
-	<h4> Attenzione: Ci si può registrare solo con la mail istituzionale (...@liceolussana.eu) </h4>
-
-	<form class="register-form" method="POST">
-		<div class="input_fields">
-			<input type="text" name="email" id="email" class="inputform" placeholder="Email" required>
-			<br>
-			<input type="text" name="name" id="name" class="inputform" placeholder="Nome" required>
-			<br>
-			<input type="text" name="lastname" id="lastname" class="inputform" placeholder="Cognome" required>
-			<br>
-			<input type="text" name="classe" id="classe" class="inputform" placeholder="es. 1A, 2B..." required>
-			<br>
-			<input type="password" name="password1" id="password1" class="inputform" placeholder="Password" required>
-			<br>
-			<input type="password" name="password2" id="password2" class="inputform" placeholder="Confirm password" required>
-			<br>
-		</div>
-		<button type="submit" class="outline_md_btn">
-			Registrati
-		</button>
-	</form>
-
+		<form class="register-form" method="POST">
+			<div class="input_fields">
+				<label for="email"><b>Email</b></label>
+				<input type="text" name="email" id="email" class="inputform" placeholder="Email" required>
+				<br>
+				<label for="name"><b>Nome</b></label>
+				<input type="text" name="name" id="name" class="inputform" placeholder="Nome" required>
+				<br>
+				<label for="lastname"><b>Cognome</b></label>
+				<input type="text" name="lastname" id="lastname" class="inputform" placeholder="Cognome" required>
+				<br>
+				<label for="classe"><b>Classe</b></label>
+				<input type="text" name="classe" id="classe" class="inputform" placeholder="es. 1A, 2B..." required>
+				<br>
+				<label for="pssw"><b>Password</b></label>
+				<input type="password" name="password1" id="password1" class="inputform" placeholder="Password" required>
+				<br>
+				<label for="confpssw"><b>Conferma Password</b></label>
+				<input type="password" name="password2" id="password2" class="inputform" placeholder="Confirm password" required>
+				<br>
+			</div>
+			<button type="submit" class="outline_md_btn">
+				Registrati
+			</button>
+		</form>
+	</center>
 {% endblock %}
