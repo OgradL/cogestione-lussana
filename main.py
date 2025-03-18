@@ -16,6 +16,9 @@ import re
 from os import path
 from werkzeug.security import check_password_hash, generate_password_hash
 from xlsxwriter import Workbook
+from random import randint
+import smtplib
+from email.message import EmailMessage
 
 
 DB_NAME = "database.db"
@@ -28,7 +31,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 @app.route("/")
 def home():
     logged = session.get("logged", False)
-    return render_template("homepage.html", logged=logged)
+    return render_template("homepage.html")
 
 @app.route("/admin", methods=["GET", "POST"])
 def execute():
@@ -263,10 +266,43 @@ def login():
     flash("Login effettuato con successo", 'success')
     return redirect(url_for("home"))
 
+def send_auth_email(email):
+    msg = EmailMessage()
+    msg.set_content(f"""Questo è il tuo codice di controllo:
+                    {session["auth_code"]}
+                    Inseriscilo nella pagina di registrazione!
+                    """) 
+    
+    msg['Subject'] = f'Codice di verifica cogestione'
+    msg['From'] = "dragoleonardo1@gmail.com"
+    msg['To'] = email
+
+    s = smtplib.SMTP('localhost')
+    s.send_message(msg)
+    s.quit() 
+
 @app.route("/register/", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return render_template("register.html")
+        return render_template("register.html", auth=False)
+    
+    
+    
+    if request.form.get("verification-code", "not present", type=str) != "not present":
+        code = request.form.get("verification-code")
+        
+        if code != session["auth_code"]:
+            flash("Il codice di controllo è sbagliato", 'error')
+            return render_template("register.html", auth=False)
+        
+        user = session["user"]
+        session.clear()
+        # db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=pwd)
+        db.db.session.add(user)
+        db.db.session.commit()
+        
+        flash("Registrato con successo", 'success')
+        return redirect(url_for("home"))
     
     nome = request.form.get("name")
     cognome = request.form.get("lastname")
@@ -300,13 +336,21 @@ def register():
         flash("Le password non corrispondono", 'error')
         return render_template("register.html")
     
+    session["auth_code"] = "".join([str(randint(0, 9)) for _ in range(6)])
+    session["auth_code"] = "000000"
+    
+    flash(f"Ti abbiamo inviato una mail di verifica su {email}")
+    
+    # send_auth_email(email)
+    
     password = generate_password_hash(password1)
     user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
-    db.db.session.add(user)
-    db.db.session.commit()
+    session["user"] = user
+    # db.db.session.add(user)
+    # db.db.session.commit()
     
-    flash("Registrato con successo", 'success')
-    return redirect(url_for("home"))
+    # flash("Registrato con successo", 'success')
+    return render_template("register.html", auth=True)
 
 @app.route("/logout/")
 @login_required
