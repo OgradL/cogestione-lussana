@@ -2,6 +2,7 @@ body {
 	margin: 0px;
 	padding-left: 10px;
 	height: 100%;
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .header {
@@ -45,4 +46,9 @@ body {
 .status-red{
 	background-color: red;
 	color: black;
+}
+
+h1{
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
 }
