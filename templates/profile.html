@@ -11,7 +11,6 @@
 	<p> {{ utente.classe }} </p>
 	<p> {{ utente.nome }} </p>
 	<p> {{ utente.cognome }} </p>
-	<p> {{ utente.password }} </p>
 	<p> {{ utente.email }} </p>
 
 	<p> Corsi a cui sei iscritto: </p>
@@ -30,7 +29,7 @@
 					<th> {{ corsi[i]["id"] }} </th>
 					<th> {{ corsi[i]["titolo"] }} </th>
 					<th> {{ corsi[i]["posti"] }} </th>
-					<th> <button onclick="annulla_iscrizione({{ corsi[i]["id"] }})"> Annulla </button> </th>
+					<th> <button onclick="annulla_iscrizione({{corsi[i]["id"]}} ) "> Annulla </button> </th>
 				{% else %}
 					<th> <a href="/lista-corsi/{{i}}"> Iscriviti! </a> </th>
 				{% endif %}
