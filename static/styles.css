@@ -55,6 +55,7 @@ strong{
 	position: absolute;
 	left: 35%;
 }
+
 .topnav {
 	padding-top: 25px;
 	padding-left: 100px;
@@ -62,9 +63,9 @@ strong{
 	overflow: hidden;
 	height: 100px;
 	text-align: center;
-  }
-  
-  .topnav a {
+}
+
+.topnav a {
 	float: left;
 	color: #f2f2f2;
 	size: 20px;
@@ -73,43 +74,43 @@ strong{
 	text-decoration: none;
 	font-size: 25px;
 	position: relative;
+}
 
-  }
-  .topnav a:hover {
+.topnav a:hover {
 	background-color: #ddd;
 	color: black;
-  }
+}
 
-  
-  * {
+
+* {
 	box-sizing: border-box;
-  }
-  
+}
 
-  
-  /* Full-width input fields */
-  input[type=text], input[type=password] {
+
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
 	width: 100%;
 	padding: 15px;
 	margin: 5px 0 22px 0;
 	display: inline-block;
 	border: none;
 	background: #f1f1f1;
-  }
-  
-  input[type=text]:focus, input[type=password]:focus {
+}
+
+input[type=text]:focus, input[type=password]:focus {
 	background-color: #ddd;
 	outline: none;
-  }
-  
-  /* Overwrite default styles of hr */
-  hr {
+}
+
+/* Overwrite default styles of hr */
+hr {
 	border: 1px solid #f1f1f1;
 	margin-bottom: 25px;
-  }
-  
-  /* Set a style for the submit button */
-  .outline_md_btn {
+}
+
+/* Set a style for the submit button */
+.outline_md_btn {
 	background-color: #04AA6D;
 	color: white;
 	padding: 16px 20px;
@@ -118,22 +119,21 @@ strong{
 	cursor: pointer;
 	width: 100%;
 	opacity: 0.9;
-  }
-  
-  .outline_md_btn:hover {
+}
+
+.outline_md_btn:hover {
 	opacity: 2;
-  }
-  
-  /* Add a blue text color to links */
-  a {
+}
+
+/* Add a blue text color to links */
+	a {
 	color: dodgerblue;
-  }
-  form{
+}
+form{
 	position: absolute;
 	right: 43%;
 	border-style: outset;
 	border-radius: 10px ;
 	border-width: 6px;
 	padding: 5px;
-  }
-  
+}

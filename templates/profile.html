@@ -29,7 +29,7 @@
 					<th> {{ corsi[i]["id"] }} </th>
 					<th> {{ corsi[i]["titolo"] }} </th>
 					<th> {{ corsi[i]["posti"] }} </th>
-					<th> <button onclick="annulla_iscrizione({{corsi[i]["id"]}} ) "> Annulla </button> </th>
+					<th> <button onclick="annulla_iscrizione({{corsi[i]["id"]}})"> Annulla </button> </th>
 				{% else %}
 					<th> <a href="/lista-corsi/{{i}}"> Iscriviti! </a> </th>
 				{% endif %}
