@@ -135,7 +135,7 @@ form{
 	border-width: 6px;
 	padding: 5px;
 }
-.Allert{
+.alert{
 	background-color: #D35C62;
 	color: #FFFFFF;
 	width: 170px;
@@ -152,7 +152,7 @@ form{
 	border-width: 0px;
 	color: #FFFFFF;
 }
-.Allert {
+.alert{
 	opacity: 1; 
 	Transition: opacity .5s ease-in-out; 
 }
