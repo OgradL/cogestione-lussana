@@ -53,6 +53,7 @@ h1{
 }
 strong{
 	position: relative;
+	left: 300px;
 }
 .topnav {
 	padding-top: 25px;
