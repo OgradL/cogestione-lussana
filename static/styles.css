@@ -52,8 +52,7 @@ h1{
 
 }
 strong{
-	position: absolute;
-	left: 35%;
+	position: relative;
 }
 .topnav {
 	padding-top: 25px;
@@ -129,11 +128,33 @@ strong{
 	color: dodgerblue;
   }
   form{
-	position: absolute;
-	right: 43%;
+	position: relative;
 	border-style: outset;
 	border-radius: 10px ;
 	border-width: 6px;
 	padding: 5px;
   }
+  .Allert{
+	background-color: #D35C62;
+	color: #FFFFFF;
+	width: 170px;
+	height: 50px;
+	border-radius: 10px;
+	padding-left: 17px;
+	padding-top: 15px;
+}
+  .close {
+	position: relative;
+	opacity: 1;
+	size: 20px;
+	background-color: #D35C62;
+	border-width: 0px;
+	color: #FFFFFF;
+  }
+  .Allert {
+	opacity: 1; 
+	Transition: opacity .5s ease-in-out; 
+}
+
+ 
   

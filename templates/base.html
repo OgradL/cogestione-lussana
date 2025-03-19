@@ -10,6 +10,7 @@
 		<!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
 		<meta name="google-signin-client_id" content="767317081882-rn7qiemb4kpgvooo7q9dp099m7ca3kn2.apps.googleusercontent.com">
 		-->
+		
 	</head>
 	<body>
 			<div class="topnav">
@@ -30,20 +31,21 @@
 				</center>
 				
 		</div>
-
-		{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-				{% for category, message in messages %}
-					<div class="alert alert-{{ category }}">
-						{{ message }} 
-						<button type="button" class="close" onclick="del_flashed_message(this)">
-							<span aria-hidden="true"> &times; </span>
-						</button>
-					</div>
-				{% endfor %}
-			{% endif %}
-		{% endwith %}
-
+		
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						{% for category, message in messages %}
+							<div class="Allert">	
+								<div class="alert alert-{{ category }}">
+									{{ message }} 
+									<button type="button" class="close" onclick="del_flashed_message(this)">
+									<span aria-hidden="true"> &times; </span>
+									</button>
+								</div>
+							</div>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
 		<div class="content">
 			{% block content%}
 			{% endblock %}
