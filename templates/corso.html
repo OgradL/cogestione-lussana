@@ -6,13 +6,16 @@
 	<a href="/lista-corsi/{{ corso.fascia }}"> <- indietro </a>
 	
 	<h1> {{ corso.titolo }} </h1>
-	<p> id: {{ corso.id }} </p>
 	<p> {{ corso.descrizione }} </p>
-	<p> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </p>
-	<p> aula: {{ corso.aula }} </p>
-	<p> organizzatori: {{ corso.organizzatori }} </p>
-	<p> note: {{ corso.note }} </p>
+	<p><b>Info Corso</b></p>
+	<ul>
+		<li> FASCIA: {{ corso.fascia }}</li>
+		<li> POSTI: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </li>
+		<li> AULA: {{ corso.aula }} </li>
+		<li> ORGANIZZATORI: {{ corso.organizzatori }} </li>
+		<li> NOTE: {{ corso.note }} </li>
+	</ul>
 
-	<button onclick="iscrizione({{ corso.id }})" class="sub"> ISCRIVITI! </button>
+	<button onclick="iscrizione({{ corso.id }})" class="sub"> <b>ISCRIVITI AL CORSO!!!</b> </button>
 	
 {% endblock %}

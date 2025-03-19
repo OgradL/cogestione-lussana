@@ -13,42 +13,42 @@
 		
 	</head>
 	<body>
-			<div class="topnav">
-				<center>
-					<strong style="color: white; font-size: 45px"> 
-						COGESTIONE
-						<span style="color: #00C199;">LUSSANA </span> 
-						2025 
-						<img src="{{url_for('static', filename='LogoLussana-1.png')}}">
-					</strong>
-					<a href="/"> HOMEPAGE </a>
-					<a href="/lista-corsi"> CORSI </a>
-					{% if session["logged"] %}
-						<a href="/profile"> PROFILO </a>
-					{% else %}
-						<a href="/register"> REGISTRATI </a>
-						<a href="/login"> LOGIN </a>
-					{% endif %}
+		<div class="topnav">
+			<center>
+				<strong style="color: white; font-size: 45px"> 
+					COGESTIONE
+					<span style="color: #00C199;">LUSSANA </span> 
+					2025 
+					<img src="{{url_for('static', filename='LogoLussana-1.png')}}" style="width:150px; margin:15px;" >
+				</strong>
+				<a href="/"> HOMEPAGE </a>
+				<a href="/lista-corsi"> CORSI </a>
+				{% if session["logged"] %}
+					<a href="/profile"> PROFILO </a>
+				{% else %}
+					<a href="/register"> REGISTRATI </a>
+					<a href="/login"> LOGIN </a>
+				{% endif %}
 
-					{% if session["logged"] %}
-						<a href="/logout"> LOGOUT </a>
-					{% endif %}
-				</center>
-				
+				{% if session["logged"] %}
+					<a href="/logout"> LOGOUT </a>
+				{% endif %}
+			</center>
+			
 		</div>
-		
-				{% with messages = get_flashed_messages(with_categories=true) %}
-					{% if messages %}
-						{% for category, message in messages %}	
-							<div class="alert alert-{{ category }}">
-								{{ message }} 
-								<button type="button" class="close" onclick="del_flashed_message(this)">
-								<span aria-hidden="true"> &times; </span>
-								</button>
-							</div>
-						{% endfor %}
-					{% endif %}
-				{% endwith %}
+
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}	
+					<div class="alert alert-{{ category }}">
+						{{ message }} 
+						<button type="button" class="close" onclick="del_flashed_message(this)">
+						<span aria-hidden="true"> &times; </span>
+						</button>
+					</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
 		<div class="content">
 			{% block content%}
 			{% endblock %}
