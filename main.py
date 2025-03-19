@@ -30,7 +30,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 
 @app.route("/")
 def home():
-    logged = session.get("logged", False)
     return render_template("homepage.html")
 
 @app.route("/admin", methods=["GET", "POST"])
