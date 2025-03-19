@@ -280,28 +280,41 @@ def send_auth_email(email):
     s.send_message(msg)
     s.quit() 
 
+@app.route("/verification/", methods=["GET", "POST"])
+def verification():
+    if session.get("auth_code", -1) == -1:
+        return redirect(url_for("home"))
+    if request.method == "GET":
+        return render_template("verification.html")
+    
+    code = request.form.get("verification-code")
+    
+    if code != session["auth_code"]:
+        flash("Il codice di controllo è sbagliato", 'error')
+        return render_template("register.html")
+    
+    # user = session["user"]
+    email = session["tmp_email"]
+    nome = session["tmp_nome"]
+    cognome = session["tmp_cognome"]
+    classe = session["tmp_classe"]
+    password = session["tmp_password"]
+    session.clear()
+    
+    user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
+    db.db.session.add(user)
+    db.db.session.commit()
+    
+    flash("Registrato con successo", 'success')
+    return redirect(url_for("home"))
+
+
 @app.route("/register/", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
-        return render_template("register.html", auth=False)
+        return render_template("register.html")
     
-    
-    
-    if request.form.get("verification-code", "not present", type=str) != "not present":
-        code = request.form.get("verification-code")
-        
-        if code != session["auth_code"]:
-            flash("Il codice di controllo è sbagliato", 'error')
-            return render_template("register.html", auth=False)
-        
-        user = session["user"]
-        session.clear()
-        # db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=pwd)
-        db.db.session.add(user)
-        db.db.session.commit()
-        
-        flash("Registrato con successo", 'success')
-        return redirect(url_for("home"))
+    failed = False
     
     nome = request.form.get("name")
     cognome = request.form.get("lastname")
@@ -312,16 +325,19 @@ def register():
     
     if re.match(EMAIL_REGEX, email) is None:
         flash("Email non valida", 'error')
-        return render_template('register.html')
+        failed = True
+        # return render_template('register.html')
     if not email.endswith("@liceolussana.eu"):
         flash("Devi usare l'email istituzionale (...@liceolussana.eu)")
-        return render_template('register.html')
+        failed = True
+        # return render_template('register.html')
     
     classe = sanitize_classe(classe)
     
     if classe is None or False:
         flash("La classe non è valida", 'error')
-        return render_template("register.html")
+        failed = True
+        # return render_template("register.html")
     
     # more checks
     
@@ -329,10 +345,15 @@ def register():
     
     if user is not None:
         flash("L'email è già usata", "error")
-        return render_template("register.html")
+        failed = True
+        # return render_template("register.html")
     
     if password1 != password2:
         flash("Le password non corrispondono", 'error')
+        failed = True
+        # return render_template("register.html")
+
+    if failed:
         return render_template("register.html")
     
     session["auth_code"] = "".join([str(randint(0, 9)) for _ in range(6)])
@@ -343,13 +364,17 @@ def register():
     # send_auth_email(email)
     
     password = generate_password_hash(password1)
-    user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
-    session["user"] = user
+    # user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
+    # session["user"] = user
     # db.db.session.add(user)
     # db.db.session.commit()
-    
+    session["tmp_email"] = email
+    session["tmp_nome"] = nome
+    session["tmp_cognome"] = cognome
+    session["tmp_classe"] = classe
+    session["tmp_password"] = password
     # flash("Registrato con successo", 'success')
-    return render_template("register.html", auth=True)
+    return redirect(url_for("verification"))
 
 @app.route("/logout/")
 @login_required
