@@ -15,7 +15,12 @@
 	<body>
 			<div class="topnav">
 				<center>
-					<strong style="color: white; font-size: 45px"> COGESTIONE <span style="color: #00C199;">LUSSANA </span> 2025  <img src="./images/LogoLussana-1.png"></strong>
+					<strong style="color: white; font-size: 45px"> 
+						COGESTIONE
+						<span style="color: #00C199;">LUSSANA </span> 
+						2025 
+						<img src="{{url_for('static', filename='LogoLussana-1.png')}}">
+					</strong>
 					<a href="/"> HOMEPAGE </a>
 					<a href="/lista-corsi"> CORSI </a>
 					{% if session["logged"] %}
