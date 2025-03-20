@@ -41,8 +41,8 @@
 			{% if messages %}
 				{% for category, message in messages %}	
 					<div class="alert alert-{{ category }}">
-						{{ message }} 
-						<button type="button" class="close" onclick="del_flashed_message(this)">
+						<p class="alert-text"> {{ message }} </p>
+						<button type="button" class="close alert-dismiss" onclick="del_flashed_message(this)">
 						<span aria-hidden="true"> &times; </span>
 						</button>
 					</div>
