@@ -1,11 +1,11 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Column, Float, ForeignKey
-import main
+from main import app
 from os import path
 
 
-db = SQLAlchemy(main.app)
+db = SQLAlchemy(app)
 
 class user(db.Model):
     id = Column(Integer, primary_key=True)
