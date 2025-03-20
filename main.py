@@ -9,7 +9,8 @@ from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
 from helper import login_required, EMAIL_REGEX, sanitize_classe
-import db
+import database
+from database import db, app
 from io import StringIO
 from contextlib import redirect_stdout
 import re
@@ -22,10 +23,10 @@ from email.message import EmailMessage
 
 
 DB_NAME = "database.db"
-app = Flask(__name__)
-app.secret_key = "secret key"
-app.permanent_session_lifetime = timedelta(days=7)
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+# app = Flask(__name__)
+# app.secret_key = "secret key"
+# app.permanent_session_lifetime = timedelta(days=7)
+# app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 
 
 @app.route("/")
@@ -61,11 +62,11 @@ def report():
     dati = {}
     info_classe = {}
     
-    sel = db.db.select(db.iscrizione)
-    iscrizioni = db.db.session.scalars(sel).all()
+    sel = db.select(database.iscrizione)
+    iscrizioni = db.session.scalars(sel).all()
 
-    sel = db.db.select(db.user)
-    utenti = db.db.session.scalars(sel).all()
+    sel = db.select(database.user)
+    utenti = db.session.scalars(sel).all()
     
     for iscrizione in iscrizioni:
         dati.setdefault(iscrizione.userref.classe, dict())
@@ -118,7 +119,7 @@ def save_data():
     }
     
     items = []
-    iscrizioni = db.db.session.scalars(db.db.select(db.iscrizione)).all()
+    iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
     
     for iscrizione in iscrizioni:
         items.append({
@@ -138,9 +139,9 @@ def save_data():
 
 @app.route("/lista-corsi/<n_fascia>", methods=["GET"])
 def lista_corsi(n_fascia):
-    corsi = db.db.session.execute(db.db.select(db.corso).filter_by(fascia=n_fascia)).all()
+    corsi = db.session.execute(db.select(database.corso).filter_by(fascia=n_fascia)).all()
     
-    # corsi = db.corso.query.filter_by(id=n_fascia).all()
+    # corsi = database.corso.query.filter_by(id=n_fascia).all()
     corsi = list(map(lambda x : x[0], corsi))
     return render_template("lista-corsi.html", fascia=n_fascia, corsi=corsi, dim=len(corsi))
 
@@ -154,8 +155,8 @@ def iscrizione():
     dati = json.loads(request.data)
     id_corso = dati["id_corso"]
     
-    user = db.db.session.execute(db.db.select(db.user).filter_by(email=session["email"])).first()[0]
-    corso = db.db.session.execute(db.db.select(db.corso).filter_by(id=id_corso)).first()[0]
+    user = db.session.execute(db.select(database.user).filter_by(email=session["email"])).first()[0]
+    corso = db.session.execute(db.select(database.corso).filter_by(id=id_corso)).first()[0]
     
     if corso is None:
         flash("Il corso non esiste", 'error')
@@ -165,16 +166,16 @@ def iscrizione():
         flash("Il corso è pieno!", 'error')
         return redirect(request.url)
     
-    # iscrizioni = db.db.session.execute(db.db.select(db.iscrizione).filter_by())
+    # iscrizioni = db.session.execute(db.select(database.iscrizione).filter_by())
     # print(user)
     # print(user[0].iscrizioni)
     # iscrizioni = user.iscrizioni
 
-    sel = db.db.select(db.iscrizione).join(db.user).where(db.user.email == session["email"])
-    iscrizioni = db.db.session.scalars(sel).all()
-    # iscrizioni = db.db.session.scalars(db.db.select(db.iscrizione).where(db.iscrizione.userref.email == session["email"])).all()
+    sel = db.select(database.iscrizione).join(database.user).where(database.user.email == session["email"])
+    iscrizioni = db.session.scalars(sel).all()
+    # iscrizioni = db.session.scalars(db.select(database.iscrizione).where(database.iscrizione.userref.email == session["email"])).all()
     
-    #(db.db.select(db.user, db.iscrizione, db.corso).filter_by(email=session["email"])).all()
+    #(db.select(database.user, database.iscrizione, database.corso).filter_by(email=session["email"])).all()
 
     # print(iscrizioni)
     
@@ -185,9 +186,9 @@ def iscrizione():
     
     
     # print("iscritto a", id_corso)
-    db.db.session.add(db.iscrizione(utente=user.id, corso=corso.id))
+    db.session.add(database.iscrizione(utente=user.id, corso=corso.id))
     corso.posti_occupati += 1
-    db.db.session.commit()
+    db.session.commit()
     
     flash("Iscritto con successo", 'success')
     return redirect(request.url)
@@ -198,22 +199,22 @@ def annulla_iscrizione():
     dati = json.loads(request.data)
     id_corso = dati["id_corso"]
     
-    corso = db.db.session.execute(db.db.select(db.corso).filter_by(id=id_corso)).first()[0]
-    sel = db.db.select(db.iscrizione).join(db.user).where(db.user.email == session["email"] and db.corso.id == id_corso)
-    iscrizione = db.db.session.scalars(sel).first()
+    corso = db.session.execute(db.select(database.corso).filter_by(id=id_corso)).first()[0]
+    sel = db.select(database.iscrizione).join(database.user).where(database.user.email == session["email"] and database.corso.id == id_corso)
+    iscrizione = db.session.scalars(sel).first()
     
     if iscrizione is None:
         return Response([b"bad"], 404)
     
-    db.db.session.delete(iscrizione)
+    db.session.delete(iscrizione)
     corso.posti_occupati -= 1
-    db.db.session.commit()
+    db.session.commit()
     
     return jsonify({})
 
 @app.route("/corso/<id_corso>", methods=["GET"])
 def info_corso(id_corso):
-    corso = db.corso.query.filter_by(id=id_corso).first()
+    corso = database.corso.query.filter_by(id=id_corso).first()
     return render_template("corso.html", corso=corso)
 
 # profilo
@@ -222,10 +223,10 @@ def info_corso(id_corso):
 @login_required
 def profile():
     
-    user = db.db.session.execute(db.db.select(db.user).filter_by(email=session["email"])).first()[0]
+    user = db.session.execute(db.select(database.user).filter_by(email=session["email"])).first()[0]
     
-    sel = db.db.select(db.iscrizione).join(db.user).where(db.user.email == session["email"])
-    iscrizioni = db.db.session.scalars(sel).all()
+    sel = db.select(database.iscrizione).join(database.user).where(database.user.email == session["email"])
+    iscrizioni = db.session.scalars(sel).all()
     
     corsi = [dict() for _ in range(7)]
     
@@ -248,7 +249,7 @@ def login():
     email = request.form.get("email")
     password = request.form.get("password")
     
-    user = db.db.session.execute(db.db.select(db.user).filter_by(email=email)).first()
+    user = db.session.execute(db.select(database.user).filter_by(email=email)).first()
     
     if user is None:
         flash("Email o password errati", 'error')
@@ -301,9 +302,9 @@ def verification():
     password = session["tmp_password"]
     session.clear()
     
-    user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
-    db.db.session.add(user)
-    db.db.session.commit()
+    user = database.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
+    db.session.add(user)
+    db.session.commit()
     
     flash("Registrato con successo", 'success')
     return redirect(url_for("home"))
@@ -341,7 +342,7 @@ def register():
     
     # more checks
     
-    user = db.db.session.execute(db.db.select(db.user).filter_by(email=email)).first()
+    user = db.session.execute(db.select(database.user).filter_by(email=email)).first()
     
     if user is not None:
         flash("L'email è già usata", "error")
@@ -364,10 +365,10 @@ def register():
     # send_auth_email(email)
     
     password = generate_password_hash(password1)
-    # user = db.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
+    # user = database.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
     # session["user"] = user
-    # db.db.session.add(user)
-    # db.db.session.commit()
+    # db.session.add(user)
+    # db.session.commit()
     session["tmp_email"] = email
     session["tmp_nome"] = nome
     session["tmp_cognome"] = cognome
@@ -385,7 +386,7 @@ def logout():
 
 if __name__ == "__main__":
     corsitmp = [
-        db.corso(id=0,
+        database.corso(id=0,
             titolo="prova corsoo",
             descrizione="descrizione bella",
             posti_totali=50,
@@ -395,7 +396,7 @@ if __name__ == "__main__":
             organizzatori="persona 1",
             note="nota 1"
         ),
-        db.corso(id=1,
+        database.corso(id=1,
             titolo="corso serio",
             descrizione="black jack",
             posti_totali=5,
@@ -405,7 +406,7 @@ if __name__ == "__main__":
             organizzatori="beccia",
             note="wooof"
         ),
-        db.corso(id=2,
+        database.corso(id=2,
             titolo="corso brutto",
             descrizione="descrizione brutta",
             posti_totali=10,
@@ -415,7 +416,7 @@ if __name__ == "__main__":
             organizzatori="ferry",
             note="tosta"
         ),
-        db.corso(id=3,
+        database.corso(id=3,
             titolo="corso cp",
             descrizione="ds + dp + grafi + advanced techincs",
             posti_totali=150,
@@ -430,13 +431,13 @@ if __name__ == "__main__":
     with app.app_context():
         # db.drop_all()
         # db.init_app(app)
-        # db.db.create_all()
-        db.init_db(app, DB_NAME)
+        # db.create_all()
+        database.init_db(app)
         
         for corso in corsitmp:
-            q = db.db.session.execute(db.db.select(db.corso).filter_by(id=corso.id)).first()
+            q = db.session.execute(db.select(database.corso).filter_by(id=corso.id)).first()
             if q is None:
-                db.db.session.add(corso)
-                db.db.session.commit()
+                db.session.add(corso)
+                db.session.commit()
         
         app.run(debug=True)
