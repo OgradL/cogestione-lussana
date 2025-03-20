@@ -11,7 +11,7 @@ app = Flask("__main__")
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 app.permanent_session_lifetime = timedelta(days=7)
 app.secret_key = "secret key"
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, template_folder='templates')
 
 class user(db.Model):
     id = Column(Integer, primary_key=True)
