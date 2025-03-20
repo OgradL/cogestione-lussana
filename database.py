@@ -7,11 +7,11 @@ from datetime import timedelta, datetime
 from os import path
 
 DB_NAME = "database.db"
-app = Flask("__main__")
+app = Flask("__main__", template_folder='templates')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 app.permanent_session_lifetime = timedelta(days=7)
 app.secret_key = "secret key"
-db = SQLAlchemy(app, template_folder='templates')
+db = SQLAlchemy(app)
 
 class user(db.Model):
     id = Column(Integer, primary_key=True)
