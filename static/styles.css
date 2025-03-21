@@ -51,7 +51,7 @@ h1{
 	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
 }
-strong{
+.Nav{
 	position: relative;
 	left: 300px;
 }
@@ -223,4 +223,41 @@ form{
 .corsis{
 	border-bottom: 1px solid grey; /* Linea sotto ogni elemento */
     padding: 10px; 
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: middle;
+}
+
+.Fascie{
+    background-color: #999;
+    color: white;
+    font-weight: bold;
+}
+
+tr:nth-child(odd) {
+    background-color: #ccc;
+}
+
+tr:nth-child(even) {
+    background-color: #eee;
+}
+
+td:last-child a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+tr.ids{
+	background-color: #999;
+    color: white;
+    font-weight: bold;
 }

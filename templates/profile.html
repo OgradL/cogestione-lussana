@@ -3,32 +3,24 @@
 
 {% block content %}
 
-	<h3> <strong> Profilo </strong> </h3>
+	<h3> <strong> RIEPILOGO ISCRIZIONI {{ utente.cognome }} {{ utente.nome }} {{ utente.classe }}</strong> </h3>
 	<br> <br>
 
-	<p> info </p>
-
-	<p> {{ utente.classe }} </p>
-	<p> {{ utente.nome }} </p>
-	<p> {{ utente.cognome }} </p>
-	<p> {{ utente.email }} </p>
-
-	<p> Corsi a cui sei iscritto: </p>
 	<table>
-		<tr>
-			<th> fascia </th>
-			<th> id </th>
-			<th> titolo </th>
-			<th> posti </th>
-			<th> annulla iscrizione </th>
+		<tr class="ids">
+			<th> Fascia </th>
+			<th> Corso </th>
+			<th> Organizzatori </th>
+			<th> Aula </th>
+			<th> Annulla Iscrizione </th>
 		</tr>
 		{% for i in range(1, 6) %}
 			<tr>
-				<th> {{ i }} </th>
+				<th class="Fascie"> {{ i }} </th>
 				{% if corsi[i] %}
-					<th> {{ corsi[i]["id"] }} </th>
 					<th> {{ corsi[i]["titolo"] }} </th>
-					<th> {{ corsi[i]["posti"] }} </th>
+					<th> {{ corsi[i]["organizzatori"] }} </th>
+					<th> {{ corsi[i]["aula"] }} </th>
 					<th> <button onclick="annulla_iscrizione({{corsi[i]["id"]}})"> Annulla </button> </th>
 				{% else %}
 					<th> <a href="/lista-corsi/{{i}}"> Iscriviti! </a> </th>
