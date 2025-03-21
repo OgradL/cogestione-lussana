@@ -16,6 +16,9 @@
 		<li> NOTE: {{ corso.note }} </li>
 	</ul>
 
-	<button onclick="iscrizione({{ corso.id }})" class="sub"> <b>ISCRIVITI AL CORSO!!!</b> </button>
-	
+	{% if session["logged"] %}
+		<button onclick="iscrizione({{ corso.id }})" class="sub"> <b>ISCRIVITI AL CORSO!!!</b> </button>
+	{% else %}
+		<a href="/login"> Devi fare il login prima di iscriverti! </a>
+	{% endif%}
 {% endblock %}
