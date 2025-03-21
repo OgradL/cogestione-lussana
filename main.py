@@ -284,16 +284,22 @@ def send_auth_email(email):
 
 @app.route("/verification/", methods=["GET", "POST"])
 def verification():
-    if session.get("auth_code", -1) == -1:
+    if (datetime.now() - datetime.fromisoformat(session["auth_age"])).seconds >= 600:
+        session.clear()
+    
+    if session.get("auth_code", -1) == -1 or session.get("auth_age", -1) == -1:
         return redirect(url_for("home"))
+    
+    
     if request.method == "GET":
         return render_template("verification.html")
     
     code = request.form.get("verification-code")
     
     if code != session["auth_code"]:
+        session.clear()
         flash("Il codice di controllo è sbagliato", 'error')
-        return render_template("register.html")
+        return redirect(url_for("register"))
     
     # user = session["user"]
     email = session["tmp_email"]
@@ -358,8 +364,10 @@ def register():
     if failed:
         return render_template("register.html")
     
+    session.clear()
     session["auth_code"] = "".join([str(randint(0, 9)) for _ in range(6)])
     session["auth_code"] = "000000"
+    session["auth_age"] = datetime.now().isoformat()
     
     flash(f"Ti abbiamo inviato una mail di verifica su {email}")
     
