@@ -12,11 +12,13 @@
 			<th> Corso </th>
 			<th> Organizzatori </th>
 			<th> Aula </th>
+			<th> organizzatori </th>
+			<th> aula </th>
 			<th> Annulla Iscrizione </th>
 		</tr>
 		{% for i in range(1, 6) %}
 			<tr>
-				<th class="Fascie"> {{ i }} </th>
+				<th class="Fascie"> {{ i }} ( {{ orari_fasce[i] }} ) </th>
 				{% if corsi[i] %}
 					<th> {{ corsi[i]["titolo"] }} </th>
 					<th> {{ corsi[i]["organizzatori"] }} </th>

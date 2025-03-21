@@ -8,7 +8,7 @@ from flask import flash
 from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
-from helper import login_required, EMAIL_REGEX, sanitize_classe
+from helper import login_required, EMAIL_REGEX, sanitize_classe, orari_fasce
 import database
 from database import db, app
 from io import StringIO
@@ -235,10 +235,11 @@ def profile():
         d["id"] = iscrizione.corsoref.id
         d["titolo"] = iscrizione.corsoref.titolo
         d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
+        d["organizzatori"] = iscrizione.corsoref.organizzatori
+        d["aula"] = iscrizione.corsoref.aula
         # d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({iscrizione.corsoref.id})\"> Annulla </button>"
     
-    
-    return render_template("profile.html", corsi=corsi, utente=user)
+    return render_template("profile.html", corsi=corsi, utente=user, orari_fasce=orari_fasce)
 
 # accesso al profilo
 @app.route("/login/", methods=["GET", "POST"])
