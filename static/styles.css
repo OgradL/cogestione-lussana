@@ -192,4 +192,35 @@ form{
 	border-color: grey;
 	overflow: scroll;
 	overflow-x: hidden;
+	padding-top: 20px;
+	padding-bottom: 10px;
+}
+.spazio{
+	float: right; 
+}
+.pagine{
+	padding: 3px;
+}
+.primo{
+	padding: 3px;
+	font-size:25px;
+	border-style:solid;
+	border-radius: 5px;
+	border-width:2px;
+	display: inline-block; /* Permette di usare padding e centrare contenuto */
+    text-align: center; /* Centra il testo */
+}
+.dettagli{
+	float: right; 
+	padding: 3px;
+	border-style:solid;
+	border-radius: 5px;
+	border-width:2px;
+	display: inline-block; /* Permette di usare padding e centrare contenuto */
+    text-align: center; /* Centra il testo */
+}
+
+.corsis{
+	border-bottom: 1px solid grey; /* Linea sotto ogni elemento */
+    padding: 10px; 
 }

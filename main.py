@@ -143,7 +143,7 @@ def lista_corsi(n_fascia):
     
     # corsi = database.corso.query.filter_by(id=n_fascia).all()
     corsi = list(map(lambda x : x[0], corsi))
-    return render_template("lista-corsi.html", fascia=n_fascia, corsi=corsi, dim=len(corsi))
+    return render_template("lista-corsi.html", fascia=int(n_fascia), corsi=corsi, dim=len(corsi))
 
 @app.route("/lista-corsi/", methods=["GET"])
 def lista_corsi_help():
