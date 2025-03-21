@@ -189,7 +189,7 @@ form{
 	border-style: solid;
 	border-radius: 10px;
 	border-width: 2px;
-	border-color: grey;
+	border-color: #04AA6D;
 	overflow: scroll;
 	overflow-x: hidden;
 	padding-top: 20px;
@@ -200,29 +200,39 @@ form{
 }
 .pagine{
 	padding: 3px;
+	color:#04AA6D;
+	font-size:1.5vw;
 }
 .primo{
 	padding: 3px;
-	font-size:25px;
+	font-size:3vw;
 	border-style:solid;
 	border-radius: 5px;
 	border-width:2px;
 	display: inline-block; /* Permette di usare padding e centrare contenuto */
     text-align: center; /* Centra il testo */
+	color:#04AA6D
 }
 .dettagli{
 	float: right; 
-	padding: 3px;
+	padding-left: 3px;
+	padding-right: 3px;
+	margin-right:1.5vw ;
 	border-style:solid;
 	border-radius: 5px;
 	border-width:2px;
 	display: inline-block; /* Permette di usare padding e centrare contenuto */
     text-align: center; /* Centra il testo */
+	color:#04AA6D
+}
+.iscriviti{
+	color:#04AA6D
 }
 
 .corsis{
-	border-bottom: 1px solid grey; /* Linea sotto ogni elemento */
+	border-bottom: 1px solid #04AA6D; /* Linea sotto ogni elemento */
     padding: 10px; 
+	margin-right: 1vw;
 }
 
 table {
