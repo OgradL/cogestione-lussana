@@ -52,8 +52,10 @@ h1{
 
 }
 .Nav{
-	position: relative;
-	left: 300px;
+	color: white; 
+	float: right;
+	padding-right: 1%;
+	font-size: clamp(10px, 6vw, 40px);
 }
 .topnav {
 	padding-top: 25px;
@@ -65,15 +67,13 @@ h1{
 }
  
 .topnav a {
-	float: left;
-	color: #f2f2f2;
-	size: 20px;
-	text-align: center;
-	padding: 14px 16px;
-	text-decoration: none;
-	font-size: 25px;
-	position: relative;
-
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 1vw 2vw; /* Padding che si riduce col viewport */
+    text-decoration: none;
+    font-size: 2vw; /* Il testo diventa più piccolo con la finestra */
+    position: relative;
 }
 .topnav a:hover {
 	background-color: #ddd;
