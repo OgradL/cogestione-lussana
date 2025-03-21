@@ -3,22 +3,19 @@
 
 {% block content %}
 
-	<table>
+	<ul class="corsi">
 	{% for corso in corsi %}
-		<tr>
-			<th> {{ corso.id }} </th>
-			<th> {{ corso.titolo }} </th>
-			<th> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </th>
+			<li> <u>{{ corso.id }} {{ corso.titolo }}</u> <a href="/corso/{{corso.id}}"> >> </a> </li>
+			 <p>posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </p> 
 
-			<th> <a href="/corso/{{corso.id}}"> >> </a> </th>
-		</tr>
 	{% endfor %}
 
-	</table>
+	</ul>
 
 	<table> <tr>
 		{% for i in range(1, 6) %}
-			<th> <a href="/lista-corsi/{{i}}"> {{i}} </a> </th>
+		{% if i== }
+			<a href="/lista-corsi/{{i}}"> {{i}} </a>
 		{% endfor %}
 	</tr> </table>
 {% endblock %}

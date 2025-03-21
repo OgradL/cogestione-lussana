@@ -182,6 +182,14 @@ form{
 	border-color: #04AA6D;
 	border-width: 3px;
 }
-li{
+.info{
 	padding-bottom: 20px;
+}
+.corsi{
+	border-style: solid;
+	border-radius: 10px;
+	border-width: 2px;
+	border-color: grey;
+	overflow: scroll;
+	overflow-x: hidden;
 }

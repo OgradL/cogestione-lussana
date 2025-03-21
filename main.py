@@ -386,7 +386,7 @@ def logout():
 
 if __name__ == "__main__":
     corsitmp = [
-        database.corso(id=0,
+        database.corso(
             titolo="prova corsoo",
             descrizione="descrizione bella",
             posti_totali=50,
@@ -396,7 +396,7 @@ if __name__ == "__main__":
             organizzatori="persona 1",
             note="nota 1"
         ),
-        database.corso(id=1,
+        database.corso(
             titolo="corso serio",
             descrizione="black jack",
             posti_totali=5,
@@ -406,7 +406,7 @@ if __name__ == "__main__":
             organizzatori="beccia",
             note="wooof"
         ),
-        database.corso(id=2,
+        database.corso(
             titolo="corso brutto",
             descrizione="descrizione brutta",
             posti_totali=10,
@@ -416,7 +416,7 @@ if __name__ == "__main__":
             organizzatori="ferry",
             note="tosta"
         ),
-        database.corso(id=3,
+        database.corso(
             titolo="corso cp",
             descrizione="ds + dp + grafi + advanced techincs",
             posti_totali=150,
