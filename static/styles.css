@@ -261,3 +261,8 @@ tr.ids{
     color: white;
     font-weight: bold;
 }
+.flashed-messages{
+	position: absolute;
+	top: 20px;
+	right: 20px;
+}
