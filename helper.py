@@ -20,7 +20,7 @@ def login_required(f):
         if 'email' in session:
             return f(*args, **kwargs)
         flash("Devi aver fatto il login!", 'error')
-        return redirect(url_for('login', next=request.path.strip("/")))
+        return redirect(url_for('login'))
     wrapped.__name__ = f.__name__
     return wrapped
 

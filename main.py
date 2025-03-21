@@ -160,11 +160,11 @@ def iscrizione():
     
     if corso is None:
         flash("Il corso non esiste", 'error')
-        return redirect(request.url)
+        return Response([b"error"], 400)
     
     if corso.posti_occupati == corso.posti_totali:
         flash("Il corso è pieno!", 'error')
-        return redirect(request.url)
+        return Response([b"error"], 400)
     
     # iscrizioni = db.session.execute(db.select(database.iscrizione).filter_by())
     # print(user)
@@ -182,7 +182,7 @@ def iscrizione():
     for iscrizione in iscrizioni:
         if iscrizione.corsoref.fascia == corso.fascia:
             flash("Sei già iscritto a un corso per questa fascia. Puoi annullare l'iscrizione dal tuo profilo", 'error')
-            return redirect(request.url)
+            return Response([b"error"], 400)
     
     
     # print("iscritto a", id_corso)
@@ -191,7 +191,7 @@ def iscrizione():
     db.session.commit()
     
     flash("Iscritto con successo", 'success')
-    return redirect(request.url)
+    return Response([b"good"], 200)
 
 @app.route("/annulla-iscrizione/", methods=["POST"])
 @login_required
@@ -200,7 +200,7 @@ def annulla_iscrizione():
     id_corso = dati["id_corso"]
     
     corso = db.session.execute(db.select(database.corso).filter_by(id=id_corso)).first()[0]
-    sel = db.select(database.iscrizione).join(database.user).where(database.user.email == session["email"] and database.corso.id == id_corso)
+    sel = db.select(database.iscrizione).join(database.user).join(database.corso).where(database.user.email == session["email"], database.corso.id == id_corso)
     iscrizione = db.session.scalars(sel).first()
     
     if iscrizione is None:
@@ -228,7 +228,7 @@ def profile():
     sel = db.select(database.iscrizione).join(database.user).where(database.user.email == session["email"])
     iscrizioni = db.session.scalars(sel).all()
     
-    corsi = [dict() for _ in range(7)]
+    corsi = [dict() for _ in range(6)]
     
     for iscrizione in iscrizioni:
         d = corsi[iscrizione.corsoref.fascia]
