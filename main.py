@@ -268,23 +268,44 @@ def login():
     flash("Login effettuato con successo", 'success')
     return redirect(url_for("home"))
 
-def send_auth_email(email):
+def send_email(to_email, subject, content):
     msg = EmailMessage()
-    msg.set_content(f"""Questo è il tuo codice di controllo:
-                    {session["auth_code"]}
-                    Inseriscilo nella pagina di registrazione!
-                    """) 
+    msg.set_content(content)
     
-    msg['Subject'] = f'Codice di verifica cogestione'
+    msg['Subject'] = subject
     msg['From'] = "dragoleonardo1@gmail.com"
-    msg['To'] = email
+    msg['To'] = to_email
 
     s = smtplib.SMTP('localhost')
     s.send_message(msg)
-    s.quit() 
+    s.quit()
+
+def send_auth_verification_email(email):
+    testo = f"""Questo è il tuo codice di verififca:
+                {session["auth_code"]}
+                Inseriscilo nella pagina di registrazione!
+    """
+    
+    send_email(email,
+               "Codice di verifica cogestione",
+               testo)
+
+def send_pwd_reset_email(email):
+    testo = f"""Questo è il tuo codice di verifica:
+                {session["auth_code"]}
+                Inseriscilo nella pagina di reset della password!
+    """
+    
+    send_email(email,
+               "Codice di verifica cogestione",
+               testo)
+
 
 @app.route("/verification/", methods=["GET", "POST"])
 def verification():
+    if session.get("auth_code", -1) == -1 or session.get("auth_age", -1) == -1:
+        return redirect(url_for("home"))
+    
     if (datetime.now() - datetime.fromisoformat(session["auth_age"])).seconds >= 600:
         session.clear()
     
@@ -317,7 +338,6 @@ def verification():
     flash("Registrato con successo", 'success')
     return redirect(url_for("home"))
 
-
 @app.route("/register/", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
@@ -335,18 +355,16 @@ def register():
     if re.match(EMAIL_REGEX, email) is None:
         flash("Email non valida", 'error')
         failed = True
-        # return render_template('register.html')
+
     if not email.endswith("@liceolussana.eu"):
         flash("Devi usare l'email istituzionale (...@liceolussana.eu)")
         failed = True
-        # return render_template('register.html')
     
     classe = sanitize_classe(classe)
     
     if classe is None or False:
         flash("La classe non è valida", 'error')
         failed = True
-        # return render_template("register.html")
     
     # more checks
     
@@ -355,12 +373,10 @@ def register():
     if user is not None:
         flash("L'email è già usata", "error")
         failed = True
-        # return render_template("register.html")
     
     if password1 != password2:
         flash("Le password non corrispondono", 'error')
         failed = True
-        # return render_template("register.html")
 
     if failed:
         return render_template("register.html")
@@ -375,17 +391,91 @@ def register():
     # send_auth_email(email)
     
     password = generate_password_hash(password1)
-    # user = database.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
-    # session["user"] = user
-    # db.session.add(user)
-    # db.session.commit()
+
     session["tmp_email"] = email
     session["tmp_nome"] = nome
     session["tmp_cognome"] = cognome
     session["tmp_classe"] = classe
     session["tmp_password"] = password
-    # flash("Registrato con successo", 'success')
+
     return redirect(url_for("verification"))
+
+@app.route("/verification-reset-pwd/", methods=["GET", "POST"])
+def verification_reset_pwd():
+    if session.get("auth_code", -1) == -1 or session.get("auth_age", -1) == -1:
+        return redirect(url_for("home"))
+    
+    if (datetime.now() - datetime.fromisoformat(session["auth_age"])).seconds >= 600:
+        session.clear()
+    
+    if session.get("auth_code", -1) == -1 or session.get("auth_age", -1) == -1:
+        return redirect(url_for("home"))
+    
+    
+    if request.method == "GET":
+        return render_template("verification-reset-pwd.html")
+    
+    code = request.form.get("verification-code")
+    
+    if code != session["auth_code"]:
+        session.clear()
+        flash("Il codice di controllo è sbagliato", 'error')
+        return redirect(url_for("reset_password"))
+    
+    email = session["tmp_email"]
+    password = session["tmp_password"]
+    session.clear()
+    
+    user = db.session.execute(db.select(database.user).filter_by(email=email)).first()[0]
+    print(user)
+    print(password)
+    user.password = password
+    db.session.commit()
+    
+    flash("Password modificata con successo", 'success')
+    return redirect(url_for("home"))
+
+@app.route("/reset-password/", methods=["GET", "POST"])
+def reset_password():
+    if request.method == "GET":
+        return render_template("reset-pwd.html")
+    
+    failed = False
+    
+    email = request.form.get("email")
+    password1 = request.form.get("password1")
+    password2 = request.form.get("password2")
+    
+    # more checks
+    
+    user = db.session.execute(db.select(database.user).filter_by(email=email)).first()
+    
+    if user is None:
+        flash("L'email non è valida", "error")
+        failed = True
+    
+    if password1 != password2:
+        flash("Le password non corrispondono", 'error')
+        failed = True
+
+    if failed:
+        return render_template("reset-pwd.html")
+    
+    session.clear()
+    session["auth_code"] = "".join([str(randint(0, 9)) for _ in range(6)])
+    session["auth_code"] = "000000"
+    session["auth_age"] = datetime.now().isoformat()
+    
+    flash(f"Ti abbiamo inviato una mail di verifica su {email}")
+    
+    # send_pwd_reset_email(email)
+    
+    password = generate_password_hash(password1)
+    
+    session["tmp_email"] = email
+    session["tmp_password"] = password
+
+    return redirect(url_for("verification_reset_pwd"))
 
 @app.route("/logout/")
 @login_required
