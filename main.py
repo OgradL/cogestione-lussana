@@ -8,7 +8,7 @@ from flask import flash
 from flask import make_response, Response
 from datetime import timedelta, datetime
 from flask_sqlalchemy import SQLAlchemy
-from helper import login_required, EMAIL_REGEX, sanitize_classe, orari_fasce
+from helper import *
 import database
 from database import db, app
 from io import StringIO
@@ -34,6 +34,7 @@ def home():
     return render_template("homepage.html")
 
 @app.route("/admin", methods=["GET", "POST"])
+@admin_access
 def execute():
     if request.method == "POST":
         
