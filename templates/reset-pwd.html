@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} Reset password {% endblock %}
+
+{% block content %}
+	<center>
+		
+		<form class="register-form" method="POST">
+			<h1> Reset Password </h1>
+			<div class="input_fields">
+				<label for="email"><b>Email</b></label>
+				<input type="text" name="email" id="email" class="inputform" placeholder="Email" required>
+				<br>
+				<label for="pssw"><b>Password</b></label>
+				<input type="password" name="password1" id="password1" class="inputform" placeholder="Password" required>
+				<br>
+				<label for="confpssw"><b>Conferma Password</b></label>
+				<input type="password" name="password2" id="password2" class="inputform" placeholder="Confirm password" required>
+				<br>
+			</div>
+			<button type="submit" class="outline_md_btn">
+				Reset
+			</button>
+		</form>
+	</center>
+{% endblock %}

@@ -16,14 +16,9 @@ orari_fasce = [
     "16/04 - 09:00",
 ]
 
-# orari_fasce = [
-#     datetime.fromisoformat("2025-04-14T09:00"),
-#     datetime.fromisoformat("2025-04-14T09:00"),
-#     datetime.fromisoformat("2025-04-14T11:00"),
-#     datetime.fromisoformat("2025-04-15T09:00"),
-#     datetime.fromisoformat("2025-04-15T11:00"),
-#     datetime.fromisoformat("2025-04-16T09:00")
-# ]
+admin_emails = [
+    "drago.leonardo.studente@liceolussana.eu"
+]
 
 def login_required(f):
     def wrapped(*args, **kwargs):
@@ -31,6 +26,15 @@ def login_required(f):
             return f(*args, **kwargs)
         flash("Devi aver fatto il login!", 'error')
         return redirect(url_for('login'))
+    wrapped.__name__ = f.__name__
+    return wrapped
+
+def admin_access(f):
+    def wrapped(*args, **kwargs):
+        if 'email' in session:
+            if session['email'] in admin_emails:
+                return f(*args, **kwargs)
+        return redirect(url_for('home'))
     wrapped.__name__ = f.__name__
     return wrapped
 
