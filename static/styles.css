@@ -79,7 +79,7 @@ h1{
     font-size: clamp(1.5px, 3vw, 45px); /* Il testo diventa più piccolo con la finestra */
     position: relative;
 }
-.topnav a:hover {
+.links a:hover {
 	background-color: #ddd;
 	color: black;
 }
