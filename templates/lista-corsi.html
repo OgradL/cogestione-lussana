@@ -6,7 +6,8 @@
 	<ul class="corsi">
 	{% for corso in corsi %}
 			<li > <b>{{ corso.id }} {{ corso.titolo }}</b> <a class="dettagli" href="/corso/{{corso.id}}"> Dettagli </a> </li>
-			<p class="corsis"> {{ corso.descrizione }} <span class="spazio"> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </span> </p>
+			<p class="corsis"> {{ corso.descrizione }} </p>
+			<p class="spazio"> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </p> 
 					
 	{% endfor %}
 

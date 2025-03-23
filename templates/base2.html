@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title> {% block title%} {% endblock %} </title>																																																																																																																																																																																																		 </title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+		<script src="{{url_for('static', filename='client_helper.js')}}"> </script>
+		<!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
+		<meta name="google-signin-client_id" content="767317081882-rn7qiemb4kpgvooo7q9dp099m7ca3kn2.apps.googleusercontent.com">
+		-->
+		
+	</head>
+	<body style="background-color: #333;">
+		{% block content%}
+		{% endblock %}
+	</body>
+</html>

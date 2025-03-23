@@ -1,8 +1,21 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 {% block title %} Cogestione Lussana {% endblock %}
 
 {% block content %}
-
-	<h1> HomePage </h1>
-
+	<center>
+		<h1 class="title"> HOMEPAGE COGESTIONE <span style="color: #00C199;">LUSSANA </span>  2025  </h1>
+		
+		<a class="home" href="/lista-corsi"> CORSI </a>
+		{% if session["logged"] %}
+			<a class="home" href="/profile"> PROFILO </a> 
+		{% else %}
+			<a class="home" href="/register"> REGISTRATI </a> 
+			<a class="home" href="/login"> LOGIN </a> 
+		{% endif %}
+	
+		{% if session["logged"] %}
+			<a class="home" href="/logout"> LOGOUT </a> 
+		{% endif %}
+	</center>
+	
 {% endblock %}

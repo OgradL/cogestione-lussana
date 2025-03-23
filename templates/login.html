@@ -3,21 +3,21 @@
 
 {% block content %}
 
-	<h1> Login </h1>
-
-	<form class="register-form" method="POST">
-		<div class="input_fields">
-			<label for="email"><b>Email</b></label>
-			<input type="text" name="email" id="email" class="inputform" placeholder="Email" required>
-			<br>
-			<label for="password"><b>Password</b></label>
-			<input type="password" name="password" id="password" class="inputform" placeholder="Password" required>
-			<br>
-			<a href="/reset-password/"> Ho dimenticato la password </a>
-		</div>
-		<button type="submit" class="outline_md_btn">
-			Entra
-		</button>
-	</form>
-
+	<center>
+		<form class="register-form" method="POST">
+			<h1> Login </h1>
+			<div class="input_fields">
+				<label for="email"><b>Email</b></label>
+				<input type="text" name="email" id="email" class="inputform" placeholder="Email" required>
+				<br>
+				<label for="password"><b>Password</b></label>
+				<input type="password" name="password" id="password" class="inputform" placeholder="Password" required>
+				<br>
+				<u><a class="iscriviti" href="/reset-password/"> Ho dimenticato la password </a></u>
+			</div>
+			<button type="submit" class="outline_md_btn">
+				Entra
+			</button>
+		</form>
+	</center>
 {% endblock %}

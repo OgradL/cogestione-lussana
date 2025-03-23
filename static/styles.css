@@ -53,21 +53,25 @@ h1{
 }
 .Nav{
 	color: white; 
-	float: right;
-	padding-right: 1%;
-	font-size: clamp(10px, 6vw, 40px);
+    font-size: clamp(10px, 6vw, 40px);
+    margin-bottom: 15px; /* Spazio tra il titolo e i link */
 }
 .topnav {
-	padding-top: 25px;
-	padding-left: 100px;
-	background-color: #333;
-	overflow: hidden;
-	height: 100px;
-	text-align: center;
+	display: flex;
+    flex-direction: column; /* Mette gli elementi in colonna */
+    align-items: center; /* Li centra orizzontalmente */
+    justify-content: center;
+    background-color: #333;
+    padding: 20px 0;
+    text-align: center;
 }
- 
+.links {
+    display: flex;
+    gap: 15px; /* Distanza tra i link */
+    flex-wrap: wrap; /* Se lo schermo è piccolo, i link vanno a capo */
+    justify-content: center; /* Centra i link */
+}
 .topnav a {
-    float: left;
     color: #f2f2f2;
     text-align: center;
     padding: 1vw 2vw; /* Padding che si riduce col viewport */
@@ -196,16 +200,19 @@ form{
 	padding-bottom: 10px;
 }
 .spazio{
-	float: right; 
+	text-align: right;
+	border-bottom: 1px solid #04AA6D; /* Linea sotto ogni elemento */
+    padding: 10px; 
+	margin-right: 1vw;
 }
 .pagine{
-	padding: 3px;
+	padding: 1vw;
 	color:#04AA6D;
-	font-size:1.5vw;
+	font-size:3vw;
 }
 .primo{
-	padding: 3px;
-	font-size:3vw;
+	padding: 1vw;
+	font-size:5vw;
 	border-style:solid;
 	border-radius: 5px;
 	border-width:2px;
@@ -229,11 +236,6 @@ form{
 	color:#04AA6D
 }
 
-.corsis{
-	border-bottom: 1px solid #04AA6D; /* Linea sotto ogni elemento */
-    padding: 10px; 
-	margin-right: 1vw;
-}
 
 table {
     width: 75%;
@@ -276,4 +278,22 @@ tr.ids{
 	top: 20px;
 	right: 20px;
 	z-index: 1000;
+}
+.title{
+	color: #fff;
+	font-size: 3.5vw;
+}
+.home{
+    color: #f2f2f2;
+    text-align: center;
+    padding: 2.5vw 2.5vw; /* Padding che si riduce col viewport */
+    text-decoration: none;
+    font-size: 2.5vw; /* Il testo diventa più piccolo con la finestra */
+    position: relative;
+	display: block; /* Ogni <a> occupa un'intera riga */
+    margin-bottom: 4.5vw; /* Aggiunge spazio sotto ogni link */
+}
+.home:hover {
+    background-color: #ddd;
+    color: black;
 }
