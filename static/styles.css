@@ -283,15 +283,24 @@ tr.ids{
 	color: #fff;
 	font-size: 3.5vw;
 }
-.home{
-    color: #f2f2f2;
+.home1 {
+    display: flex;
+    flex-direction: column; /* Organizza gli elementi in colonna */
+    align-items: center; /* Centra orizzontalmente */
+    justify-content: space-between; /* Distribuisce gli elementi equamente */
+    height: 100vh; /* Occupa tutta l'altezza dello schermo */
+    background-color: #333;
     text-align: center;
-    padding: 2.5vw 2.5vw; /* Padding che si riduce col viewport */
-    text-decoration: none;
-    font-size: 2.5vw; /* Il testo diventa più piccolo con la finestra */
-    position: relative;
-	display: block; /* Ogni <a> occupa un'intera riga */
-    margin-bottom: 4.5vw; /* Aggiunge spazio sotto ogni link */
+    padding: 20px 0;
+}
+.home{
+    color: white;
+    font-size: clamp(10px, 6vw, 40px);
+    flex-grow: 1; /* Permette al titolo di occupare spazio */
+    display: flex;
+    align-items: center; /* Centra verticalmente il titolo */
+    justify-content: center; /* Centra il testo */
+    width: 100%;
 }
 .home:hover {
     background-color: #ddd;
