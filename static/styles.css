@@ -53,7 +53,7 @@ h1{
 }
 .Nav{
 	color: white; 
-    font-size: clamp(4vw, 6vw, 60px);
+    font-size: clamp(4vw, 6vw, 50px);
     margin-bottom: 15px; /* Spazio tra il titolo e i link */
 }
 .topnav {
@@ -76,7 +76,7 @@ h1{
     text-align: center;
     padding: 1vw 2vw; /* Padding che si riduce col viewport */
     text-decoration: none;
-    font-size: clamp(3vw, 4vw, 50px); /* Il testo diventa più piccolo con la finestra */
+    font-size: clamp(3vw, 4vw, 40px); /* Il testo diventa più piccolo con la finestra */
     position: relative;
 }
 .links a:hover {
