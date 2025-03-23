@@ -76,7 +76,7 @@ h1{
     text-align: center;
     padding: 1vw 2vw; /* Padding che si riduce col viewport */
     text-decoration: none;
-    font-size: 3vw; /* Il testo diventa più piccolo con la finestra */
+    font-size: 3.5vw; /* Il testo diventa più piccolo con la finestra */
     position: relative;
 }
 .topnav a:hover {
