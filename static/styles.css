@@ -76,7 +76,7 @@ h1{
     text-align: center;
     padding: 1vw 2vw; /* Padding che si riduce col viewport */
     text-decoration: none;
-    font-size: 3.5vw; /* Il testo diventa più piccolo con la finestra */
+    font-size: clamp(1.5px, 3vw, 45px); /* Il testo diventa più piccolo con la finestra */
     position: relative;
 }
 .topnav a:hover {
@@ -88,6 +88,7 @@ h1{
 * {
 	box-sizing: border-box;
 }
+
  
 
 
@@ -208,11 +209,11 @@ form{
 .pagine{
 	padding: 1vw;
 	color:#04AA6D;
-	font-size:3vw;
+	font-size: clamp(2vw, 3vw, 4vw);
 }
 .primo{
 	padding: 1vw;
-	font-size:5vw;
+	font-size: clamp(4vw, 5vw, 6vw);
 	border-style:solid;
 	border-radius: 5px;
 	border-width:2px;
