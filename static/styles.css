@@ -53,7 +53,7 @@ h1{
 }
 .Nav{
 	color: white; 
-    font-size: clamp(10px, 6vw, 40px);
+    font-size: clamp(4vw, 6vw, 40px);
     margin-bottom: 15px; /* Spazio tra il titolo e i link */
 }
 .topnav {
@@ -76,7 +76,7 @@ h1{
     text-align: center;
     padding: 1vw 2vw; /* Padding che si riduce col viewport */
     text-decoration: none;
-    font-size: clamp(1.5px, 3vw, 45px); /* Il testo diventa più piccolo con la finestra */
+    font-size: clamp(3vw, 3vw, 45px); /* Il testo diventa più piccolo con la finestra */
     position: relative;
 }
 .links a:hover {
@@ -234,7 +234,8 @@ form{
 	color:#04AA6D
 }
 .iscriviti{
-	color:#04AA6D
+	color:#04AA6D;
+	text-decoration: none;
 }
 
 
@@ -282,7 +283,7 @@ tr.ids{
 }
 .title{
 	color: #fff;
-	font-size: 3.5vw;
+	font-size: clamp(3vw, 6vw, 40px);
 }
 .home1 {
     display: flex;
