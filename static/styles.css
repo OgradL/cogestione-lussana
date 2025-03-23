@@ -297,7 +297,7 @@ tr.ids{
 }
 .home{
     color: white;
-    font-size: clamp(10px, 6vw, 40px);
+    font-size: clamp(3vw, 6vw, 40px);
     flex-grow: 1; /* Permette al titolo di occupare spazio */
     display: flex;
     align-items: center; /* Centra verticalmente il titolo */
