@@ -70,6 +70,8 @@ def report():
     utenti = db.session.scalars(sel).all()
     
     for iscrizione in iscrizioni:
+        if iscrizione.userref is None:
+            continue
         dati.setdefault(iscrizione.userref.classe, dict())
         dati[iscrizione.userref.classe].setdefault(iscrizione.corsoref.fascia, 0)
         # prev = dati[iscrizione.userref.classe].get(iscrizione.corsoref.fascia)
@@ -106,7 +108,10 @@ def create_xlsx_file(file_path: str, headers: dict, items: list):
 def save_data():
     date = str(datetime.now().time())
     date = date[:date.find('.')]
-
+    
+    dir_path = path.join('.', "output-data")
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
     file_name = path.join('.', "output-data", "dati-" + date + ".xlsx")
     # file_name = "dati-" + date + ".xlsx"
     
