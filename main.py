@@ -128,6 +128,8 @@ def save_data():
     iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
     
     for iscrizione in iscrizioni:
+        if iscrizione.userref is None:
+            continue
         items.append({
             "id" : iscrizione.id,
             "nome" : iscrizione.userref.nome,
