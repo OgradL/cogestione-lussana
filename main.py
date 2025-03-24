@@ -266,7 +266,7 @@ def login():
     session["logged"] = True
     
     flash("Login effettuato con successo", 'success')
-    return redirect(url_for("home"))
+    return redirect(url_for("lista_corsi", n_fascia=1))
 
 def send_email(to_email, subject, content):
     return requests.post(
@@ -329,7 +329,7 @@ def verification():
     db.session.commit()
     
     flash("Registrato con successo", 'success')
-    return redirect(url_for("home"))
+    return redirect(url_for("login"))
 
 @app.route("/register/", methods=["GET", "POST"])
 def register():
@@ -425,7 +425,7 @@ def verification_reset_pwd():
     db.session.commit()
     
     flash("Password modificata con successo", 'success')
-    return redirect(url_for("home"))
+    return redirect(url_for("login"))
 
 @app.route("/reset-password/", methods=["GET", "POST"])
 def reset_password():
