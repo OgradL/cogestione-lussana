@@ -17,6 +17,7 @@ import re
 from os import path
 from werkzeug.security import check_password_hash, generate_password_hash
 from xlsxwriter import Workbook
+import openpyxl
 from random import randint
 import requests
 import os
@@ -33,28 +34,62 @@ DB_NAME = "database.db"
 def home():
     return render_template("homepage.html")
 
+
 @app.route("/admin", methods=["GET", "POST"])
 @admin_access
 def execute():
     if request.method == "POST":
         
         headers = dict(request.headers)
-        
+        dati = json.loads(request.data)
         res = ""
+        
         f = StringIO()
         with redirect_stdout(f):
             try:
-                exec(headers["Comando"])
+                exec(dati["comando"])
                 res = f.getvalue().strip()
             except:
                 res = "error"
         
-        headers["Result"] = str(res)
-        
+        # headers["Result"] = str(res)
+        return jsonify({"res" : res})
         return Response([b"good"], headers=headers)
     elif request.method == "GET":
         return render_template("admin.html")
     return "idk"
+
+def carica_corsi(path):
+    print(path)
+
+    if not os.path.exists(path):
+        print("path does not exists")
+        return
+    
+    wb = openpyxl.load_workbook(path)
+    ws = wb.active
+    values = [ws.cell(row=1,column=i).value for i in range(1,ws.max_column+1)]
+    
+    print(values)
+    
+    for value in ws.iter_rows(min_row=2):
+        for i in range(1, 6):
+            new_corso = database.corso(
+                titolo = value[values.find("titolo")].value,
+                descrizione = value[values.find("descrizione")].value,
+                posti_totali = value[values.find("posti_tatli")].value,
+                posti_occupati = 0,
+                aula = value[values.find("aula")].value,
+                fascia = i,
+                organizzatori = value[values.find("organizzatori")].value,
+                note = value[values.find("note")].value
+            )
+            if value[values.find("fascia")].value.find(f"Fascia {i}") != -1:
+                # add corso for fascia {i}
+                db.session.add(new_corso)
+                db.session.commit()
+                
+    pass
 
 # statistiche
 
