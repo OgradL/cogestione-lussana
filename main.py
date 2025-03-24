@@ -18,9 +18,9 @@ from os import path
 from werkzeug.security import check_password_hash, generate_password_hash
 from xlsxwriter import Workbook
 from random import randint
-import smtplib
-from email.message import EmailMessage
-
+import requests
+import os
+import dotenv
 
 DB_NAME = "database.db"
 # app = Flask(__name__)
@@ -269,16 +269,14 @@ def login():
     return redirect(url_for("home"))
 
 def send_email(to_email, subject, content):
-    msg = EmailMessage()
-    msg.set_content(content)
-    
-    msg['Subject'] = subject
-    msg['From'] = "dragoleonardo1@gmail.com"
-    msg['To'] = to_email
-
-    s = smtplib.SMTP('localhost')
-    s.send_message(msg)
-    s.quit()
+    return requests.post(
+        "https://api.eu.mailgun.net/v3/cogestione-lussana.eu/messages",
+        auth=("api", os.getenv('API_KEY', 'API_KEY')),
+        data={"from": "Iscrizioni Cogestione Lussana <iscrizioni@cogestione-lussana.eu>",
+            "to": to_email,
+            "subject": subject,
+            "text": content
+            })
 
 def send_auth_verification_email(email):
     testo = f"""Questo è il tuo codice di verififca:
@@ -291,14 +289,9 @@ def send_auth_verification_email(email):
                testo)
 
 def send_pwd_reset_email(email):
-    testo = f"""Questo è il tuo codice di verifica:
-                {session["auth_code"]}
-                Inseriscilo nella pagina di reset della password!
-    """
+    testo = f"""Questo è il tuo codice di verifica:\n\t{session["auth_code"]}\nInseriscilo nella pagina di reset della password!"""
     
-    send_email(email,
-               "Codice di verifica cogestione",
-               testo)
+    send_email(email, "Codice di verifica cogestione", testo)
 
 
 @app.route("/verification/", methods=["GET", "POST"])
@@ -383,12 +376,11 @@ def register():
     
     session.clear()
     session["auth_code"] = "".join([str(randint(0, 9)) for _ in range(6)])
-    session["auth_code"] = "000000"
     session["auth_age"] = datetime.now().isoformat()
     
     flash(f"Ti abbiamo inviato una mail di verifica su {email}")
     
-    # send_auth_email(email)
+    send_auth_verification_email(email)
     
     password = generate_password_hash(password1)
 
@@ -463,12 +455,11 @@ def reset_password():
     
     session.clear()
     session["auth_code"] = "".join([str(randint(0, 9)) for _ in range(6)])
-    session["auth_code"] = "000000"
     session["auth_age"] = datetime.now().isoformat()
     
     flash(f"Ti abbiamo inviato una mail di verifica su {email}")
     
-    # send_pwd_reset_email(email)
+    send_pwd_reset_email(email)
     
     password = generate_password_hash(password1)
     
@@ -485,6 +476,8 @@ def logout():
 
 
 if __name__ == "__main__":
+    dotenv.load_dotenv()
+    
     corsitmp = [
         database.corso(
             titolo="prova corsoo",
@@ -508,7 +501,7 @@ if __name__ == "__main__":
         ),
         database.corso(
             titolo="corso brutto",
-            descrizione="descrizione brutta",
+            descrizione="descrizione brutta ma molto lunga lungalunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lungaaaaaaaaaaaaaaaaaaaaaa",
             posti_totali=10,
             posti_occupati=0,
             aula="Ed. 2, Piano 1, aula 36",
