@@ -485,59 +485,10 @@ def logout():
 if __name__ == "__main__":
     dotenv.load_dotenv()
     
-    corsitmp = [
-        database.corso(
-            titolo="prova corsoo",
-            descrizione="descrizione bella",
-            posti_totali=50,
-            posti_occupati=20,
-            aula="Ed. 2, Piano 1, aula 36",
-            fascia="1",
-            organizzatori="persona 1",
-            note="nota 1"
-        ),
-        database.corso(
-            titolo="corso serio",
-            descrizione="black jack",
-            posti_totali=5,
-            posti_occupati=1,
-            aula="Ed. 2, Piano 2, aula 32",
-            fascia="2",
-            organizzatori="beccia",
-            note="wooof"
-        ),
-        database.corso(
-            titolo="corso brutto",
-            descrizione="descrizione brutta ma molto lunga lungalunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lungaaaaaaaaaaaaaaaaaaaaaa",
-            posti_totali=10,
-            posti_occupati=0,
-            aula="Ed. 2, Piano 1, aula 36",
-            fascia="1",
-            organizzatori="ferry",
-            note="tosta"
-        ),
-        database.corso(
-            titolo="corso cp",
-            descrizione="ds + dp + grafi + advanced techincs",
-            posti_totali=150,
-            posti_occupati=149,
-            aula="Ed. 2, Piano 0, Laboratorio Ravasio",
-            fascia="1",
-            organizzatori="drago",
-            note="tanta cp bella"
-        )
-    ]
-    
     with app.app_context():
         # db.drop_all()
         # db.init_app(app)
         # db.create_all()
         database.init_db(app)
-        
-        for corso in corsitmp:
-            q = db.session.execute(db.select(database.corso).filter_by(id=corso.id)).first()
-            if q is None:
-                db.session.add(corso)
-                db.session.commit()
         
         app.run(debug=True)
