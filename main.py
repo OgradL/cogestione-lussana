@@ -269,6 +269,7 @@ def login():
     return redirect(url_for("lista_corsi", n_fascia=1))
 
 def send_email(to_email, subject, content):
+    dotenv.load_dotenv()
     res = requests.post(
         "https://api.eu.mailgun.net/v3/cogestione-lussana.eu/messages",
         auth=("api", os.getenv('API_KEY', 'API_KEY')),
@@ -277,7 +278,8 @@ def send_email(to_email, subject, content):
             "subject": subject,
             "text": content
             })
-    print(to_email, res)
+    
+    # print(to_email, res)
 
 def send_auth_verification_email(email):
     testo = f"""Questo è il tuo codice di verififca:
