@@ -282,17 +282,14 @@ def send_email(to_email, subject, content):
     # print(to_email, res)
 
 def send_auth_verification_email(email):
-    testo = f"""Questo è il tuo codice di verififca:
-                {session["auth_code"]}
-                Inseriscilo nella pagina di registrazione!
-    """
+    testo = f"""Questo è il tuo codice di verififca:\n\t{session["auth_code"]}\n\nInseriscilo nella pagina di registrazione!"""
     
     send_email(email,
                "Codice di verifica cogestione",
                testo)
 
 def send_pwd_reset_email(email):
-    testo = f"""Questo è il tuo codice di verifica:\n\t{session["auth_code"]}\nInseriscilo nella pagina di reset della password!"""
+    testo = f"""Questo è il tuo codice di verifica:\n\t{session["auth_code"]}\n\nInseriscilo nella pagina di reset della password!"""
     
     send_email(email, "Codice di verifica cogestione", testo)
 
