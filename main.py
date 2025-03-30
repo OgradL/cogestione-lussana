@@ -603,4 +603,5 @@ if __name__ == "__main__":
                 db.session.add(corso)
                 db.session.commit()
         
+        # debug = False on production
         app.run(debug=True)
