@@ -23,6 +23,7 @@ class user(db.Model):
     classe = Column(String(2))
     password = Column(String(150))
     iscrizioni = db.relationship('iscrizione', backref="userref", lazy=True)
+    corsi_organizzati = db.relationship('organizza', backref="userref", lazy=True)
 
 
 class corso(db.Model):
@@ -33,9 +34,10 @@ class corso(db.Model):
     posti_occupati = Column(Integer)
     aula = Column(String(100))
     fascia = Column(Integer)
-    organizzatori = Column(String(200))
+    organizzatori_str = Column(String(200))
     note = Column(String(1000))
     iscrizioni = db.relationship('iscrizione', backref="corsoref", lazy=True)
+    organizzatori = db.relationship('organizza', backref="corsoref", lazy=True)
 
 
 class iscrizione(db.Model):
@@ -43,6 +45,10 @@ class iscrizione(db.Model):
     utente = Column(Integer, ForeignKey('user.id'))
     corso = Column(Integer, ForeignKey('corso.id'))
 
+class organizza(db.Model):
+    id = Column(Integer, primary_key=True)
+    utente = Column(Integer, ForeignKey('user.id'))
+    corso = Column(Integer, ForeignKey('corso.id'))
 
 def init_db(app):
     # db.init_app(app)

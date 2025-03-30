@@ -18,10 +18,17 @@
 			<tr>
 				<th class="Fascie"> {{ i }} ( {{ orari_fasce[i] }} ) </th>
 				{% if corsi[i] %}
-					<th> {{ corsi[i]["titolo"] }} </th>
-					<th> {{ corsi[i]["organizzatori"] }} </th>
-					<th> {{ corsi[i]["aula"] }} </th>
-					<th> <button class="sub" onclick="annulla_iscrizione({{corsi[i]["id"]}})"> Annulla </button> </th>
+					{% if corsi[i]["organizzato"] %}
+						<th> {{ corsi[i]["titolo"] }} </th>
+						<th> {{ corsi[i]["organizzatori"] }} </th>
+						<th> {{ corsi[i]["aula"] }} </th>
+						<th> Sei tu l'organizzatore di questo corso </th>
+					{% else %}
+						<th> {{ corsi[i]["titolo"] }} </th>
+						<th> {{ corsi[i]["organizzatori"] }} </th>
+						<th> {{ corsi[i]["aula"] }} </th>
+						<th> <button class="sub" onclick="annulla_iscrizione({{corsi[i]["id"]}})"> Annulla </button> </th>
+					{% endif %}
 				{% else %}
 					<th> <a class="iscriviti" href="/lista-corsi/{{i}}"> Iscriviti! </a> </th>
 					<th> </th>

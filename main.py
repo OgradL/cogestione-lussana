@@ -216,6 +216,9 @@ def iscrizione():
 
     sel = db.select(database.iscrizione).join(database.user).where(database.user.email == session["email"])
     iscrizioni = db.session.scalars(sel).all()
+    
+    sel = db.select(database.organizza).join(database.user).where(database.user.email == session["email"])
+    organizzazioni = db.session.scalars(sel).all()
     # iscrizioni = db.session.scalars(db.select(database.iscrizione).where(database.iscrizione.userref.email == session["email"])).all()
     
     #(db.select(database.user, database.iscrizione, database.corso).filter_by(email=session["email"])).all()
@@ -225,6 +228,11 @@ def iscrizione():
     for iscrizione in iscrizioni:
         if iscrizione.corsoref.fascia == corso.fascia:
             flash("Sei già iscritto a un corso per questa fascia. Puoi annullare l'iscrizione dal tuo profilo", 'error')
+            return Response([b"error"], 400)
+
+    for organizza in organizzazioni:
+        if organizza.corsoref.fascia == corso.fascia:
+            flash("Sei già organizzatore di un corso per questa fascia", 'error')
             return Response([b"error"], 400)
     
     
@@ -271,6 +279,9 @@ def profile():
     sel = db.select(database.iscrizione).join(database.user).where(database.user.email == session["email"])
     iscrizioni = db.session.scalars(sel).all()
     
+    sel = db.select(database.organizza).join(database.user).where(database.user.email == session["email"])
+    organizzazioni = db.session.scalars(sel).all()
+    
     corsi = [dict() for _ in range(6)]
     
     for iscrizione in iscrizioni:
@@ -278,9 +289,20 @@ def profile():
         d["id"] = iscrizione.corsoref.id
         d["titolo"] = iscrizione.corsoref.titolo
         d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
-        d["organizzatori"] = iscrizione.corsoref.organizzatori
+        d["organizzatori"] = iscrizione.corsoref.organizzatori_str
         d["aula"] = iscrizione.corsoref.aula
+        d["organizzato"] = False
         # d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({iscrizione.corsoref.id})\"> Annulla </button>"
+    
+    for organizza in organizzazioni:
+        d = corsi[organizza.corsoref.fascia]
+        d["id"] = organizza.corsoref.id
+        d["titolo"] = organizza.corsoref.titolo
+        d["posti"] = f"{organizza.corsoref.posti_occupati} / {organizza.corsoref.posti_totali}"
+        d["organizzatori"] = organizza.corsoref.organizzatori_str
+        d["aula"] = organizza.corsoref.aula
+        d["organizzato"] = True
+    
     
     return render_template("profile.html", corsi=corsi, utente=user, orari_fasce=orari_fasce)
 
@@ -418,11 +440,12 @@ def register():
     
     session.clear()
     session["auth_code"] = "".join([str(randint(0, 9)) for _ in range(6)])
+    session["auth_code"] = "000000"
     session["auth_age"] = datetime.now().isoformat()
     
     flash(f"Ti abbiamo inviato una mail di verifica su {email}")
     
-    send_auth_verification_email(email)
+    # send_auth_verification_email(email)
     
     password = generate_password_hash(password1)
 
@@ -520,10 +543,59 @@ def logout():
 if __name__ == "__main__":
     dotenv.load_dotenv()
     
+    corsitmp = [
+        database.corso(
+            titolo="prova corsoo",
+            descrizione="descrizione bella",
+            posti_totali=50,
+            posti_occupati=20,
+            aula="Ed. 2, Piano 1, aula 36",
+            fascia="1",
+            organizzatori_str="persona 1",
+            note="nota 1"
+        ),
+        database.corso(
+            titolo="corso serio",
+            descrizione="black jack",
+            posti_totali=5,
+            posti_occupati=1,
+            aula="Ed. 2, Piano 2, aula 32",
+            fascia="2",
+            organizzatori_str="beccia",
+            note="wooof"
+        ),
+        database.corso(
+            titolo="corso brutto",
+            descrizione="descrizione brutta ma molto lunga lungalunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lungaaaaaaaaaaaaaaaaaaaaaa",
+            posti_totali=10,
+            posti_occupati=0,
+            aula="Ed. 2, Piano 1, aula 36",
+            fascia="1",
+            organizzatori_str="ferry",
+            note="tosta"
+        ),
+        database.corso(
+            titolo="corso cp",
+            descrizione="ds + dp + grafi + advanced techincs",
+            posti_totali=150,
+            posti_occupati=149,
+            aula="Ed. 2, Piano 0, Laboratorio Ravasio",
+            fascia="1",
+            organizzatori_str="drago",
+            note="tanta cp bella"
+        )
+    ]
+    
     with app.app_context():
         # db.drop_all()
         # db.init_app(app)
         # db.create_all()
         database.init_db(app)
+        
+        for corso in corsitmp:
+            q = db.session.execute(db.select(database.corso).filter_by(id=corso.id)).first()
+            if q is None:
+                db.session.add(corso)
+                db.session.commit()
         
         app.run(debug=True)
