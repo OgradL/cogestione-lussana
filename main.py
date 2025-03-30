@@ -68,27 +68,73 @@ def carica_corsi(path):
     
     wb = openpyxl.load_workbook(path)
     ws = wb.active
-    values = [ws.cell(row=1,column=i).value for i in range(1,ws.max_column+1)]
+    # values = [ws.cell(row=1,column=i).value for i in range(1,ws.max_column+1)]
     
-    print(values)
     
+    FASCIA = 0
     for value in ws.iter_rows(min_row=2):
-        for i in range(1, 6):
-            new_corso = database.corso(
-                titolo = value[values.find("titolo")].value,
-                descrizione = value[values.find("descrizione")].value,
-                posti_totali = value[values.find("posti_tatli")].value,
-                posti_occupati = 0,
-                aula = value[values.find("aula")].value,
-                fascia = i,
-                organizzatori_str = value[values.find("organizzatori")].value,
-                note = value[values.find("note")].value
-            )
-            if value[values.find("fascia")].value.find(f"Fascia {i}") != -1:
-                # add corso for fascia {i}
-                db.session.add(new_corso)
-                db.session.commit()
+        titolo = value[1].value
+        referenti = value[2].value
+        descrizione = value[3].value
+        aula = value[4].value
+        capienza = value[5].value
+        
+        try:
+            new_capienza = ""
+            for c in capienza:
+                if c.isnumeric():
+                    new_capienza += c
+            capienza = int(new_capienza)
+        except:
+            print(f"error reading capienza: {capienza} - {new_capienza}")
+            continue
+        
+        if not all([titolo, referenti, descrizione, aula, capienza]):
+            if titolo is not None and titolo.startswith("FASCIA"):
+                FASCIA = int(titolo[7])
+            continue
+
+        if str(titolo).strip().lower().count("nome") != 0 and str(aula).strip().lower().count("aula") != 0:
+            # print(f"--------------------------------------------------------------------------------  CORSI FASCIA {FASCIA}  --------------------------------------------------------------------------------")
+            continue
+        
+        new_corso = database.corso(
+            titolo = titolo,
+            descrizione = descrizione,
+            posti_totali = capienza,
+            posti_occupati = 0,
+            aula = aula,
+            fascia = FASCIA,
+            organizzatori_str = referenti
+        )
+        db.session.add(new_corso)
+        db.session.commit()
+        
+        # print(f"{FASCIA} --- {titolo}:\n referenti: {referenti} \n descrizione: {descrizione} \n aula: {aula} \n capienza: {capienza} \n\n\n")
+
+
+    # for value in ws.iter_rows(min_row=2):
+    #     for i in range(1, 6):
+    #         new_corso = database.corso(
+    #             titolo = value[values.find("titolo")].value,
+    #             descrizione = value[values.find("descrizione")].value,
+    #             posti_totali = value[values.find("posti_tatli")].value,
+    #             posti_occupati = 0,
+    #             aula = value[values.find("aula")].value,
+    #             fascia = i,
+    #             organizzatori_str = value[values.find("organizzatori")].value,
+    #             note = value[values.find("note")].value
+    #         )
+    #         if value[values.find("fascia")].value.find(f"Fascia {i}") != -1:
+    #             # add corso for fascia {i}
+    #             db.session.add(new_corso)
+    #             db.session.commit()
                 
+    # pass
+
+def carica_utenti(path):
+    # open anagrafica
+    
     pass
 
 # statistiche
