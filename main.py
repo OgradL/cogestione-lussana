@@ -382,14 +382,17 @@ def verification():
     
     # user = session["user"]
     email = session["tmp_email"]
-    nome = session["tmp_nome"]
-    cognome = session["tmp_cognome"]
-    classe = session["tmp_classe"]
+    # nome = session["tmp_nome"]
+    # cognome = session["tmp_cognome"]
+    # classe = session["tmp_classe"]
     password = session["tmp_password"]
     session.clear()
     
-    user = database.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
-    db.session.add(user)
+    user = db.session.execute(db.select(database.user).filter_by(email=email)).first()
+    user.password = password
+    
+    # user = database.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
+    # db.session.add(user)
     db.session.commit()
     
     flash("Registrato con successo", 'success')
@@ -402,10 +405,10 @@ def register():
     
     failed = False
     
-    nome = request.form.get("name")
-    cognome = request.form.get("lastname")
+    # nome = request.form.get("name")
+    # cognome = request.form.get("lastname")
     email = request.form.get("email")
-    classe = request.form.get("classe")
+    # classe = request.form.get("classe")
     password1 = request.form.get("password1")
     password2 = request.form.get("password2")
     
@@ -417,19 +420,22 @@ def register():
         flash("Devi usare l'email istituzionale (...@liceolussana.eu)")
         failed = True
     
-    classe = sanitize_classe(classe)
+    # classe = sanitize_classe(classe)
     
-    if classe is None or False:
-        flash("La classe non è valida", 'error')
-        failed = True
+    # if classe is None or False:
+    #     flash("La classe non è valida", 'error')
+    #     failed = True
     
     # more checks
     
     user = db.session.execute(db.select(database.user).filter_by(email=email)).first()
     
-    if user is not None:
-        flash("L'email è già usata", "error")
+    if user is None:
+        flash("L'email non è esistente. Se credi ci sia stato un errore, contatta i rappresentanti", "error")
         failed = True
+    
+    if user.password != "":
+        flash("Email è già in uso", 'error')
     
     if password1 != password2:
         flash("Le password non corrispondono", 'error')
@@ -450,9 +456,9 @@ def register():
     password = generate_password_hash(password1)
 
     session["tmp_email"] = email
-    session["tmp_nome"] = nome
-    session["tmp_cognome"] = cognome
-    session["tmp_classe"] = classe
+    # session["tmp_nome"] = nome
+    # session["tmp_cognome"] = cognome
+    # session["tmp_classe"] = classe
     session["tmp_password"] = password
 
     return redirect(url_for("verification"))
@@ -484,10 +490,9 @@ def verification_reset_pwd():
     session.clear()
     
     user = db.session.execute(db.select(database.user).filter_by(email=email)).first()[0]
-    print(user)
-    print(password)
     user.password = password
     db.session.commit()
+    session.clear()
     
     flash("Password modificata con successo", 'success')
     return redirect(url_for("login"))
