@@ -81,7 +81,7 @@ def carica_corsi(path):
                 posti_occupati = 0,
                 aula = value[values.find("aula")].value,
                 fascia = i,
-                organizzatori = value[values.find("organizzatori")].value,
+                organizzatori_str = value[values.find("organizzatori")].value,
                 note = value[values.find("note")].value
             )
             if value[values.find("fascia")].value.find(f"Fascia {i}") != -1:
