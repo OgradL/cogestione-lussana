@@ -2,5 +2,8 @@
 instance/
 __pycache__/
 
+input_data/
 output-data/
 .env
+
+test_parser.py
