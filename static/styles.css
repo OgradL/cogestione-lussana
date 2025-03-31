@@ -320,6 +320,6 @@ a{
 }
 
 .logo {
-    width: 1em; /* Usa una dimensione relativa per adattare l'immagine al testo */
+    width: auto; /* Usa una dimensione relativa per adattare l'immagine al testo */
     height: 1em; /* Mantiene le proporzioni */
 }
