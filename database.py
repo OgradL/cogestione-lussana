@@ -54,3 +54,5 @@ def init_db(app):
     # db.init_app(app)
     if not path.exists(path.join(path.dirname(__file__), "instance", DB_NAME)):
         db.create_all()
+        return True
+    return False

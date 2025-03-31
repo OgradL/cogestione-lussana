@@ -60,6 +60,7 @@ def execute():
     return "idk"
 
 def carica_corsi(path):
+    
     print(path)
 
     if not os.path.exists(path):
@@ -78,16 +79,7 @@ def carica_corsi(path):
         descrizione = value[3].value
         aula = value[4].value
         capienza = value[5].value
-        
-        try:
-            new_capienza = ""
-            for c in capienza:
-                if c.isnumeric():
-                    new_capienza += c
-            capienza = int(new_capienza)
-        except:
-            print(f"error reading capienza: {capienza} - {new_capienza}")
-            continue
+        real_referenti = value[6].value
         
         if not all([titolo, referenti, descrizione, aula, capienza]):
             if titolo is not None and titolo.startswith("FASCIA"):
@@ -97,6 +89,18 @@ def carica_corsi(path):
         if str(titolo).strip().lower().count("nome") != 0 and str(aula).strip().lower().count("aula") != 0:
             # print(f"--------------------------------------------------------------------------------  CORSI FASCIA {FASCIA}  --------------------------------------------------------------------------------")
             continue
+
+        try:
+            new_capienza = ""
+            for c in str(capienza):
+                if c.isnumeric():
+                    new_capienza += c
+            capienza = int(new_capienza)
+        except:
+            print(f"error reading capienza: {capienza} - {new_capienza}")
+            print(titolo, referenti, descrizione, aula)
+            continue
+        
         
         new_corso = database.corso(
             titolo = titolo,
@@ -109,6 +113,17 @@ def carica_corsi(path):
         )
         db.session.add(new_corso)
         db.session.commit()
+        
+        for x in real_referenti.split(";"):
+            user = db.session.scalars(db.select(database.user).where(database.user.email == x)).first()
+            if user is None:
+                print(x)
+                continue
+                # raise "vaffanculo"
+            db.session.add(database.organizza(
+                utente = user.id,
+                corso = new_corso.id
+            ))
         
         # print(f"{FASCIA} --- {titolo}:\n referenti: {referenti} \n descrizione: {descrizione} \n aula: {aula} \n capienza: {capienza} \n\n\n")
 
@@ -133,9 +148,30 @@ def carica_corsi(path):
     # pass
 
 def carica_utenti(path):
-    # open anagrafica
+
+    if not os.path.exists(path):
+        print("path does not exists")
+        return
     
-    pass
+    wb = openpyxl.load_workbook(path)
+    ws = wb.active
+    
+    for value in ws.iter_rows(min_row=2):
+        db.session.add(database.user(
+            email = value[3].value,
+            nome = value[1].value,
+            cognome = value[0].value,
+            classe = value[2].value,
+            password = ""
+        ))
+        db.session.commit()
+        
+        # anagrafica.append((
+        #     str(value[0].value).strip().lower(),
+        #     value[1].value.strip().lower() if value[1].value is not None else "",
+        #     sanitize_classe(str(value[2].value).strip().lower()),
+        #     str(value[3].value).strip().lower()
+        # ))
 
 # statistiche
 
@@ -435,7 +471,7 @@ def verification():
     session.clear()
     
     user = db.session.execute(db.select(database.user).filter_by(email=email)).first()
-    user.password = password
+    user[0].password = password
     
     # user = database.user(email=email, nome=nome, cognome=cognome, classe=classe, password=password)
     # db.session.add(user)
@@ -479,8 +515,8 @@ def register():
     if user is None:
         flash("L'email non è esistente. Se credi ci sia stato un errore, contatta i rappresentanti", "error")
         failed = True
-    
-    if user.password != "":
+    print(user)
+    if user[0].password != "":
         flash("Email è già in uso", 'error')
     
     if password1 != password2:
@@ -594,60 +630,15 @@ def logout():
 if __name__ == "__main__":
     dotenv.load_dotenv()
     
-    corsitmp = [
-        database.corso(
-            titolo="prova corsoo",
-            descrizione="descrizione bella",
-            posti_totali=50,
-            posti_occupati=20,
-            aula="Ed. 2, Piano 1, aula 36",
-            fascia="1",
-            organizzatori_str="persona 1",
-            note="nota 1"
-        ),
-        database.corso(
-            titolo="corso serio",
-            descrizione="black jack",
-            posti_totali=5,
-            posti_occupati=1,
-            aula="Ed. 2, Piano 2, aula 32",
-            fascia="2",
-            organizzatori_str="beccia",
-            note="wooof"
-        ),
-        database.corso(
-            titolo="corso brutto",
-            descrizione="descrizione brutta ma molto lunga lungalunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lunglunga lungaaaaaaaaaaaaaaaaaaaaaa",
-            posti_totali=10,
-            posti_occupati=0,
-            aula="Ed. 2, Piano 1, aula 36",
-            fascia="1",
-            organizzatori_str="ferry",
-            note="tosta"
-        ),
-        database.corso(
-            titolo="corso cp",
-            descrizione="ds + dp + grafi + advanced techincs",
-            posti_totali=150,
-            posti_occupati=149,
-            aula="Ed. 2, Piano 0, Laboratorio Ravasio",
-            fascia="1",
-            organizzatori_str="drago",
-            note="tanta cp bella"
-        )
-    ]
-    
     with app.app_context():
         # db.drop_all()
         # db.init_app(app)
         # db.create_all()
-        database.init_db(app)
-        
-        for corso in corsitmp:
-            q = db.session.execute(db.select(database.corso).filter_by(id=corso.id)).first()
-            if q is None:
-                db.session.add(corso)
-                db.session.commit()
+        if database.init_db(app):
+            print("carica")
+            dirPath = os.path.dirname(__file__)
+            carica_utenti(os.path.join(dirPath, "input_data", "Anagrafica.xlsx"))
+            carica_corsi(os.path.join(dirPath, "input_data", "Corsi-fixed.xlsx"))
         
         # debug = False on production
         app.run(debug=True)
