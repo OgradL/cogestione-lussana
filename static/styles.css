@@ -312,7 +312,14 @@ tr.ids{
 a{
 	text-decoration: none;
 }
-.logo{
-	float: right;
-	width: 2vw;
+
+.Nav a {
+    display: flex;
+    align-items: center; /* Allinea verticalmente il testo e l'immagine */
+    gap: 10px; /* Aggiunge uno spazio tra il testo e l'immagine */
+}
+
+.logo {
+    width: 1em; /* Usa una dimensione relativa per adattare l'immagine al testo */
+    height: 1em; /* Mantiene le proporzioni */
 }
