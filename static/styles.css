@@ -312,3 +312,7 @@ tr.ids{
 a{
 	text-decoration: none;
 }
+.logo{
+	float: right;
+	width: 2vw;
+}
