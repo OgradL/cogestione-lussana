@@ -316,7 +316,7 @@ a{
 .Nav a {
     display: flex;
     align-items: center; /* Allinea verticalmente il testo e l'immagine */
-    gap: 10px; /* Aggiunge uno spazio tra il testo e l'immagine */
+    gap: 20px; /* Aggiunge uno spazio tra il testo e l'immagine */
 }
 
 .logo {
