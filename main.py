@@ -126,24 +126,6 @@ def carica_corsi(path):
             ))
         
         # print(f"{FASCIA} --- {titolo}:\n referenti: {referenti} \n descrizione: {descrizione} \n aula: {aula} \n capienza: {capienza} \n\n\n")
-
-
-    # for value in ws.iter_rows(min_row=2):
-    #     for i in range(1, 6):
-    #         new_corso = database.corso(
-    #             titolo = value[values.find("titolo")].value,
-    #             descrizione = value[values.find("descrizione")].value,
-    #             posti_totali = value[values.find("posti_tatli")].value,
-    #             posti_occupati = 0,
-    #             aula = value[values.find("aula")].value,
-    #             fascia = i,
-    #             organizzatori_str = value[values.find("organizzatori")].value,
-    #             note = value[values.find("note")].value
-    #         )
-    #         if value[values.find("fascia")].value.find(f"Fascia {i}") != -1:
-    #             # add corso for fascia {i}
-    #             db.session.add(new_corso)
-    #             db.session.commit()
                 
     # pass
 
@@ -358,7 +340,7 @@ def annulla_iscrizione():
 @app.route("/corso/<id_corso>", methods=["GET"])
 def info_corso(id_corso):
     corso = database.corso.query.filter_by(id=id_corso).first()
-    referenti = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome}", corso.organizzatori)))
+    referenti = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome} {x.userref.classe}", corso.organizzatori)))
     return render_template("corso.html", corso=corso, referenti=referenti)
 
 # profilo
@@ -382,7 +364,7 @@ def profile():
         d["id"] = iscrizione.corsoref.id
         d["titolo"] = iscrizione.corsoref.titolo
         d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
-        d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome}", iscrizione.corsoref.organizzatori)))
+        d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome} {x.userref.classe}", iscrizione.corsoref.organizzatori)))
         d["aula"] = iscrizione.corsoref.aula
         d["organizzato"] = False
         # d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({iscrizione.corsoref.id})\"> Annulla </button>"
@@ -392,7 +374,7 @@ def profile():
         d["id"] = organizza.corsoref.id
         d["titolo"] = organizza.corsoref.titolo
         d["posti"] = f"{organizza.corsoref.posti_occupati} / {organizza.corsoref.posti_totali}"
-        d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome}", organizza.corsoref.organizzatori)))
+        d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome} {x.userref.classe}", organizza.corsoref.organizzatori)))
         d["aula"] = organizza.corsoref.aula
         d["organizzato"] = True
     
@@ -526,7 +508,7 @@ def register():
     if user is None:
         flash("L'email non è esistente. Se credi ci sia stato un errore, contatta i rappresentanti", "error")
         failed = True
-    print(user)
+    # print(user)
     if user[0].password != "":
         flash("Email è già in uso", 'error')
     
