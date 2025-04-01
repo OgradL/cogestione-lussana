@@ -242,9 +242,13 @@ form{
 
 
 table {
-    width: 75%;
+    width: 100%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
+}
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Abilita lo scroll orizzontale */
 }
 
 th, td {

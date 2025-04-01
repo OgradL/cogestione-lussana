@@ -5,37 +5,38 @@
 
 	<h3> <strong> RIEPILOGO ISCRIZIONI {{ utente.cognome }} {{ utente.nome }} {{ utente.classe }}</strong> </h3>
 	<br> <br>
-
-	<table>
-		<tr class="ids">
-			<th> Fascia </th>
-			<th> Corso </th>
-			<th> Organizzatori </th>
-			<th> Aula </th>
-			<th> Annulla Iscrizione </th>
-		</tr>
-		{% for i in range(1, 6) %}
-			<tr>
-				<th class="Fascie"> {{ i }} ( {{ orari_fasce[i] }} ) </th>
-				{% if corsi[i] %}
-					{% if corsi[i]["organizzato"] %}
-						<th> {{ corsi[i]["titolo"] }} </th>
-						<th> {{ corsi[i]["organizzatori"] }} </th>
-						<th> {{ corsi[i]["aula"] }} </th>
-						<th> Sei tu l'organizzatore di questo corso </th>
-					{% else %}
-						<th> {{ corsi[i]["titolo"] }} </th>
-						<th> {{ corsi[i]["organizzatori"] }} </th>
-						<th> {{ corsi[i]["aula"] }} </th>
-						<th> <button class="sub" onclick="annulla_iscrizione({{corsi[i]["id"]}})"> Annulla </button> </th>
-					{% endif %}
-				{% else %}
-					<th> <a class="iscriviti" href="/lista-corsi/{{i}}"> Iscriviti! </a> </th>
-					<th> </th>
-					<th> </th>
-					<th> </th>
-				{% endif %}
+	<div class="table-container">
+		<table>
+			<tr class="ids">
+				<th> Fascia </th>
+				<th> Corso </th>
+				<th> Organizzatori </th>
+				<th> Aula </th>
+				<th> Annulla Iscrizione </th>
 			</tr>
-		{% endfor %}
-	</table>
+			{% for i in range(1, 6) %}
+				<tr>
+					<th class="Fascie"> {{ i }} ( {{ orari_fasce[i] }} ) </th>
+					{% if corsi[i] %}
+						{% if corsi[i]["organizzato"] %}
+							<th> {{ corsi[i]["titolo"] }} </th>
+							<th> {{ corsi[i]["organizzatori"] }} </th>
+							<th> {{ corsi[i]["aula"] }} </th>
+							<th> Sei tu l'organizzatore di questo corso </th>
+						{% else %}
+							<th> {{ corsi[i]["titolo"] }} </th>
+							<th> {{ corsi[i]["organizzatori"] }} </th>
+							<th> {{ corsi[i]["aula"] }} </th>
+							<th> <button class="sub" onclick="annulla_iscrizione({{corsi[i]["id"]}})"> Annulla </button> </th>
+						{% endif %}
+					{% else %}
+						<th> <a class="iscriviti" href="/lista-corsi/{{i}}"> Iscriviti! </a> </th>
+						<th> </th>
+						<th> </th>
+						<th> </th>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
 {% endblock %}
