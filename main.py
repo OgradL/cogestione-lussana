@@ -521,12 +521,12 @@ def register():
     
     session.clear()
     session["auth_code"] = "".join([str(randint(0, 9)) for _ in range(6)])
-    session["auth_code"] = "000000"
+    # session["auth_code"] = "000000"
     session["auth_age"] = datetime.now().isoformat()
     
     flash(f"Ti abbiamo inviato una mail di verifica su {email}")
     
-    # send_auth_verification_email(email)
+    send_auth_verification_email(email)
     
     password = generate_password_hash(password1)
 
