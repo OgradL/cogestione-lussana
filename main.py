@@ -126,24 +126,6 @@ def carica_corsi(path):
             ))
         
         # print(f"{FASCIA} --- {titolo}:\n referenti: {referenti} \n descrizione: {descrizione} \n aula: {aula} \n capienza: {capienza} \n\n\n")
-
-
-    # for value in ws.iter_rows(min_row=2):
-    #     for i in range(1, 6):
-    #         new_corso = database.corso(
-    #             titolo = value[values.find("titolo")].value,
-    #             descrizione = value[values.find("descrizione")].value,
-    #             posti_totali = value[values.find("posti_tatli")].value,
-    #             posti_occupati = 0,
-    #             aula = value[values.find("aula")].value,
-    #             fascia = i,
-    #             organizzatori_str = value[values.find("organizzatori")].value,
-    #             note = value[values.find("note")].value
-    #         )
-    #         if value[values.find("fascia")].value.find(f"Fascia {i}") != -1:
-    #             # add corso for fascia {i}
-    #             db.session.add(new_corso)
-    #             db.session.commit()
                 
     # pass
 
@@ -526,7 +508,7 @@ def register():
     if user is None:
         flash("L'email non è esistente. Se credi ci sia stato un errore, contatta i rappresentanti", "error")
         failed = True
-    print(user)
+    # print(user)
     if user[0].password != "":
         flash("Email è già in uso", 'error')
     
