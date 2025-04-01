@@ -9,18 +9,18 @@
 	<table>
 		<tr>
 			<th> classe </th>
-			<th> 1 </th>
-			<th> 2 </th>
-			<th> 3 </th>
-			<th> 4 </th>
-			<th> 5 </th>
+			<th> Fascia 1 </th>
+			<th> Fascia 2 </th>
+			<th> Fascia 3 </th>
+			<th> Fascia 4 </th>
+			<th> Fascia 5 </th>
 		</tr>
 		{% for classe in dati %}
 			<tr>
 				<th> {{ classe }} </th>
 				{% for fascia in range(1, 6) %}
 					<th class="
-						status-{% if dati[classe][fascia] < 40 %}red{% elif dati[classe][fascia] < 70 %}yellow{% else %}green{% endif %}
+						status-{% if dati[classe][fascia] < 35 %}red{% elif dati[classe][fascia] < 70 %}yellow{% else %}green{% endif %}
 					"> {{ dati[classe][fascia] }}% </th>
 				{% endfor %}
 			</tr>
