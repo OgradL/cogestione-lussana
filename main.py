@@ -180,6 +180,15 @@ def report():
     dati = {}
     info_classe = {}
     
+    lista_classi = []
+    path = os.path.join(os.path.dirname(__file__), "input_data", "lista_classi.xlsx")
+    wb = openpyxl.load_workbook(path)
+    ws = wb.active
+    for value in ws.iter_rows(min_row=1):
+        if value[0].value is not None:
+            lista_classi.append(value[0].value)
+    
+    
     sel = db.select(database.iscrizione)
     iscrizioni = db.session.scalars(sel).all()
 
@@ -201,7 +210,8 @@ def report():
         info_classe.setdefault(utente.classe, 0)
         info_classe[utente.classe] += 1
     
-    for classe in dati:
+    for classe in lista_classi:
+        dati.setdefault(classe, dict())
         d = dati[classe]
         # print(classe, d)
         for i in range(1, 6):
