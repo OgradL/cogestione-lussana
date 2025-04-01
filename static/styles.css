@@ -5,12 +5,13 @@ body {
 }
 
 .header {
-	position: relative;
-	top: 0px;
-	left: 0px;
-	/* width: 100%; */
-	height: 20px;
-	padding: 15px;
+    position: fixed; /* Fissa la navbar in alto */
+    top: 0;
+    left: 0;
+    width: 100%; /* Assicura che occupi tutta la larghezza */
+    background-color: #333; /* Mantiene il colore di sfondo */
+    padding: 15px;
+    z-index: 1000; /* Impedisce che venga coperta da altri elementi */
 }
 
 .content {
@@ -52,32 +53,30 @@ h1{
 
 }
 .Nav{
-	color: white; 
-    font-size: clamp(4vw, 6vw, 50px);
-    margin-bottom: 15px; /* Spazio tra il titolo e i link */
+	color: white;
+    font-size: clamp(2vw, 3vw, 30px);
+    margin: 0;
 }
 .topnav {
 	display: flex;
-    flex-direction: column; /* Mette gli elementi in colonna */
-    align-items: center; /* Li centra orizzontalmente */
-    justify-content: center;
+    flex-direction: row; /* Elementi disposti in riga */
+    align-items: center;
+    justify-content: space-between; /* Spaziatura tra elementi */
+    padding: 10px 20px;
     background-color: #333;
-    padding: 20px 0;
-    text-align: center;
+    width: 100%;
 }
 .links {
     display: flex;
-    gap: 15px; /* Distanza tra i link */
-    flex-wrap: wrap; /* Se lo schermo è piccolo, i link vanno a capo */
-    justify-content: center; /* Centra i link */
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 .topnav a {
     color: #f2f2f2;
-    text-align: center;
-    padding: 1vw 2vw; /* Padding che si riduce col viewport */
+    padding: 10px 15px;
     text-decoration: none;
-    font-size: clamp(3vw, 4vw, 40px); /* Il testo diventa più piccolo con la finestra */
-    position: relative;
+    font-size: clamp(1.5vw, 2vw, 20px);
 }
 .links a:hover {
 	background-color: #ddd;
@@ -295,10 +294,11 @@ tr.ids{
     background-color: #333;
     text-align: center;
     padding: 20px 0;
+	font-size: clamp(3vw, 6vw, 40px);
+	gap: 20px; /* Aggiunge uno spazio tra il testo e l'immagine */
 }
 .home{
     color: white;
-    font-size: clamp(3vw, 6vw, 40px);
     flex-grow: 1; /* Permette al titolo di occupare spazio */
     display: flex;
     align-items: center; /* Centra verticalmente il titolo */
@@ -321,5 +321,5 @@ a{
 
 .logo {
     width: auto; /* Usa una dimensione relativa per adattare l'immagine al testo */
-    height: 1em; /* Mantiene le proporzioni */
+    height: 1.5em; /* Mantiene le proporzioni */
 }
