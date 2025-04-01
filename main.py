@@ -177,6 +177,9 @@ def report():
     sel = db.select(database.user)
     utenti = db.session.scalars(sel).all()
     
+    for classe in lista_classi:
+        dati.setdefault(classe, dict())
+    
     for iscrizione in iscrizioni:
         if iscrizione.userref is None:
             continue
