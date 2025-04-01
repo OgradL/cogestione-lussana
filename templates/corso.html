@@ -12,8 +12,7 @@
 		<li> FASCIA: {{ corso.fascia }}</li>
 		<li> POSTI: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </li>
 		<li> AULA: {{ corso.aula }} </li>
-		<li> ORGANIZZATORI: {{ corso.organizzatori }} </li>
-		<li> NOTE: {{ corso.note }} </li>
+		<li> ORGANIZZATORI: {{ referenti }} </li>
 	</ul>
 
 	{% if session["logged"] %}

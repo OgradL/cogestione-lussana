@@ -358,7 +358,8 @@ def annulla_iscrizione():
 @app.route("/corso/<id_corso>", methods=["GET"])
 def info_corso(id_corso):
     corso = database.corso.query.filter_by(id=id_corso).first()
-    return render_template("corso.html", corso=corso)
+    referenti = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome}", corso.organizzatori)))
+    return render_template("corso.html", corso=corso, referenti=referenti)
 
 # profilo
 
@@ -381,7 +382,7 @@ def profile():
         d["id"] = iscrizione.corsoref.id
         d["titolo"] = iscrizione.corsoref.titolo
         d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
-        d["organizzatori"] = iscrizione.corsoref.organizzatori_str
+        d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome}", iscrizione.corsoref.organizzatori)))
         d["aula"] = iscrizione.corsoref.aula
         d["organizzato"] = False
         # d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({iscrizione.corsoref.id})\"> Annulla </button>"
@@ -391,7 +392,7 @@ def profile():
         d["id"] = organizza.corsoref.id
         d["titolo"] = organizza.corsoref.titolo
         d["posti"] = f"{organizza.corsoref.posti_occupati} / {organizza.corsoref.posti_totali}"
-        d["organizzatori"] = organizza.corsoref.organizzatori_str
+        d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome}", organizza.corsoref.organizzatori)))
         d["aula"] = organizza.corsoref.aula
         d["organizzato"] = True
     
