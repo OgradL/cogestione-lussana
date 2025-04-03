@@ -434,6 +434,7 @@ def login():
         flash("Email o password errati", 'error')
         return render_template("login.html")
 
+    session.permanent = True
     session["email"] = email
     session["logged"] = True
     
