@@ -144,7 +144,7 @@ def carica_utenti(path):
     for value in ws.iter_rows(min_row=2):
         db.session.add(database.user(
             email = value[3].value,
-            nome = value[1].value,
+            nome = value[1].value if value[1].value != None else "",
             cognome = value[0].value,
             classe = value[2].value,
             password = ""
