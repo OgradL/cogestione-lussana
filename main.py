@@ -375,7 +375,7 @@ def profile():
     corsi = [dict() for _ in range(6)]
     
     for iscrizione in iscrizioni:
-        if iscrizione.id == 44:
+        if iscrizione.corsoref.id == 44:
             d = corsi[iscrizione.corsoref.fascia+1]
             d["id"] = iscrizione.corsoref.id
             d["titolo"] = iscrizione.corsoref.titolo
@@ -394,13 +394,13 @@ def profile():
         # d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({iscrizione.corsoref.id})\"> Annulla </button>"
     
     for organizza in organizzazioni:
-        if iscrizione.id == 44:
-            d = corsi[iscrizione.corsoref.fascia+1]
-            d["id"] = iscrizione.corsoref.id
-            d["titolo"] = iscrizione.corsoref.titolo
-            d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
-            d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome} {x.userref.classe}", iscrizione.corsoref.organizzatori)))
-            d["aula"] = iscrizione.corsoref.aula
+        if organizza.corsoref.id == 44:
+            d = corsi[organizza.corsoref.fascia+1]
+            d["id"] = organizza.corsoref.id
+            d["titolo"] = organizza.corsoref.titolo
+            d["posti"] = f"{organizza.corsoref.posti_occupati} / {organizza.corsoref.posti_totali}"
+            d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome} {x.userref.classe}", organizza.corsoref.organizzatori)))
+            d["aula"] = organizza.corsoref.aula
             d["organizzato"] = True
 
         d = corsi[organizza.corsoref.fascia]
