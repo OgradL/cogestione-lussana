@@ -81,6 +81,9 @@ def carica_corsi(path):
         capienza = value[5].value
         real_referenti = value[6].value
         
+        if real_referenti is None:
+            real_referenti = ""
+        
         if not all([titolo, referenti, descrizione, aula, capienza]):
             if titolo is not None and titolo.startswith("FASCIA"):
                 FASCIA = int(titolo[7])
