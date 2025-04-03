@@ -306,6 +306,15 @@ def iscrizione():
     # print(iscrizioni)
     
     for iscrizione in iscrizioni:
+        if corso.fascia <= 2 and iscrizione.corsoref.id == 44:
+            flash("Sei già iscritto a un corso nella prima fascia che dura 2 fasce. Puoi annullare l'iscrizione dal tuo profilo", 'error')
+            return Response([b"error"], 400)
+            
+        if corso.id == 44:
+            if iscrizione.corsoref.fascia <= 2:
+                flash("Sei già iscritto a un corso per questa fascia o per la successiva. Questo corso dura 2 fasce. Puoi annullare l'iscrizione dal tuo profilo", 'error')
+                return Response([b"error"], 400)
+
         if iscrizione.corsoref.fascia == corso.fascia:
             flash("Sei già iscritto a un corso per questa fascia. Puoi annullare l'iscrizione dal tuo profilo", 'error')
             return Response([b"error"], 400)
@@ -366,6 +375,15 @@ def profile():
     corsi = [dict() for _ in range(6)]
     
     for iscrizione in iscrizioni:
+        if iscrizione.id == 44:
+            d = corsi[iscrizione.corsoref.fascia+1]
+            d["id"] = iscrizione.corsoref.id
+            d["titolo"] = iscrizione.corsoref.titolo
+            d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
+            d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome} {x.userref.classe}", iscrizione.corsoref.organizzatori)))
+            d["aula"] = iscrizione.corsoref.aula
+            d["organizzato"] = False
+        
         d = corsi[iscrizione.corsoref.fascia]
         d["id"] = iscrizione.corsoref.id
         d["titolo"] = iscrizione.corsoref.titolo
@@ -376,6 +394,15 @@ def profile():
         # d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({iscrizione.corsoref.id})\"> Annulla </button>"
     
     for organizza in organizzazioni:
+        if iscrizione.id == 44:
+            d = corsi[iscrizione.corsoref.fascia+1]
+            d["id"] = iscrizione.corsoref.id
+            d["titolo"] = iscrizione.corsoref.titolo
+            d["posti"] = f"{iscrizione.corsoref.posti_occupati} / {iscrizione.corsoref.posti_totali}"
+            d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome} {x.userref.classe}", iscrizione.corsoref.organizzatori)))
+            d["aula"] = iscrizione.corsoref.aula
+            d["organizzato"] = True
+
         d = corsi[organizza.corsoref.fascia]
         d["id"] = organizza.corsoref.id
         d["titolo"] = organizza.corsoref.titolo
