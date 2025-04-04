@@ -431,8 +431,8 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
     
-    email = request.form.get("email")
-    password = request.form.get("password")
+    email = request.form.get("email").strip()
+    password = request.form.get("password").strip()
     
     user = db.session.execute(db.select(database.user).filter_by(email=email)).first()
     
@@ -527,10 +527,10 @@ def register():
     
     # nome = request.form.get("name")
     # cognome = request.form.get("lastname")
-    email = request.form.get("email")
+    email = request.form.get("email").strip()
     # classe = request.form.get("classe")
-    password1 = request.form.get("password1")
-    password2 = request.form.get("password2")
+    password1 = request.form.get("password1").strip()
+    password2 = request.form.get("password2").strip()
     
     if re.match(EMAIL_REGEX, email) is None:
         flash("Email non valida", 'error')
