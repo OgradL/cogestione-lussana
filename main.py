@@ -62,7 +62,7 @@ def execute():
 def fix_emails(nome, cognome, classe, email):
     sel = db.select(database.user).where(database.user.nome.contains(nome.strip().upper()), database.user.cognome.contains(cognome.strip().upper()), database.user.classe.contains(sanitize_classe(classe)))
     
-    if db.session.scalars(sel).all().count() > 1:
+    if len(list(db.session.scalars(sel).all())) > 1:
         print("C'è più di un utente con questi robi")
         return
     
