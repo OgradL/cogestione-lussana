@@ -49,8 +49,8 @@ def execute():
             try:
                 exec(dati["comando"])
                 res = f.getvalue().strip()
-            except:
-                res = "error"
+            except Exception as e:
+                res = str(e)
         
         # headers["Result"] = str(res)
         return jsonify({"res" : res})
