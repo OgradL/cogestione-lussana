@@ -17,7 +17,8 @@ orari_fasce = [
 ]
 
 admin_emails = [
-    "drago.leonardo.studente@liceolussana.eu"
+    "drago.leonardo.studente@liceolussana.eu",
+    "colombo.ferruccio.studente@liceolussana.eu"
 ]
 
 def login_required(f):
