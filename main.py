@@ -542,6 +542,8 @@ def register():
     if user is None:
         flash("L'email non è esistente. Se credi ci sia stato un errore, contatta i rappresentanti", "error")
         failed = True
+        return render_template("register.html")
+    
     # print(user)
     if user[0].password != "":
         flash("Email è già in uso", 'error')
