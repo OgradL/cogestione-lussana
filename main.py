@@ -59,6 +59,17 @@ def execute():
         return render_template("admin.html")
     return "idk"
 
+def fix_emails(nome, cognome, classe, email):
+    sel = db.select(database.user).where(database.user.nome.contains(nome.strip().upper()), database.user.cognome.contains(cognome.strip().upper()), database.user.classe.contains(sanitize_classe(classe)))
+    
+    if db.session.scalars(sel).all().count > 1:
+        print("C'è più di un utente con questi robi")
+        return
+    
+    db.session.scalars(sel).first().email = email
+    db.session.commit()
+    
+
 def carica_corsi(path):
     
     print(path)
