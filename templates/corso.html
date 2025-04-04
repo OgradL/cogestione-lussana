@@ -16,7 +16,9 @@
 	</ul>
 
 	{% if session["logged"] %}
-		<button onclick="iscrizione({{ corso.id }})" class="sub"> <b>ISCRIVITI AL CORSO!!!</b> </button>
+		<!-- 
+			<button onclick="iscrizione({{ corso.id }})" class="sub"> <b>ISCRIVITI AL CORSO!!!</b> </button>
+		-->
 	{% else %}
 		<u>
 			<a href="/login" class="iscriviti"> Devi fare il login prima di iscriverti! </a>
