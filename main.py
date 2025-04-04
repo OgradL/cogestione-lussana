@@ -68,7 +68,28 @@ def fix_emails(nome, cognome, classe, email):
     
     db.session.scalars(sel).first().email = email
     db.session.commit()
+
+def solve_emails(path):
+    if not os.path.exists(path):
+        print("path does not exists")
+        return
+          
     
+    wb = openpyxl.load_workbook(path)
+    ws = wb.active
+
+
+    for value in ws.iter_rows(min_row=2):
+        nome = value[1].value if value[1].value != None else ""
+        nome = nome.lower()
+        cognome = value[0].value.lower()
+        classe = value[2].value
+        email = value[3].value
+        email = email.strip()
+        if not email.endswith("@liceolussana.eu") and classe != "docente":
+            email = f"{cognome}.{nome}.studente@liceolussana.eu"
+            fix_emails(nome, cognome, classe, email)
+
 
 def carica_corsi(path):
     
