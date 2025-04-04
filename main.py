@@ -71,6 +71,7 @@ def fix_emails(nome, cognome, classe, email):
 
 def solve_emails(path):
     if not os.path.exists(path):
+        print(path)
         print("path does not exists")
         return
           
