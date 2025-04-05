@@ -364,6 +364,15 @@ def iscrizione():
             return Response([b"error"], 400)
 
     for organizza in organizzazioni:
+        if corso.fascia <= 2 and organizza.corsoref.id == 44:
+            flash("Sei già organizzatore di un corso per questa fascia", 'error')
+            return Response([b"error"], 400)
+        
+        if corso.id == 44:
+            if organizza.corsoref.fascia <= 2:
+                flash("Sei già organizzatore di un corso per questa fascia o per la successiva. Questo corso dura 2 fasce", 'error')
+                return Response([b"error"], 400)
+
         if organizza.corsoref.fascia == corso.fascia:
             flash("Sei già organizzatore di un corso per questa fascia", 'error')
             return Response([b"error"], 400)
