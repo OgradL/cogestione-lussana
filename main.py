@@ -210,6 +210,9 @@ def report():
     sel = db.select(database.iscrizione)
     iscrizioni = db.session.scalars(sel).all()
 
+    sel = db.select(database.organizza)
+    organizzazioni = db.session.scalars(sel).all()
+
     sel = db.select(database.user)
     utenti = db.session.scalars(sel).all()
     
@@ -221,11 +224,19 @@ def report():
             continue
         dati.setdefault(iscrizione.userref.classe, dict())
         dati[iscrizione.userref.classe].setdefault(iscrizione.corsoref.fascia, 0)
-        # prev = dati[iscrizione.userref.classe].get(iscrizione.corsoref.fascia)
-        # print(dati[iscrizione.userref.classe], " -- ", prev)
-        # print(dati["5g"])
-        # print(dati)
         dati[iscrizione.userref.classe][iscrizione.corsoref.fascia] += 1
+
+    for organizza in organizzazioni:
+        if organizza.userref is None:
+            continue
+        if organizza.corsoref.id == 44:
+            dati.setdefault(organizza.userref.classe, dict())
+            dati[organizza.userref.classe].setdefault(organizza.corsoref.fascia+1, 0)
+            dati[organizza.userref.classe][organizza.corsoref.fascia+1] += 1
+            
+        dati.setdefault(organizza.userref.classe, dict())
+        dati[organizza.userref.classe].setdefault(organizza.corsoref.fascia, 0)
+        dati[organizza.userref.classe][organizza.corsoref.fascia] += 1
     
     for utente in utenti:
         info_classe.setdefault(utente.classe, 0)
