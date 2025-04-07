@@ -263,6 +263,12 @@ def create_xlsx_file(file_path: str, headers: dict, items: list):
             row = map(lambda field_id: item.get(field_id, ''), header_keys)
             worksheet.write_row(row=index + 1, col=0, data=row)
 
+@app.route("/forza-iscrizioni/", methods=["GET"])
+def forza_iscrizioni():
+
+	
+    pass
+
 @app.route("/save-data/", methods=["GET"])
 def save_data():
     date = str(datetime.now().time())
@@ -279,7 +285,8 @@ def save_data():
         "nome" : "Nome",
         "cognome" : "Cognome",
         "classe" : "Classe",
-        "id_corso" : "Id corso",
+        "titolo_corso" : "Titolo Corso",
+        "aula" : "Aula",
         "fascia" : "Fascia",
     }
     
@@ -294,7 +301,8 @@ def save_data():
             "nome" : iscrizione.userref.nome,
             "cognome" : iscrizione.userref.cognome,
             "classe" : iscrizione.userref.classe,
-            "id_corso" : iscrizione.corsoref.id,
+            "titolo_corso" : iscrizione.corsoref.titolo,
+            "aula" : iscrizione.corsoref.aula,
             "fascia" : iscrizione.corsoref.fascia
         })
     
@@ -319,6 +327,9 @@ def lista_corsi_help():
 @app.route("/iscrizione/", methods=["POST"])
 @login_required
 def iscrizione():
+    flash("Le iscrizioni sono chiuse")
+    return Response([b"error"], 400)
+
     dati = json.loads(request.data)
     id_corso = dati["id_corso"]
     
@@ -389,6 +400,9 @@ def iscrizione():
 @app.route("/annulla-iscrizione/", methods=["POST"])
 @login_required
 def annulla_iscrizione():
+    flash("Le iscrizioni sono chiuse e non puoi più modificarle")
+    return Response([b"error"], 400)
+
     dati = json.loads(request.data)
     id_corso = dati["id_corso"]
     

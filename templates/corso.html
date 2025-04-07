@@ -15,11 +15,16 @@
 		<li> ORGANIZZATORI INTERNI: {{ referenti }} </li>
 	</ul>
 
+	<u>
+		<p class="iscriviti"> Le iscrizioni sono chiuse! </p>
+	</u>
+	<!--
 	{% if session["logged"] %}
 		<button onclick="iscrizione({{ corso.id }})" class="sub"> <b>ISCRIVITI AL CORSO!!!</b> </button>
-	{% else %}
+		{% else %}
 		<u>
 			<a href="/login" class="iscriviti"> Devi fare il login prima di iscriverti! </a>
 		</u>
 	{% endif%}
+	-->
 {% endblock %}
