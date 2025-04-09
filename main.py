@@ -18,10 +18,11 @@ from os import path
 from werkzeug.security import check_password_hash, generate_password_hash
 from xlsxwriter import Workbook
 import openpyxl
-from random import randint
+from random import randint, choice
 import requests
 import os
 import dotenv
+import sys
 
 DB_NAME = "database.db"
 # app = Flask(__name__)
@@ -263,11 +264,82 @@ def create_xlsx_file(file_path: str, headers: dict, items: list):
             row = map(lambda field_id: item.get(field_id, ''), header_keys)
             worksheet.write_row(row=index + 1, col=0, data=row)
 
-@app.route("/forza-iscrizioni/", methods=["GET"])
+def fix_dati():
+    iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
+    
+    s = {}
+    count = 0
+    for iscrizione in iscrizioni:
+        t = (iscrizione.userref.id, iscrizione.corsoref.id)
+        s.setdefault(t, 0)
+        if s[t] == 1:
+            count += 1
+            db.session.delete(iscrizione)
+        
+        s[t] = 1
+
+    print(f"double iscrizioni: {count}")
+    db.session.commit()
+
+def randomizzato(lista : list, func):
+    if len(lista) == 0:
+        raise BaseException("List is empty")
+
+    totale = sum(list(map(func, lista)))
+    n = randint(0, totale+1)
+    
+    contatore = 0
+    for x in lista:
+        contatore += func(x)
+        if contatore >= n:
+            return x
+    return choice(lista)
+
+@app.route("/forza/")
 def forza_iscrizioni():
 
-	
-    pass
+    iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
+    utenti = db.session.scalars(db.select(database.user)).all()
+
+    for i in range(1, 6):
+        corsi = list(db.session.scalars(db.select(database.corso).where(database.corso.fascia == i, database.corso.posti_occupati != database.corso.posti_totali)).all())
+        if i == 2:
+            corsi.append(db.session.scalars(db.select(database.corso).where(database.corso.id == 44)).first())
+        print(f"fascia {i}:")
+        for user in utenti:
+            if user.classe == 'docente':
+                continue
+            le_sue_iscrizioni = [x for x in iscrizioni if x.userref.id == user.id]
+            ids = [x.id for x in le_sue_iscrizioni]
+            fasce = [x.corsoref.fascia for x in le_sue_iscrizioni]
+            if 44 in ids:
+                fasce.append(2)
+
+            if i not in fasce:
+                corso = randomizzato(corsi, lambda x : x.posti_totali - x.posti_occupati)
+                while (corso.id == 44 and 2 in fasce):
+                    # print(len(corsi), " - ".join(map(lambda x : str(x.posti_occupati), corsi)))
+                    # print(corso)
+                    if len(corsi) <= 1 and corso.id == 44:
+                        db.session.commit()
+                        corsi = list(db.session.scalars(db.select(database.corso).where(database.corso.fascia == i, database.corso.posti_occupati != database.corso.posti_totali)).all())
+                        print(list(map(lambda x : str(x.posti_totali - x.posti_occupati), corsi)))
+                        
+                        print("merdaccia")
+                        exit(0)
+                        raise BaseException("sto cazzo di capitol di merda porcaccia")
+                    corso = randomizzato(corsi, lambda x : x.posti_totali - x.posti_occupati)
+                
+                db.session.add(database.iscrizione(utente=user.id, corso=corso.id))
+                corso.posti_occupati += 1
+                
+                if corso.posti_occupati == corso.posti_totali:
+                    corsi.remove(corso)
+            print(f"user {user.id} / {i}")
+
+        db.session.commit()
+    return "Fatto!"
+
 
 @app.route("/save-data/", methods=["GET"])
 def save_data():
