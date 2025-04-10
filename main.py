@@ -221,8 +221,13 @@ def report():
         dati.setdefault(classe, dict())
     
     for iscrizione in iscrizioni:
-        if iscrizione.userref is None:
+        if iscrizione.userref is None or iscrizione.corsoref is None:
             continue
+        if iscrizione.corsoref.id == 44:
+            dati.setdefault(iscrizione.userref.classe, dict())
+            dati[iscrizione.userref.classe].setdefault(iscrizione.corsoref.fascia+1, 0)
+            dati[iscrizione.userref.classe][iscrizione.corsoref.fascia+1] += 1
+            
         dati.setdefault(iscrizione.userref.classe, dict())
         dati[iscrizione.userref.classe].setdefault(iscrizione.corsoref.fascia, 0)
         dati[iscrizione.userref.classe][iscrizione.corsoref.fascia] += 1
@@ -265,9 +270,14 @@ def create_xlsx_file(file_path: str, headers: dict, items: list):
             worksheet.write_row(row=index + 1, col=0, data=row)
 
 def fix_dati():
+    organizzazioni = db.session.scalars(db.select(database.organizza)).all()
     iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
     
     s = {}
+    for org in organizzazioni:
+        t = (org.userref.id, org.corsoref.id)
+        s[t] = 1
+
     count = 0
     for iscrizione in iscrizioni:
         t = (iscrizione.userref.id, iscrizione.corsoref.id)
@@ -295,13 +305,13 @@ def randomizzato(lista : list, func):
             return x
     return choice(lista)
 
-@app.route("/forza/")
 def forza_iscrizioni():
 
-    iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
+    organizzazioni = db.session.scalars(db.select(database.organizza)).all()
     utenti = db.session.scalars(db.select(database.user)).all()
 
     for i in range(1, 6):
+        iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
         corsi = list(db.session.scalars(db.select(database.corso).where(database.corso.fascia == i, database.corso.posti_occupati != database.corso.posti_totali)).all())
         if i == 2:
             corsi.append(db.session.scalars(db.select(database.corso).where(database.corso.id == 44)).first())
@@ -310,14 +320,22 @@ def forza_iscrizioni():
             if user.classe == 'docente':
                 continue
             le_sue_iscrizioni = [x for x in iscrizioni if x.userref.id == user.id]
-            ids = [x.id for x in le_sue_iscrizioni]
+            le_sue_organizzazioni = [x for x in organizzazioni if x.userref.id == user.id]
+            ids = [x.corsoref.id for x in le_sue_iscrizioni]
+            ids2 = [x.corsoref.id for x in le_sue_organizzazioni]
+            ids += ids2
             fasce = [x.corsoref.fascia for x in le_sue_iscrizioni]
+            fasce2 = [x.corsoref.fascia for x in le_sue_organizzazioni]
+            fasce += fasce2
             if 44 in ids:
                 fasce.append(2)
 
             if i not in fasce:
-                corso = randomizzato(corsi, lambda x : x.posti_totali - x.posti_occupati)
-                while (corso.id == 44 and 2 in fasce):
+                if i == 1 and 2 not in fasce:
+                    corso = corsi[-1]
+                else:
+                    corso = randomizzato(corsi, lambda x : x.posti_totali - x.posti_occupati)
+                while (corso.id == 44 and 2 in fasce) or (corso.id == 44 and 1 in fasce):
                     # print(len(corsi), " - ".join(map(lambda x : str(x.posti_occupati), corsi)))
                     # print(corso)
                     if len(corsi) <= 1 and corso.id == 44:
@@ -340,8 +358,155 @@ def forza_iscrizioni():
         db.session.commit()
     return "Fatto!"
 
+def dati_per_corso_per_fascia():
 
-@app.route("/save-data/", methods=["GET"])
+    dir_path = path.join('.', "output-data", "corsi")
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+    
+    corsi = db.session.scalars(db.select(database.corso)).all()
+    corsi = list(corsi)
+    corsi = sorted(corsi, key=lambda x : x.fascia)
+    
+    iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
+    
+    fascia = 0
+    
+    for corso in corsi:
+        if corso.fascia > fascia:
+            fascia = corso.fascia
+            dir_path = path.join('.', "output-data", "corsi", f"fascia {fascia}")
+            if not os.path.exists(dir_path):
+                os.makedirs(dir_path)
+        
+
+        file_name = path.join('.', "output-data", "corsi", f"fascia {fascia}", f"{corso.id}.xlsx")
+        headers = {
+            "nome" : "Nome",
+            "cognome" : "Cognome",
+            "classe" : "Classe"
+        }
+        items = []
+        for x in iscrizioni:
+            if x.corsoref.id != corso.id:
+                continue
+            items.append({
+                "nome" : x.userref.nome,
+                "cognome" : x.userref.cognome,
+                "classe" : x.userref.classe
+            })
+        create_xlsx_file(file_name, headers, items)
+    
+def corsi_finali():
+    
+    date = str(datetime.now().time())
+    date = date[:date.find('.')]
+
+    dir_path = path.join('.', "output-data")
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    file_name = path.join('.', "output-data", "corsi-finali-" + date + ".xlsx")
+    
+    headers = {
+        "fascia" : "",
+        "id" : "ID",
+        "nome" : "Nome corso",
+        "aula" : "Aula",
+        "persone" : "Persone"
+    }
+    
+    items = []
+    corsi = db.session.scalars(db.select(database.corso)).all()
+    corsi = list(corsi)
+    corsi = sorted(corsi, key=lambda x : x.fascia)
+    
+    iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
+    
+    fascia = 0
+    
+    for corso in corsi:
+        if corso.fascia > fascia:
+            fascia = corso.fascia
+            items.append({
+                "fascia" : "",
+                "id" : "",
+                "nome" : "",
+                "aula" : "",
+                "persone" : ""
+            })
+            items.append({
+                "fascia" : f"Fascia {fascia}",
+                "id" : "",
+                "nome" : "",
+                "aula" : "",
+                "persone" : ""
+            })
+        posti_occupati = len([x for x in iscrizioni if x.corsoref.id == corso.id])
+        items.append({
+            "fascia" : "",
+            "id" : f"{corso.id}",
+            "nome" : f"{corso.titolo}",
+            "aula" : f"{corso.aula}",
+            "persone" : f"{posti_occupati}"
+        })
+
+
+
+    create_xlsx_file(file_name, headers, items)
+    
+    return "fatto"
+
+def assegna_sorveglianza():
+    
+    path = os.path.join('.', "input_data", "SORVEGLIANZA.xlsx")
+
+    wb = openpyxl.load_workbook(path)
+    ws = wb.active
+    
+    corsi_sorv = [0 for _ in range(5)]
+    for i in range(5):
+        if db.session.scalars(db.select(database.corso).where(database.corso.titolo == f"sorveglianza {i+1}")).first() is None:
+            corso = database.corso(
+                titolo=f"sorveglianza {i+1}",
+                fascia=i+1
+            )
+            db.session.add(corso)
+            db.session.commit()
+        corsi_sorv[i] = db.session.scalars(db.select(database.corso).where(database.corso.titolo == f"sorveglianza {i+1}")).first().id
+    
+
+    for value in ws.iter_rows(min_row=2):
+        for i in range(0, 5):
+            if value[2*i+1].value is None:
+                continue
+            email = value[2*i+1].value.strip()
+
+            user = db.session.scalars(db.select(database.user).where(database.user.email == email)).first()
+            # iscrizioni = db.session.scalars(db.select(database.iscrizione).join(database.user).where(database.user.email == email)).all()
+            # organizzazioni = db.session.scalars(db.select(database.organizza).join(database.user).where(database.user.email == email)).all()
+            # print(user)
+            # print(iscrizioni, organizzazioni)
+            # print([x.corsoref for x in iscrizioni])
+            if user is None:
+                print(email)
+                continue
+            # print(user.id)
+            for x in db.session.scalars(db.select(database.iscrizione).join(database.user).join(database.corso).where(database.user.id == user.id, database.corso.fascia == i+1)):
+                db.session.delete(x)
+            db.session.commit()
+            # fasce_iscrizioni = [x.corsoref.fascia for x in iscrizioni if x.corsoref is not None]
+            # fasce_organizzazioni = [x.corsoref.fascia for x in organizzazioni if x.corsoref is not None]
+            
+            # if i+1 in fasce_iscrizioni or i+1 in fasce_organizzazioni:
+            #     # print(f"user {user.id} is already busy in fascia {i}")
+            #     continue
+            
+            db.session.add(database.iscrizione(corso=corsi_sorv[i], utente=user.id))
+        db.session.commit()
+        
+    return "fatto!"
+
 def save_data():
     date = str(datetime.now().time())
     date = date[:date.find('.')]
