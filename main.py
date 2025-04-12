@@ -662,6 +662,46 @@ def info_corso(id_corso):
     referenti = " - ".join(list(map(lambda x : f"{x.userref.nome} {x.userref.cognome} {x.userref.classe}", corso.organizzatori)))
     return render_template("corso.html", corso=corso, referenti=referenti)
 
+@app.route("/appello/<id_corso>", methods=["GET", "POST"])
+def appello(id_corso):
+    id_corso = int(id_corso)
+    
+    corso = db.session.scalars(db.select(database.corso).where(database.corso.id == id_corso)).first()
+
+    if corso is None:
+        return redirect(url_for("home"))
+    
+    if request.method == "GET":
+        iscrizioni = db.session.scalars(db.select(database.iscrizione).join(database.corso).where(database.corso.id == id_corso)).all()
+        organizzazioni = db.session.scalars(db.select(database.organizza).join(database.corso).where(database.corso.id == id_corso)).all()
+        
+        presenza = db.session.scalars(db.select(database.presenza).join(database.corso).where(database.corso.id == id_corso)).all()
+
+        persone = []
+        
+        for x in (iscrizioni + organizzazioni):
+            assegnato = False
+            valore = None
+            for v in presenza:
+                if v.userref.id == x.userref.id:
+                    assegnato = True
+                    valore = v.presente
+                    break
+            
+            persone.append({
+                "name" : f"{x.userref.nome} {x.userref.cognome}",
+                "assegnato" : assegnato,
+                "valore" : valore
+            })
+            print(persone[-1])
+
+        return render_template("appello.html", persone=persone, corso=corso)
+    
+    # POST request
+    
+    
+    pass
+
 # profilo
 
 @app.route("/profile/")
