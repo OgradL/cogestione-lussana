@@ -41,7 +41,7 @@ class corso(db.Model):
     note = Column(String(1000))
     iscrizioni = db.relationship('iscrizione', backref="corsoref", lazy=True)
     organizzatori = db.relationship('organizza', backref="corsoref", lazy=True)
-    appello = db.relationship('appello', backref="corsoref", lazy=True)
+    appello = db.relationship('presenza', backref="corsoref", lazy=True)
 
 
 class iscrizione(db.Model):
