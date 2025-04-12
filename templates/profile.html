@@ -22,7 +22,10 @@
 							<th> <a class="iscriviti" href="{{ url_for("info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
 							<th> {{ corsi[i]["organizzatori"] }} </th>
 							<th> {{ corsi[i]["aula"] }} </th>
-							<th> Sei tu l'organizzatore di questo corso </th>
+							<th>
+								Sei tu l'organizzatore di questo corso.
+								<a class="iscriviti" href="{{url_for("appello", id_corso=corsi[i]["id"])}}"> APPELLO CORSO </a>
+							</th>
 						{% else %}
 							<th> <a class="iscriviti" href="{{ url_for("info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
 							<th> {{ corsi[i]["organizzatori"] }} </th>
