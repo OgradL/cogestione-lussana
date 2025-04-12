@@ -704,9 +704,36 @@ def appello(id_corso):
         return render_template("appello.html", persone=persone, corso=corso)
     
     # POST request
+    dati = json.loads(request.data)
     
+    iscrizioni = db.session.scalars(db.select(database.iscrizione).join(database.corso).where(database.corso.id == id_corso)).all()
+    organizzazioni = db.session.scalars(db.select(database.organizza).join(database.corso).where(database.corso.id == id_corso)).all()
     
-    pass
+    presenza = db.session.scalars(db.select(database.presenza).join(database.corso).where(database.corso.id == id_corso)).all()
+    
+    id_presenti = [x.userref.id for x in (iscrizioni + organizzazioni)]
+
+    print(id_presenti)
+    
+    for chiave in dati:
+        key = int(chiave)
+        val = dati[chiave]
+        print(key)
+        if key not in id_presenti:
+            continue
+        for x in presenza:
+            print(x, x.userref, x.userref.id)
+            if x.userref.id == key:
+                x.presente = val
+                print(key, 2)
+                break
+        else:
+            print(key)
+            db.session.add(database.presenza(utente=key, corso=id_corso, presente=val))
+        print("\n")
+    
+    db.session.commit()
+    return Response([b"good"], 200)
 
 # profilo
 

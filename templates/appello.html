@@ -7,12 +7,12 @@
 	<br> <br>
 	<div class="table-container">
 		<table id="lista-appello">
-			<tr class="ids">
+			<tr id="ids" class="ids">
 				<th> Nome e Cognome </th>
 				<th> Presenza </th>
 			</tr>
 			{% for persona in persone %}
-				<tr>
+				<tr id="row-{{persona["id"]}}">
 					<th> {{ persona["name"] }} </th>
 					<th>
 						{% if persona["assegnato"] %}
@@ -31,5 +31,6 @@
 				</tr>
 			{% endfor %}
 		</table>
+		<button onclick="salva_presenze()"> Salva </button>
 	</div>
 {% endblock %}
