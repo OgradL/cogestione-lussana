@@ -1,7 +1,8 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String, Column, Float, ForeignKey
+from flask_migrate import Migrate
+from sqlalchemy import Integer, String, Column, Float, ForeignKey, Boolean
 from datetime import timedelta, datetime
 # from main import app
 from os import path
@@ -14,6 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 app.permanent_session_lifetime = timedelta(days=7)
 app.secret_key = "secret key"
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class user(db.Model):
     id = Column(Integer, primary_key=True)
@@ -24,6 +26,7 @@ class user(db.Model):
     password = Column(String(150))
     iscrizioni = db.relationship('iscrizione', backref="userref", lazy=True)
     corsi_organizzati = db.relationship('organizza', backref="userref", lazy=True)
+    presenze = db.relationship('presenza', backref="userref", lazy=True)
 
 
 class corso(db.Model):
@@ -38,6 +41,7 @@ class corso(db.Model):
     note = Column(String(1000))
     iscrizioni = db.relationship('iscrizione', backref="corsoref", lazy=True)
     organizzatori = db.relationship('organizza', backref="corsoref", lazy=True)
+    appello = db.relationship('appello', backref="corsoref", lazy=True)
 
 
 class iscrizione(db.Model):
@@ -49,6 +53,12 @@ class organizza(db.Model):
     id = Column(Integer, primary_key=True)
     utente = Column(Integer, ForeignKey('user.id'))
     corso = Column(Integer, ForeignKey('corso.id'))
+
+class presenza(db.Model):
+    id = Column(Integer, primary_key=True)
+    utente = Column(Integer, ForeignKey('user.id'))
+    corso = Column(Integer, ForeignKey('corso.id'))
+    presente = Column(Boolean)
 
 def init_db(app):
     # db.init_app(app)
