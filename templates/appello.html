@@ -17,15 +17,15 @@
 					<th> 
 						{% if persona["assegnato"] %}
 							{% if persona["valore"] %}
-								<button class="app-green"> ✔ </button>
-								<button class="app-gray"> ✖ </button>
+								<button class="appello-checkbox app-green"> ✔ </button>
+								<button class="appello-checkbox app-gray"> ✖ </button>
 							{% else %}
-								<button class="app-gray"> ✔ </button>
-								<button class="app-red"> ✖ </button>
+								<button class="appello-checkbox app-gray"> ✔ </button>
+								<button class="appello-checkbox app-red"> ✖ </button>
 							{% endif %}
 						{% else %}
-							<button class="app-gray"> ✔ </button>
-							<button class="app-gray"> ✖ </button>
+							<button class="appello-checkbox app-gray"> ✔ </button>
+							<button class="appello-checkbox app-gray"> ✖ </button>
 						{% endif %}
 					</th>
 				</tr>

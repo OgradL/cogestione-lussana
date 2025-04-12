@@ -329,3 +329,23 @@ a{
     width: auto; /* Usa una dimensione relativa per adattare l'immagine al testo */
     height: 1.5em; /* Mantiene le proporzioni */
 }
+
+.appello-checkbox{
+	border: 1px solid black;
+	position: relative;
+}
+
+.app-gray{
+	background-color: lightgray;
+	color: black;
+}
+
+.app-green{
+	background-color: green;
+	color: black;
+}
+
+.app-red{
+	background-color: red;
+	color: black;
+}
