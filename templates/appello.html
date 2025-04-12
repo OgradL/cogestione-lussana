@@ -6,7 +6,7 @@
 	<h3> <strong> APPELLO PRESENZE - {{ corso.titolo }} </strong> </h3>
 	<br> <br>
 	<div class="table-container">
-		<table>
+		<table id="lista-appello">
 			<tr class="ids">
 				<th> Nome e Cognome </th>
 				<th> Presenza </th>
@@ -14,18 +14,18 @@
 			{% for persona in persone %}
 				<tr>
 					<th> {{ persona["name"] }} </th>
-					<th> 
+					<th>
 						{% if persona["assegnato"] %}
 							{% if persona["valore"] %}
-								<button class="appello-checkbox app-green"> ✔ </button>
-								<button class="appello-checkbox app-gray"> ✖ </button>
+								<button id="pres-{{persona["id"]}}" class="appello-checkbox app-green" onclick="segna_presenza({{persona["id"]}}, 1)"> ✔ </button>
+								<button id="asse-{{persona["id"]}}" class="appello-checkbox app-gray" onclick="segna_presenza({{persona["id"]}}, 0)"> ✖ </button>
 							{% else %}
-								<button class="appello-checkbox app-gray"> ✔ </button>
-								<button class="appello-checkbox app-red"> ✖ </button>
+								<button id="pres-{{persona["id"]}}" class="appello-checkbox app-gray" onclick="segna_presenza({{persona["id"]}}, 1)"> ✔ </button>
+								<button id="asse-{{persona["id"]}}" class="appello-checkbox app-red" onclick="segna_presenza({{persona["id"]}}, 0)"> ✖ </button>
 							{% endif %}
 						{% else %}
-							<button class="appello-checkbox app-gray"> ✔ </button>
-							<button class="appello-checkbox app-gray"> ✖ </button>
+							<button id="pres-{{persona["id"]}}" class="appello-checkbox app-gray" onclick="segna_presenza({{persona["id"]}}, 1)"> ✔ </button>
+							<button id="asse-{{persona["id"]}}" class="appello-checkbox app-gray" onclick="segna_presenza({{persona["id"]}}, 0)"> ✖ </button>
 						{% endif %}
 					</th>
 				</tr>

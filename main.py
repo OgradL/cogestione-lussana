@@ -695,6 +695,7 @@ def appello(id_corso):
                     break
             
             persone.append({
+                "id" : x.userref.id,
                 "name" : f"{x.userref.nome} {x.userref.cognome}",
                 "assegnato" : assegnato,
                 "valore" : valore

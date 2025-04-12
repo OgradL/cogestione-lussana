@@ -47,3 +47,26 @@ async function annulla_iscrizione(corso_id) {
 function del_flashed_message(message) {
 	message.parentElement.remove();
 }
+
+function segna_presenza(id_user, presenza){
+	prebut = document.getElementById("pres-" + id_user);
+	assbut = document.getElementById("asse-" + id_user);
+
+	if (presenza == 1){
+		assbut.classList.remove("app-gray");
+		assbut.classList.remove("app-red");
+		assbut.classList.add("app-gray");
+
+		prebut.classList.remove("app-gray");
+		prebut.classList.remove("app-green");
+		prebut.classList.add("app-green");
+	} else {
+		assbut.classList.remove("app-gray");
+		assbut.classList.remove("app-red");
+		assbut.classList.add("app-red");
+
+		prebut.classList.remove("app-gray");
+		prebut.classList.remove("app-green");
+		prebut.classList.add("app-gray");
+	}
+}
