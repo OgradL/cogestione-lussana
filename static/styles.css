@@ -156,6 +156,12 @@ form{
 	padding-top: 15px;
 	padding-bottom: 15px; */
 }
+.alert-error{
+	background-color: #D35C62;
+}
+.alert-success{
+	background-color: #41be4b;
+}
 .alert-text{
 	padding: 0px;
 	margin: 0px;
@@ -167,7 +173,8 @@ form{
 	margin-left: auto;
 	opacity: 1;
 	size: 20px;
-	background-color: #D35C62;
+	/* background-color: #D35C62; */
+	background-color: #00000000;
 	border-width: 0px;
 	color: #FFFFFF;
 }
