@@ -663,12 +663,18 @@ def info_corso(id_corso):
     return render_template("corso.html", corso=corso, referenti=referenti)
 
 @app.route("/appello/<id_corso>", methods=["GET", "POST"])
+@login_required
 def appello(id_corso):
     id_corso = int(id_corso)
     
     corso = db.session.scalars(db.select(database.corso).where(database.corso.id == id_corso)).first()
 
     if corso is None:
+        return redirect(url_for("home"))
+    
+    organizza = db.session.scalars(db.select(database.organizza).join(database.user).where(database.user.email == session["email"], database.organizza.corso == id_corso)).first()
+    
+    if organizza is None:
         return redirect(url_for("home"))
     
     if request.method == "GET":
@@ -693,7 +699,6 @@ def appello(id_corso):
                 "assegnato" : assegnato,
                 "valore" : valore
             })
-            print(persone[-1])
 
         return render_template("appello.html", persone=persone, corso=corso)
     
