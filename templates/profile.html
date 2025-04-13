@@ -12,7 +12,7 @@
 				<th> Corso </th>
 				<th> Organizzatori </th>
 				<th> Aula </th>
-				<th> Annulla Iscrizione </th>
+				<th> Appello </th>
 			</tr>
 			{% for i in range(1, 6) %}
 				<tr>
@@ -23,14 +23,13 @@
 							<th> {{ corsi[i]["organizzatori"] }} </th>
 							<th> {{ corsi[i]["aula"] }} </th>
 							<th>
-								Sei tu l'organizzatore di questo corso.
 								<a class="iscriviti" href="{{url_for("appello", id_corso=corsi[i]["id"])}}"> APPELLO CORSO </a>
 							</th>
 						{% else %}
 							<th> <a class="iscriviti" href="{{ url_for("info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
 							<th> {{ corsi[i]["organizzatori"] }} </th>
 							<th> {{ corsi[i]["aula"] }} </th>
-							<th> <button class="sub" onclick="annulla_iscrizione({{corsi[i]["id"]}})"> Annulla </button> </th>
+							<th> Non organizzi questo corso </th>
 						{% endif %}
 					{% else %}
 						<th> <a class="iscriviti" href="/lista-corsi/{{i}}"> Iscriviti! </a> </th>
