@@ -6,7 +6,7 @@
 	<h3> <strong> APPELLO PRESENZE - {{ corso.titolo }} </strong> </h3>
 	<br> <br>
 	<div class="table-container">
-		<table id="lista-appello">
+		<table class="lista-appello" id="lista-appello">
 			<tr id="ids" class="ids">
 				<th> Nome e Cognome </th>
 				<th> Presenza </th>
@@ -31,6 +31,8 @@
 				</tr>
 			{% endfor %}
 		</table>
-		<button onclick="salva_presenze()"> Salva </button>
+		<center>
+			<button class="sub sub-presenze" onclick="salva_presenze()"> Salva </button>
+		</center>
 	</div>
 {% endblock %}

@@ -142,9 +142,11 @@ form{
 	padding: 5px;
 }
 .alert{
+	position: absolute;
+	right: 0;
 	background-color: #D35C62;
 	color: #FFFFFF;
-	/* max-width: 300px; */
+	/* max-width: 500px; */
 	/* height: 50px; */
 	border-radius: 10px;
 	padding: 15px;
@@ -187,7 +189,7 @@ form{
 	Transition: opacity .5s ease-in-out; 
 }
 
-.sub{
+/* .sub{
 	width: 150px;
 	height: 50px;
 	border-radius: 10px;
@@ -195,7 +197,7 @@ form{
 	color:#04AA6D;
 	border-color: #04AA6D;
 	border-width: 3px;
-}
+} */
 .info{
 	padding-bottom: 20px;
 }
@@ -289,7 +291,7 @@ tr.ids{
     font-weight: bold;
 }
 .flashed-messages{
-	position: absolute;
+	position: sticky;
 	top: 20px;
 	right: 20px;
 	z-index: 1000;
@@ -354,33 +356,38 @@ h3 {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-#lista-appello {
+.lista-appello {
     width: 100%;
     border-collapse: collapse;
     font-size: clamp(2.5vw, 2vw, 18px);
 }
 
-#lista-appello th {
-    background-color: #04AA6D;
-    color: white;
+.lista-appello {
+    color: black;
     text-align: center;
     padding: 12px;
 }
 
+.ids tr {
+	color: white;
+}
 
-#lista-appello td, #lista-appello th {
+
+.lista-appello td, .lista-appello th {
     border: 1px solid #ddd;
     padding: 12px;
 }
 
 /* Righe alternate */
-#lista-appello tr:nth-child(even) {
+.lista-appello tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
+
+/* 
 #lista-appello tr:hover {
     background-color: #f1f1f1;
-}
+} */
 
 .appello-checkbox {
     border: none;
@@ -390,6 +397,10 @@ h3 {
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+tr:nth-child(odd) .app-gray {
+    background-color: #f9f9f9;
 }
 
 .appello-checkbox:hover {
@@ -412,8 +423,7 @@ h3 {
     color: white;
 }
 
-/* .table-container button:last-of-type {
-    margin-top: 20px;
+.sub {
     padding: 12px 24px;
     font-size: 18px;
     background-color: #04AA6D;
@@ -422,8 +432,24 @@ h3 {
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-} */
+}
 
-/* .table-container button:last-of-type:hover {
+.sub:hover {
     background-color: #03895a;
-} */
+}
+
+.sub-presenze {
+	margin-top: 15px;
+    padding: 12px 24px;
+    font-size: 28px;
+    background-color: #04AA6D;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sub-presenze:hover {
+    background-color: #03895a;
+}
