@@ -69,6 +69,8 @@ function segna_presenza(id_user, presenza){
 		prebut.classList.remove("app-green");
 		prebut.classList.add("app-gray");
 	}
+
+	salva_presenze();
 }
 
 async function salva_presenze(){

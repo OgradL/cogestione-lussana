@@ -778,7 +778,7 @@ def appello(id_corso):
             db.session.add(database.presenza(utente=key, corso=id_corso, presente=val))
     
     db.session.commit()
-    flash("Presenze aggiornate con successo", 'success')
+    # flash("Presenze aggiornate con successo", 'success')
     return Response([b"good"], 200)
 
 # profilo
