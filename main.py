@@ -448,8 +448,6 @@ def dati_per_classe():
             items = sorted(items, key=lambda x : x["cognome"] + " " + x["nome"])
             create_xlsx_file(file_name, headers, items)
 
-
-
 def corsi_finali():
     
     date = str(datetime.now().time())
@@ -726,8 +724,8 @@ def appello(id_corso):
     
     organizza = db.session.scalars(db.select(database.organizza).join(database.user).where(database.user.email == session["email"], database.organizza.corso == id_corso)).first()
     
-    if organizza is None:
-        return redirect(url_for("home"))
+    # if organizza is None:
+    #     return redirect(url_for("home"))
     
     if request.method == "GET":
         iscrizioni = db.session.scalars(db.select(database.iscrizione).join(database.corso).where(database.corso.id == id_corso)).all()
@@ -748,11 +746,12 @@ def appello(id_corso):
             
             persone.append({
                 "id" : x.userref.id,
-                "name" : f"{x.userref.nome} {x.userref.cognome}",
+                "name" : f"{x.userref.cognome} {x.userref.nome}",
                 "assegnato" : assegnato,
                 "valore" : valore
             })
-
+            
+        persone = sorted(persone, key=lambda x : x["name"])
         return render_template("appello.html", persone=persone, corso=corso)
     
     # POST request
