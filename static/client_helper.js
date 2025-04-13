@@ -105,6 +105,6 @@ async function salva_presenze(){
 		method: "POST",
 		body: JSON.stringify(objRes)
 	}).then((ret) => {
-		window.location.reload();
+		// window.location.reload();
 	});
 }
