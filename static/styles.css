@@ -412,7 +412,7 @@ h3 {
     color: white;
 }
 
-.table-container button:last-of-type {
+/* .table-container button:last-of-type {
     margin-top: 20px;
     padding: 12px 24px;
     font-size: 18px;
@@ -422,8 +422,8 @@ h3 {
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
+} */
 
-.table-container button:last-of-type:hover {
+/* .table-container button:last-of-type:hover {
     background-color: #03895a;
-}
+} */
