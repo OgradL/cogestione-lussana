@@ -724,8 +724,8 @@ def appello(id_corso):
     
     organizza = db.session.scalars(db.select(database.organizza).join(database.user).where(database.user.email == session["email"], database.organizza.corso == id_corso)).first()
     
-    # if organizza is None:
-    #     return redirect(url_for("home"))
+    if organizza is None:
+        return redirect(url_for("home"))
     
     if request.method == "GET":
         iscrizioni = db.session.scalars(db.select(database.iscrizione).join(database.corso).where(database.corso.id == id_corso)).all()
