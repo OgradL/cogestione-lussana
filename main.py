@@ -397,7 +397,59 @@ def dati_per_corso_per_fascia():
                 "classe" : x.userref.classe
             })
         create_xlsx_file(file_name, headers, items)
+
+def dati_per_classe():
+
+    dir_path = os.path.join('.', "output-data", "classi")
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+    lista_classi = []
+    path = os.path.join(os.path.dirname(__file__), "input_data", "lista_classi.xlsx")
+    wb = openpyxl.load_workbook(path)
+    ws = wb.active
+    for value in ws.iter_rows(min_row=1):
+        if value[0].value is not None:
+            lista_classi.append(value[0].value)
     
+    corsi = db.session.scalars(db.select(database.corso)).all()
+    corsi = list(corsi)
+    corsi = sorted(corsi, key=lambda x : x.fascia)
+    
+    iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
+    organizzazioni = db.session.scalars(db.select(database.organizza)).all()
+    
+    headers = {
+        "nome" : "Nome",
+        "cognome" : "Cognome",
+        "classe" : "Classe",
+        "aula" : "Aula"
+    }
+    
+    for fascia in range(1, 6):
+        dir_path = os.path.join('.', "output-data", "classi", f"fascia {fascia}")
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+
+        for classe in lista_classi:
+            items = []
+            file_name = os.path.join('.', "output-data", "classi", f"fascia {fascia}", f"{classe}.xlsx")
+            
+
+            for x in iscrizioni + organizzazioni:
+                if x.userref.classe == classe and x.corsoref.fascia == fascia:
+                    items.append({
+                        "nome" : x.userref.nome,
+                        "cognome" : x.userref.cognome,
+                        "classe" : x.corsoref.titolo,
+                        "aula" : x.corsoref.aula
+                    })
+
+            items = sorted(items, key=lambda x : x["cognome"] + " " + x["nome"])
+            create_xlsx_file(file_name, headers, items)
+
+
+
 def corsi_finali():
     
     date = str(datetime.now().time())
