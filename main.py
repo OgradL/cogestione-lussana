@@ -715,6 +715,7 @@ def info_corso(id_corso):
 @app.route("/appello/<id_corso>", methods=["GET", "POST"])
 @login_required
 def appello(id_corso):
+    return redirect(url_for("home"))
     id_corso = int(id_corso)
     
     corso = db.session.scalars(db.select(database.corso).where(database.corso.id == id_corso)).first()
