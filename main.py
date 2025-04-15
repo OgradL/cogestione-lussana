@@ -560,38 +560,55 @@ def assegna_sorveglianza():
 def save_data():
     date = str(datetime.now().time())
     date = date[:date.find('.')]
-    
-    dir_path = path.join('.', "output-data")
+
+    dir_path = path.join(os.path.dirname(__file__), "output-data")
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    file_name = path.join('.', "output-data", "dati-" + date + ".xlsx")
+    
+    file_name = path.join(os.path.dirname(__file__), "output-data", "dati-finali" + ".xlsx")
     # file_name = "dati-" + date + ".xlsx"
     
     headers = {
-        "id" : "Id",
         "nome" : "Nome",
         "cognome" : "Cognome",
         "classe" : "Classe",
         "titolo_corso" : "Titolo Corso",
         "aula" : "Aula",
         "fascia" : "Fascia",
+        "organizza" : "Organizza",
     }
     
     items = []
     iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
+    organizzazioni = db.session.scalars(db.select(database.organizza)).all()
+
     
     for iscrizione in iscrizioni:
         if iscrizione.userref is None:
             continue
         items.append({
-            "id" : iscrizione.id,
             "nome" : iscrizione.userref.nome,
             "cognome" : iscrizione.userref.cognome,
             "classe" : iscrizione.userref.classe,
             "titolo_corso" : iscrizione.corsoref.titolo,
             "aula" : iscrizione.corsoref.aula,
-            "fascia" : iscrizione.corsoref.fascia
+            "fascia" : iscrizione.corsoref.fascia,
+            "organizza" : ""
         })
+    
+    for iscrizione in organizzazioni:
+        if iscrizione.userref is None:
+            continue
+        items.append({
+            "nome" : iscrizione.userref.nome,
+            "cognome" : iscrizione.userref.cognome,
+            "classe" : iscrizione.userref.classe,
+            "titolo_corso" : iscrizione.corsoref.titolo,
+            "aula" : iscrizione.corsoref.aula,
+            "fascia" : iscrizione.corsoref.fascia,
+            "organizza" : "Organizzatore"
+        })
+
     
     create_xlsx_file(file_name, headers, items)
     
