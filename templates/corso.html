@@ -6,7 +6,9 @@
 	<a class="iscriviti" href="/lista-corsi/{{ corso.fascia }}"> <- indietro </a>
 	
 	<h1> {{ corso.titolo }} </h1>
-	<p> {{ corso.descrizione }} </p>
+	{% for line in corso.descrizione.splitlines() %}
+		<p> {{ line }} </p> <br>
+	{% endfor %}
 	<h2><b>Info Corso</b></h2>
 	<ul class="info">
 		<li> FASCIA: {{ corso.fascia }}</li>
