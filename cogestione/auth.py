@@ -94,6 +94,8 @@ def verification():
 
     if code is None:
         return Response("bad request", 400)
+
+    code = code.strip()
     
     if code != session["auth_code"]:
         session.clear()
@@ -127,6 +129,10 @@ def register():
     
     if email is None or password1 is None or password2 is None:
         return Response("bad request", 400)
+
+    email = email.strip()
+    password1 = password1.strip()
+    password2 = password2.strip()
     
     if re.match(utils.EMAIL_REGEX, email) is None:
         flash("Email non valida", 'error')
@@ -193,6 +199,8 @@ def verification_reset_pwd():
 
     if code is None:
         return Response("bad request", 400)
+
+    code = code.strip()
     
     if code != session["auth_code"]:
         session.clear()
@@ -229,6 +237,10 @@ def reset_password():
     if email is None or password1 is None or password2 is None:
         return Response("bad request", 400)
     
+    email = email.strip()
+    password1 = password1.strip()
+    password2 = password2.strip()
+
     # more checks
     
     user = db.session.scalar(db.select(database.user).filter_by(email=email))
