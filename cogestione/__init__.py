@@ -27,13 +27,13 @@ def create_app():
     os.makedirs(app.instance_path, exist_ok=True)
     # os.makedirs(upload_folder, exist_ok=True)
 
-    # with app.app_context():
-    #     from flaskr.db import init_app
-    #     init_app(app)
+    with app.app_context():
+        from db import init_app
+        init_app(app)
 
-    # from . import auth
+    from . import auth
 
-    # app.register_blueprint(auth.bp)
+    app.register_blueprint(auth.bp)
 
     @app.route("/ping")
     def ping():

@@ -1,6 +1,7 @@
 
 
 from flask import g
+from flask.app import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy import Integer, String, Boolean, ForeignKey, UniqueConstraint
@@ -24,7 +25,7 @@ def init_db_command():
     init_db()
     click.echo('Initialized the database.')
 
-def init_app(app):
+def init_app(app : Flask):
     db.init_app(app)
     migrate.init_app(app, db)
     app.cli.add_command(init_db_command)
