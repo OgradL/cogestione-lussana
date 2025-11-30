@@ -9,16 +9,16 @@
 			
 			<a class="home" href="/lista-corsi"> CORSI </a>
 			{% if session["logged"] %}
-				<a class="home" href="/profile"> PROFILO </a> 
+				<a class="home" href="/profile"> PROFILO </a>
 			{% else %}
-				<a class="home" href="/register"> REGISTRATI </a> 
-				<a class="home" href="/login"> LOGIN </a> 
+				<a class="home" href="/auth/register"> REGISTRATI </a>
+				<a class="home" href="/auth/login"> LOGIN </a>
 			{% endif %}
 		
 			{% if session["logged"] %}
-				<a class="home" href="/logout"> LOGOUT </a> 
+				<a class="home" href="/auth/logout"> LOGOUT </a>
 			{% endif %}
 		</div>
 	</center>
-	
+
 {% endblock %}

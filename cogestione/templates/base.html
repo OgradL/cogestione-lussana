@@ -26,12 +26,12 @@
 					{% if session["logged"] %}
 						<a href="/profile">PROFILO</a>
 					{% else %}
-						<a href="/register">REGISTRATI</a>
-						<a href="/login">LOGIN</a>
+						<a href="/auth/register">REGISTRATI</a>
+						<a href="/auth/login">LOGIN</a>
 					{% endif %}
 			
 					{% if session["logged"] %}
-						<a href="/logout">LOGOUT</a>
+						<a href="/auth/logout">LOGOUT</a>
 					{% endif %}
 				</div>
 		</div>

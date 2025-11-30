@@ -1,5 +1,5 @@
 
-from flask import Blueprint, Response, flash, render_template, redirect, request, session
+from flask import Blueprint, Response, flash, render_template, redirect, request, session, url_for
 from flask import json
 
 from cogestione import utils
@@ -7,8 +7,17 @@ from cogestione import db as database
 
 bp = Blueprint('core', __name__, url_prefix='/')
 
+@bp.route("/")
+def home():
+    return render_template("homepage.html")
+
 @bp.route("/lista-corsi/<n_fascia>", methods=["GET"])
 def lista_corsi(n_fascia):
+    try:
+        n_fascia = int(n_fascia)
+    except ValueError:
+        return redirect(url_for("core.home"))
+
     n_fascia = min(n_fascia, 5)
     n_fascia = max(n_fascia, 1)
 
