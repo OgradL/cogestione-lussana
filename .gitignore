@@ -1,6 +1,7 @@
 
 instance/
 __pycache__/
+/venv
 
 input_data/
 output-data/
