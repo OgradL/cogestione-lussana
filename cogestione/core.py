@@ -111,9 +111,52 @@ def info_corso(id_corso):
     return render_template("corso.html", corso=corso, referenti=referenti)
 
 
+@bp.route("/create-corso/", methods=["GET", "POST"])
+@utils.login_required
+def create_corso():
+    if request.method == "GET":
+        return render_template("create-corso.html")
+
+    db = database.get_db()
+
+    titolo = request.form.get("titolo")
+    descrizione = request.form.get("descrizione")
+    organizzatori = request.form.get("organizzatori")
+    note = request.form.get("note")
+
+    fascia1 = request.form.get("fascia1")
+    fascia2 = request.form.get("fascia2")
+    fascia3 = request.form.get("fascia3")
+    fascia4 = request.form.get("fascia4")
+    fascia5 = request.form.get("fascia5")
+
+    if titolo is None or descrizione is None or organizzatori is None:
+        return Response("bad request", 400)
+
+    if note is None:
+        note = ""
+
+    fasce = [fascia1, fascia2, fascia3, fascia4, fascia5]
+
+    fasce = [i+1 for i, el in enumerate(fasce) if el]
+
+    if len(fasce) == 0:
+        flash("Non è stata scelta nessuna fascia")
+        return redirect(url_for("core.create-corso"))
+
+    for f in fasce:
+        corso = database.corso(titolo, descrizione, 30, 0, "tbd", f, organizzatori, note)
+
+        db.session.add(corso)
+
+    db.session.commit()
+
+    flash("Corso creato con successo!", "success")
+    return redirect(url_for("core.profile"))
+
 # profilo
 
-@bp.route("/profile/")
+@bp.route("/profile/", methods=["GET"])
 @utils.login_required
 def profile():
 

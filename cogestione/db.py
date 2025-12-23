@@ -73,7 +73,7 @@ class corso(db.Model):
     organizzatori = db.relationship('organizza', back_populates="corso")
     appello = db.relationship('presenza', back_populates="corso")
 
-    def __init__(self, titolo : str, descrizione : str, posti_totali : int, posti_occupati : int, aula : str, fascia : int, organizzatori_str : str):
+    def __init__(self, titolo : str, descrizione : str, posti_totali : int, posti_occupati : int, aula : str, fascia : int, organizzatori_str : str, note : str):
         self.titolo = titolo
         self.descrizione = descrizione
         self.posti_totali = posti_totali
@@ -81,6 +81,7 @@ class corso(db.Model):
         self.aula = aula
         self.fascia = fascia
         self.organizzatori_str = organizzatori_str
+        self.note = note
 
 
 class iscrizione(db.Model):

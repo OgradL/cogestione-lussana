@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %} Crea un nuovo corso {% endblock %}
+
+{% block content %}
+
+    <center>
+        <form class="register-form" method="POST">
+            <h1> <strong>CREA UN NUOVO CORSO</strong> </h1>
+            <div class="input_fields">
+
+                <label for="titolo"><b>Titolo</b></label>
+                <input type="text" name="titolo" class="inputform" required>
+
+                <br>
+
+                <label for="descrizione"><b>Descrizione</b></label>
+                <input type="text" name="descrizione" class="inputform" required>
+
+                <br>
+
+                <label for="organizzatori"><b>Organizzatori</b></label>
+                <input type="text" name="organizzatori" class="inputform" required>
+
+                <br>
+
+                <label for="fascia"><b>Fascia</b></label>
+                <br>
+
+                <input type="checkbox" name="fascia1" class="inputform">
+                <label for="fascia1">Fascia 1</label>
+                <br>
+                <input type="checkbox" name="fascia2" class="inputform">
+                <label for="fascia2">Fascia 2</label>
+                <br>
+                <input type="checkbox" name="fascia3" class="inputform">
+                <label for="fascia3">Fascia 3</label>
+                <br>
+                <input type="checkbox" name="fascia4" class="inputform">
+                <label for="fascia4">Fascia 4</label>
+                <br>
+                <input type="checkbox" name="fascia5" class="inputform">
+                <label for="fascia5">Fascia 5</label>
+                <br>
+
+                <br>
+
+                <label for="note"><b>Note</b></label>
+                <input type="text" name="note" class="inputform">
+
+            </div>
+            <button type="submit" class="outline_md_btn">
+                Crea
+            </button>
+        </form>
+    </center>
+{% endblock %}
