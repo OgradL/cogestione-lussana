@@ -43,10 +43,14 @@ def login():
     session["logged"] = True
     
     flash("Login effettuato con successo", 'success')
-    return redirect(url_for("home"))
+    return redirect(url_for("core.home"))
 
 
 def send_email(to_email, subject, content):
+    print(f"""To: <{to_email}>
+Subject: {subject}
+
+{content}""")
     return to_email, subject, content
     # dotenv.load_dotenv()
     # res = requests.post(
@@ -76,13 +80,13 @@ def send_pwd_reset_email(email):
 @bp.route("/verification/", methods=["GET", "POST"])
 def verification():
     if session.get("auth_code", -1) == -1 or session.get("auth_age", -1) == -1:
-        return redirect(url_for("home"))
+        return redirect(url_for("core.home"))
     
     if (datetime.now() - datetime.fromisoformat(session["auth_age"])).seconds >= 600:
         session.clear()
     
     if session.get("auth_code", -1) == -1 or session.get("auth_age", -1) == -1:
-        return redirect(url_for("home"))
+        return redirect(url_for("core.home"))
     
     
     if request.method == "GET":
@@ -175,19 +179,19 @@ def register():
     session["tmp_email"] = email
     session["tmp_password"] = password
 
-    return redirect(url_for("verification"))
+    return redirect(url_for("auth.verification"))
 
 
 @bp.route("/verification-reset-pwd/", methods=["GET", "POST"])
 def verification_reset_pwd():
     if session.get("auth_code", -1) == -1 or session.get("auth_age", -1) == -1:
-        return redirect(url_for("home"))
+        return redirect(url_for("core.home"))
     
     if (datetime.now() - datetime.fromisoformat(session["auth_age"])).seconds >= 600:
         session.clear()
     
     if session.get("auth_code", -1) == -1 or session.get("auth_age", -1) == -1:
-        return redirect(url_for("home"))
+        return redirect(url_for("core.home"))
     
     
     if request.method == "GET":
@@ -205,7 +209,7 @@ def verification_reset_pwd():
     if code != session["auth_code"]:
         session.clear()
         flash("Il codice di controllo è sbagliato", 'error')
-        return redirect(url_for("reset_password"))
+        return redirect(url_for("auth.reset_password"))
     
     email = session["tmp_email"]
     password = session["tmp_password"]
@@ -269,11 +273,11 @@ def reset_password():
     session["tmp_email"] = email
     session["tmp_password"] = password
 
-    return redirect(url_for("verification_reset_pwd"))
+    return redirect(url_for("auth.verification_reset_pwd"))
 
 @bp.route("/logout/")
 @utils.login_required
 def logout():
     session.clear()
-    return redirect(url_for("home"))
+    return redirect(url_for("core.home"))
 

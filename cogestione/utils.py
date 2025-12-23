@@ -1,9 +1,6 @@
 
-from flask import Flask
 from flask import redirect, url_for, flash
-from flask import request, jsonify, json
 from flask import session
-from datetime import timedelta, datetime
 from random import randint
 import os
 
@@ -14,7 +11,7 @@ def login_required(f):
         if 'email' in session:
             return f(*args, **kwargs)
         flash("Devi aver fatto il login!", 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     wrapped.__name__ = f.__name__
     return wrapped
 
@@ -23,7 +20,7 @@ def admin_access(f):
         if 'email' in session:
             if session['email'] in os.getenv("admin_emails"):
                 return f(*args, **kwargs)
-        return redirect(url_for('home'))
+        return redirect(url_for('core.home'))
     wrapped.__name__ = f.__name__
     return wrapped
 
