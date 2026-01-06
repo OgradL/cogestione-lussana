@@ -38,6 +38,7 @@ class user(db.Model):
     nome : Mapped[str] = mapped_column(String(100))
     cognome : Mapped[str] = mapped_column(String(100))
     classe : Mapped[str] = mapped_column(String(10))
+    full_name : Mapped[str] = mapped_column(String(210))
     password : Mapped[str] = mapped_column(String(150))
 
     iscrizioni = db.relationship('iscrizione', back_populates="user")
@@ -53,6 +54,7 @@ class user(db.Model):
         self.nome = nome
         self.cognome = cognome
         self.classe = classe
+        self.full_name = f"{cognome} {nome} {classe}"
         self.password = password
 
 
