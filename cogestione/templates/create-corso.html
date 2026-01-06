@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block title %} Crea un nuovo corso {% endblock %}
 
-{% block content %}
+{% block extra_head %}
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+{% endblock %}
 
+{% block content %}
     <center>
         <form class="register-form" method="POST">
             <h1> <strong>CREA UN NUOVO CORSO</strong> </h1>
@@ -18,9 +21,20 @@
 
                 <br>
 
-                <label for="organizzatori"><b>Organizzatori</b></label>
-                <input type="text" id="organizzatori" name="organizzatori" class="inputform" required>
 
+                <div id="search-bar">
+                    <label for="organizzatori"><b>Organizzatori</b></label>
+                    <input v-model="selection_str" type="text" id="organizzatori" name="organizzatori" class="inputform" required style="visibility:hidden">
+
+                    <input v-model="query" @input="search" placeholder="Cerca studenti..." />
+
+                    <ul v-if="results.length">
+                        <li v-for="user in results" :key="user.id">
+                            <p @click="select([[ user.email ]])"> [[ user.full_name ]] </p>
+                        </li>
+                    </ul>
+
+                    <p v-if="loading">Searching... [[ query ]] </p>
                 <br>
 
                 <label for="fascia"><b>Fasce</b></label>
@@ -53,4 +67,70 @@
             </button>
         </form>
     </center>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            delimiters: ['[[', ']]'],
+            data() {
+                return {
+                    query: "",
+                    results: [],
+                    selected: [],
+                    loading: false,
+                    timeout: null,
+                    selection_str: "";
+                };
+            },
+            methods: {
+                search() {
+                    clearTimeout(this.timeout);
+
+                    console.log("search");
+
+                    this.timeout = setTimeout(async () => {
+                        if (this.query.length < 2) {
+                            this.results = [];
+                            return;
+                        }
+
+                        this.loading = true;
+                        const res = await fetch(`/get_students/${this.query}`, {
+                            method:"GET",
+                        });
+                        console.log(res);
+
+                        this.results = await res.json();
+                        console.log(this.results)
+                        console.log(this.results["name"])
+                        this.loading = false;
+                    }, 300);
+                },
+
+                clear() {
+                    this.results = [];
+                    this.query = "";
+                    this.loading = false;
+                    this.timeout = null;
+                    this.selection_str = "";
+                },
+
+                select(email) {
+
+                    this.clear()
+                    console.log(`added ${email}`)
+
+                    this.selection_str += ";" + email
+                },
+
+                deselect(email) {
+
+                    console.log(`removed ${email}`)
+                    this.selection_str = this.selection_str.replace(email, "")
+                }
+            }
+        }).mount("#search-bar");
+        console.log("prova");
+    </script>
 {% endblock %}

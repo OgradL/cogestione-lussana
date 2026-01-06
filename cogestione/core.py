@@ -1,5 +1,5 @@
 
-from flask import Blueprint, Response, flash, render_template, redirect, request, session, url_for
+from flask import Blueprint, Response, flash, jsonify, render_template, redirect, request, session, url_for
 from flask import json
 
 from cogestione import utils
@@ -153,6 +153,22 @@ def create_corso():
 
     flash("Corso creato con successo!", "success")
     return redirect(url_for("core.profile"))
+
+@bp.route("/get_students/<query>", methods=["GET"])
+def get_students(query : str):
+
+
+    db = database.get_db()
+
+    query = query.replace(" ", "%")
+    query = "%" + query + "%"
+
+    users = db.session.scalars(db.select(database.user).where(database.user.full_name.ilike(query)).limit(10)).all()
+
+    return jsonify([
+        {"id" : user.id, "email" : user.email, "full_name" : user.full_name} for user in users
+    ])
+
 
 # profilo
 
