@@ -26,6 +26,11 @@
                     <label for="organizzatori"><b>Organizzatori</b></label>
                     <input v-model="selection_str" type="text" id="organizzatori" name="organizzatori" class="inputform" required style="visibility:hidden">
 
+                    <ul v-if="selected.length">
+                        <li v-for="user in selected" :key="user.id">
+                            <p @click="deselect([[ user.email ]])"> [[ user.full_name ]] </p>
+                        </li>
+                    </ul>
                     <input v-model="query" @input="search" placeholder="Cerca studenti..." />
 
                     <ul v-if="results.length">
@@ -68,69 +73,5 @@
         </form>
     </center>
 
-    <script>
-        const { createApp } = Vue;
-
-        createApp({
-            delimiters: ['[[', ']]'],
-            data() {
-                return {
-                    query: "",
-                    results: [],
-                    selected: [],
-                    loading: false,
-                    timeout: null,
-                    selection_str: "";
-                };
-            },
-            methods: {
-                search() {
-                    clearTimeout(this.timeout);
-
-                    console.log("search");
-
-                    this.timeout = setTimeout(async () => {
-                        if (this.query.length < 2) {
-                            this.results = [];
-                            return;
-                        }
-
-                        this.loading = true;
-                        const res = await fetch(`/get_students/${this.query}`, {
-                            method:"GET",
-                        });
-                        console.log(res);
-
-                        this.results = await res.json();
-                        console.log(this.results)
-                        console.log(this.results["name"])
-                        this.loading = false;
-                    }, 300);
-                },
-
-                clear() {
-                    this.results = [];
-                    this.query = "";
-                    this.loading = false;
-                    this.timeout = null;
-                    this.selection_str = "";
-                },
-
-                select(email) {
-
-                    this.clear()
-                    console.log(`added ${email}`)
-
-                    this.selection_str += ";" + email
-                },
-
-                deselect(email) {
-
-                    console.log(`removed ${email}`)
-                    this.selection_str = this.selection_str.replace(email, "")
-                }
-            }
-        }).mount("#search-bar");
-        console.log("prova");
-    </script>
+    <script src="{{url_for('static', filename='vue_logic.js')}}"> </script>
 {% endblock %}

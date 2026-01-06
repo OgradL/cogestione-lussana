@@ -144,10 +144,19 @@ def create_corso():
         flash("Non è stata scelta nessuna fascia")
         return redirect(url_for("core.create-corso"))
 
-    for f in fasce:
-        corso = database.corso(titolo, descrizione, 30, 0, "tbd", f, organizzatori, note)
+    organizzatori_str = organizzatori
+    organizzatori = [x for x in organizzatori.split(";") if x not in ["", None]]
 
+    for f in fasce:
+        corso = database.corso(titolo, descrizione, 30, 0, "tbd", f, organizzatori_str, note)
         db.session.add(corso)
+
+        for org_email in organizzatori:
+            print(org_email)
+            user_org = db.session.scalar(db.select(database.user).filter_by(email = org_email))
+            organizza = database.organizza(user_org.id, corso.id)
+            db.session.add(organizza)
+
 
     db.session.commit()
 

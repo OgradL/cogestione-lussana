@@ -19,14 +19,14 @@
                     <th class="Fascie"> {{ i }} ( ORARIO FASCIA {{ i }} ) </th>
 					{% if corsi[i] %}
 						{% if corsi[i]["organizzato"] %}
-							<th> <a class="iscriviti" href="{{ url_for("info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
+							<th> <a class="iscriviti" href="{{ url_for("core.info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
 							<th> {{ corsi[i]["organizzatori"] }} </th>
 							<th> {{ corsi[i]["aula"] }} </th>
 							<!-- <th>
-								<a class="iscriviti" href="{{url_for("appello", id_corso=corsi[i]["id"])}}"> APPELLO CORSO </a>
+								<a class="iscriviti" href="{#url_for("core.appello", id_corso=corsi[i]["id"]#}}"> APPELLO CORSO </a>
 							</th> -->
 						{% else %}
-							<th> <a class="iscriviti" href="{{ url_for("info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
+							<th> <a class="iscriviti" href="{{ url_for("core.info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
 							<th> {{ corsi[i]["organizzatori"] }} </th>
 							<th> {{ corsi[i]["aula"] }} </th>
 							<!-- <th> Non organizzi questo corso </th> -->
