@@ -24,7 +24,7 @@
 
                 <div id="search-bar">
                     <label for="organizzatori"><b>Organizzatori</b></label>
-                    <input v-model="selection_str" type="text" id="organizzatori" name="organizzatori" class="inputform" required style="visibility:hidden">
+                    <input v-model="selection_str" type="text" id="organizzatori" name="organizzatori" class="inputform" style="visibility:hidden">
 
                     <ul v-if="selected.length">
                         <li v-for="user in selected" :key="user.id">

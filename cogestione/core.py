@@ -130,8 +130,11 @@ def create_corso():
     fascia4 = request.form.get("fascia4")
     fascia5 = request.form.get("fascia5")
 
-    if titolo is None or descrizione is None or organizzatori is None:
+    if titolo is None or descrizione is None:
         return Response("bad request", 400)
+
+    if organizzatori is None:
+        organizzatori = ""
 
     if note is None:
         note = ""
@@ -146,6 +149,8 @@ def create_corso():
 
     organizzatori_str = organizzatori
     organizzatori = [x for x in organizzatori.split(";") if x not in ["", None]]
+    organizzatori.append(session["email"])
+    organizzatori = list(set(organizzatori))
 
     for f in fasce:
         corso = database.corso(titolo, descrizione, 30, 0, "tbd", f, organizzatori_str, note)
