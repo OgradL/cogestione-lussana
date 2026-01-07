@@ -168,6 +168,24 @@ def create_corso():
     flash("Corso creato con successo!", "success")
     return redirect(url_for("core.profile"))
 
+@bp.route("/delete-corso/<id>", methods=["POST"])
+@utils.login_required
+def delete_corso(id):
+
+    try:
+        id = int(id)
+    except ValueError:
+        return Response("Bad request", 400)
+
+    db = database.get_db()
+
+    corso = db.session.scalar(db.select(database.corso).where(database.corso.id == id))
+
+    db.session.delete(corso)
+    db.session.commit()
+
+    return Response("Deleted", 200)
+
 @bp.route("/get_students/<query>", methods=["GET"])
 def get_students(query : str):
 
