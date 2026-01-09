@@ -161,6 +161,11 @@ def create_corso():
             if user_org is None:
                 continue
 
+            prv_org = db.session.scalars(db.select(database.organizza).join(database.user).join(database.corso).where(database.user.id == session["user_id"], database.corso.fascia == f)).all()
+
+            if len(prv_org) != 0:
+                continue
+
             organizza = database.organizza(user_org.id, corso.id)
             db.session.add(organizza)
 
@@ -170,7 +175,7 @@ def create_corso():
     flash("Corso creato con successo!", "success")
     return redirect(url_for("core.profile"))
 
-@bp.route("/delete-corso/<id>", methods=["POST"])
+@bp.route("/delete-corso/<id>", methods=["GET"])
 @utils.login_required
 def delete_corso(id):
 
@@ -181,12 +186,16 @@ def delete_corso(id):
 
     db = database.get_db()
 
-    corso = db.session.scalar(db.select(database.corso).where(database.corso.id == id))
+    corso = db.session.scalar(db.select(database.corso).join(database.user).where(database.corso.id == id, database.user.id == session["user_id"]))
+
+    if corso is None:
+        return Response("Not allowed", 405)
 
     db.session.delete(corso)
     db.session.commit()
 
-    return Response("Deleted", 200)
+    flash("Corso eliminato", 'success')
+    return redirect(url_for('core.profile'))
 
 @bp.route("/get_students/<query>", methods=["GET"])
 def get_students(query : str):
