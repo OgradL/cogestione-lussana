@@ -157,8 +157,10 @@ def create_corso():
         db.session.add(corso)
 
         for org_email in organizzatori:
-            print(org_email)
             user_org = db.session.scalar(db.select(database.user).filter_by(email = org_email))
+            if user_org is None:
+                continue
+
             organizza = database.organizza(user_org.id, corso.id)
             db.session.add(organizza)
 
