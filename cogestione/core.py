@@ -204,6 +204,7 @@ def delete_corso(id):
     return redirect(url_for('core.profile'))
 
 @bp.route("/get_students/<query>", methods=["GET"])
+@utils.login_required
 def get_students(query : str):
 
 
