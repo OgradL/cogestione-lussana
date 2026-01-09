@@ -24,7 +24,7 @@ def lista_corsi(n_fascia):
     db = database.get_db()
 
     corsi = db.session.scalars(db.select(database.corso).filter_by(fascia=n_fascia)).all()
-    
+
     return render_template("lista-corsi.html", fascia=int(n_fascia), corsi=corsi, dim=len(corsi))
 
 @bp.route("/lista-corsi/", methods=["GET"])
@@ -39,23 +39,22 @@ def iscrizione():
 
     dati = json.loads(request.data)
     id_corso = dati["id_corso"]
-    
+
     user = db.session.scalar(db.select(database.user).filter_by(id=session["user_id"]))
     corso = db.session.scalar(db.select(database.corso).filter_by(id=id_corso))
-    
+
     if corso is None:
         flash("Il corso non esiste", 'error')
         return Response("Corso inesistente", 400)
-    
+
     if corso.posti_occupati == corso.posti_totali:
         flash("Il corso è pieno!", 'error')
         return Response("Corso pieno", 403)
-    
 
 
     sel = db.select(database.iscrizione).join(database.user).where(database.user.id == session["user_id"])
     iscrizioni = db.session.scalars(sel).all()
-    
+
     sel = db.select(database.organizza).join(database.user).where(database.user.id == session["user_id"])
     organizzazioni = db.session.scalars(sel).all()
 
@@ -65,14 +64,14 @@ def iscrizione():
         return Response("Già iscritto", 403)
 
     if any(list(map(lambda x : x.corso.fascia == corso.fascia, organizzazioni))):
-        flash("Sei già organizzatore per un corso di questa fascia. Puoi annullare l'iscrizione dal tuo profilo", 'error')
+        flash("Sei già organizzatore per un corso di questa fascia", 'error')
         return Response("Già organizzatore", 403)
-    
+
 
     db.session.add(database.iscrizione(user_id=user.id, corso_id=corso.id))
     corso.posti_occupati += 1
     db.session.commit()
-    
+
     flash("Iscritto con successo", 'success')
     return Response("Iscritto con successo", 200)
 
@@ -84,19 +83,19 @@ def annulla_iscrizione():
 
     dati = json.loads(request.data)
     id_corso = dati["id_corso"]
-    
+
     corso = db.session.scalar(db.select(database.corso).filter_by(id=id_corso))
 
     sel = db.select(database.iscrizione).join(database.user).join(database.corso).where(database.user.id == session["user_id"], database.corso.id == id_corso)
     iscrizione = db.session.scalar(sel)
-    
+
     if iscrizione is None:
         return Response([b"Iscrizione inesistente"], 404)
-    
+
     db.session.delete(iscrizione)
     corso.posti_occupati -= 1
     db.session.commit()
-    
+
     return Response("Iscrizione rimossa", 200)
 
 @bp.route("/corso/<id_corso>", methods=["GET"])
@@ -153,9 +152,10 @@ def create_corso():
     organizzatori = list(set(organizzatori))
 
     for f in fasce:
-        corso = database.corso(titolo, descrizione, 30, 0, "tbd", f, organizzatori_str, note)
+        corso = database.corso(titolo, descrizione, 30, 0, "non ancora assegnata", f, organizzatori_str, note)
         db.session.add(corso)
 
+        cnt_ref = 0
         for org_email in organizzatori:
             user_org = db.session.scalar(db.select(database.user).filter_by(email = org_email))
             if user_org is None:
@@ -167,8 +167,11 @@ def create_corso():
                 continue
 
             organizza = database.organizza(user_org.id, corso.id)
+            cnt_ref += 1
             db.session.add(organizza)
 
+        if cnt_ref == 0:
+            db.session.delete(corso)
 
     db.session.commit()
 
@@ -186,11 +189,14 @@ def delete_corso(id):
 
     db = database.get_db()
 
-    corso = db.session.scalar(db.select(database.corso).join(database.user).where(database.corso.id == id, database.user.id == session["user_id"]))
+    corso = db.session.scalar(db.select(database.corso).where(database.corso.id == id))
+    organizzazioni = db.session.scalars(db.select(database.organizza).join(database.corso).where(database.corso.id == id)).all()
 
-    if corso is None:
+    if corso is None or not any(list(map(lambda x : x.user_id == session["user_id"], organizzazioni))):
         return Response("Not allowed", 405)
 
+    for org in organizzazioni:
+        db.session.delete(org)
     db.session.delete(corso)
     db.session.commit()
 
@@ -220,13 +226,13 @@ def get_students(query : str):
 def profile():
 
     db = database.get_db()
-    
+
     user = db.session.scalar(db.select(database.user).filter_by(email=session["email"]))
-    
+
 
     sel = db.select(database.iscrizione).join(database.user).where(database.user.id == session["user_id"])
     iscrizioni = db.session.scalars(sel).all()
-    
+
     sel = db.select(database.organizza).join(database.user).where(database.user.id == session["user_id"])
     organizzazioni = db.session.scalars(sel).all()
 
@@ -245,7 +251,7 @@ def profile():
         d["aula"] = isc_corso.aula
         d["organizzato"] = False
         d["annulla iscrizione"] = f"<button onclick=\"annulla_iscrizione({isc_corso.id})\"> Annulla </button>"
-    
+
     for organizza in organizzazioni:
         org_corso = organizza.corso
         d = corsi[org_corso.fascia]
@@ -254,9 +260,9 @@ def profile():
         d["titolo"] = org_corso.titolo
         d["posti"] = f"{org_corso.posti_occupati} / {org_corso.posti_totali}"
         d["organizzatori"] = " - ".join(list(map(lambda x : f"{x.user.nome} {x.user.cognome} {x.user.classe}", org_corso.organizzatori)))
-        d["aula"] = org_corso.aula
+        # d["aula"] = org_corso.aula
         d["organizzato"] = True
-    
-    
+
+
     return render_template("profile.html", corsi=corsi, utente=user)
 
