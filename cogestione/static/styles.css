@@ -94,7 +94,8 @@ h1{
 
 
 /* Full-width input fields */
-input[type=text], input[type=password] {
+/* input[type=text], input[type=password] { */
+.inputform {
 	width: 100%;
 	padding: 15px;
 	margin: 5px 0 22px 0;
@@ -103,9 +104,14 @@ input[type=text], input[type=password] {
 	background: #f1f1f1;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+/* input[type=text]:focus, input[type=password]:focus { */
+.inputform:focus {
 	background-color: #ddd;
 	outline: none;
+}
+
+.checkbox-form {
+    height: 100px;
 }
 
 /* Overwrite default styles of hr */
@@ -266,7 +272,7 @@ th, td {
     text-align: middle;
 }
 
-.Fascie{
+.fasce{
     background-color: #999;
     color: white;
     font-weight: bold;
@@ -452,4 +458,27 @@ tr:nth-child(odd) .app-gray {
 
 .sub-presenze:hover {
     background-color: #03895a;
+}
+
+.very-hidden {
+    visibility: hidden;
+    size: 0;
+    height: 0;
+    width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.students-list {
+	width: 100%;
+	padding: 15px;
+	margin: 5px 0 22px 0;
+	display: inline-block;
+	border: none;
+	background: #f1f1f1;
+}
+
+.students-list:focus {
+	background-color: #ddd;
+	outline: none;
 }

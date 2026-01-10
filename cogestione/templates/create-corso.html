@@ -23,41 +23,47 @@
 
 
                 <div id="search-bar">
-                    <label for="organizzatori"><b>Organizzatori</b></label>
-                    <input v-model="selection_str" type="text" id="organizzatori" name="organizzatori" class="inputform" style="visibility:hidden">
+                    <label for="organizzatori"><b>Altri organizzatori</b></label>
+                    <input v-model="selection_str" type="text" id="organizzatori" name="organizzatori" class="very-hidden">
 
+                    <label><b>Selezionati</b></label>
                     <ul v-if="selected.length">
-                        <li v-for="user in selected" :key="user.id">
-                            <p @click="deselect([[ user.email ]])"> [[ user.full_name ]] </p>
+                        <li v-for="user in selected" :key="user.id" style="display:flex">
+                            <p> [[ user.full_name ]] </p>
+                            <button @click="deselect([[ user.email ]])">
+                                <span aria-hidden="true"> &times; </span>
+                            </button>
                         </li>
                     </ul>
-                    <input v-model="query" @input="search" placeholder="Cerca studenti..." />
+                    <p v-if="selected.length == 0"> Non hai ancora scelto altri organizzatori oltre a te </p>
+
+                    <input v-model="query" @input="search" placeholder="Cerca studenti..." class="inputform" />
 
                     <ul v-if="results.length">
-                        <li v-for="user in results" :key="user.id">
+                        <li v-for="user in results" :key="user.id" class="students-list">
                             <p @click="select([[ user.email ]])"> [[ user.full_name ]] </p>
                         </li>
                     </ul>
 
-                    <p v-if="loading">Searching... [[ query ]] </p>
+                    <p v-if="results.length == 0 && query.length >= 2"> Non ci sono studenti ([[ query ]]) </p>
                 <br>
 
                 <label for="fascia"><b>Fasce</b></label>
                 <br>
 
-                <input type="checkbox" id="fascia1" name="fascia1" class="inputform">
+                <input type="checkbox" id="fascia1" name="fascia1" class="checkbox-form">
                 <label for="fascia1">Fascia 1</label>
                 <br>
-                <input type="checkbox" id="fascia2" name="fascia2" class="inputform">
+                <input type="checkbox" id="fascia2" name="fascia2" class="checkbox-form">
                 <label for="fascia2">Fascia 2</label>
                 <br>
-                <input type="checkbox" id="fascia3" name="fascia3" class="inputform">
+                <input type="checkbox" id="fascia3" name="fascia3" class="checkbox-form">
                 <label for="fascia3">Fascia 3</label>
                 <br>
-                <input type="checkbox" id="fascia4" name="fascia4" class="inputform">
+                <input type="checkbox" id="fascia4" name="fascia4" class="checkbox-form">
                 <label for="fascia4">Fascia 4</label>
                 <br>
-                <input type="checkbox" id="fascia5" name="fascia5" class="inputform">
+                <input type="checkbox" id="fascia5" name="fascia5" class="checkbox-form">
                 <label for="fascia5">Fascia 5</label>
                 <br>
 
