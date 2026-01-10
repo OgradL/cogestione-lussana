@@ -22,11 +22,11 @@
                 <br>
 
 
-                <div id="search-bar">
+                <div id="search-bar" class="search-bar">
                     <label for="organizzatori"><b>Altri organizzatori</b></label>
                     <input v-model="selection_str" type="text" id="organizzatori" name="organizzatori" class="very-hidden">
 
-                    <label><b>Selezionati</b></label>
+                    <label><b>Selezionati:</b></label>
                     <ul v-if="selected.length">
                         <li v-for="user in selected" :key="user.id" style="display:flex">
                             <p> [[ user.full_name ]] </p>
@@ -39,40 +39,41 @@
 
                     <input v-model="query" @input="search" placeholder="Cerca studenti..." class="inputform" />
 
-                    <ul v-if="results.length">
-                        <li v-for="user in results" :key="user.id" class="students-list">
-                            <p @click="select([[ user.email ]])"> [[ user.full_name ]] </p>
+                    <p v-if="results.length != 0"> Risultati: </p>
+
+                    <ul v-if="results.length" class="students-list">
+                        <li @click="select([[ user.email ]])" v-for="user in results" :key="user.id" class="students-list-el">
+                            <p> [[ user.full_name ]] </p>
                         </li>
                     </ul>
 
-                    <p v-if="results.length == 0 && query.length >= 2"> Non ci sono studenti ([[ query ]]) </p>
-                <br>
-
-                <label for="fascia"><b>Fasce</b></label>
-                <br>
-
-                <input type="checkbox" id="fascia1" name="fascia1" class="checkbox-form">
-                <label for="fascia1">Fascia 1</label>
-                <br>
-                <input type="checkbox" id="fascia2" name="fascia2" class="checkbox-form">
-                <label for="fascia2">Fascia 2</label>
-                <br>
-                <input type="checkbox" id="fascia3" name="fascia3" class="checkbox-form">
-                <label for="fascia3">Fascia 3</label>
-                <br>
-                <input type="checkbox" id="fascia4" name="fascia4" class="checkbox-form">
-                <label for="fascia4">Fascia 4</label>
-                <br>
-                <input type="checkbox" id="fascia5" name="fascia5" class="checkbox-form">
-                <label for="fascia5">Fascia 5</label>
-                <br>
-
-                <br>
-
-                <label for="note"><b>Note</b></label>
-                <input type="text" id="note" name="note" class="inputform">
-
+                    <p v-if="results.length == 0 && query.length >= 2 && !loading"> Non ci sono studenti ([[ query ]]) </p>
             </div>
+
+            <label for="fascia"><b>Fasce</b></label>
+            <br>
+
+            <input type="checkbox" id="fascia1" name="fascia1" class="checkbox-form">
+            <label for="fascia1">Fascia 1</label>
+            <br>
+            <input type="checkbox" id="fascia2" name="fascia2" class="checkbox-form">
+            <label for="fascia2">Fascia 2</label>
+            <br>
+            <input type="checkbox" id="fascia3" name="fascia3" class="checkbox-form">
+            <label for="fascia3">Fascia 3</label>
+            <br>
+            <input type="checkbox" id="fascia4" name="fascia4" class="checkbox-form">
+            <label for="fascia4">Fascia 4</label>
+            <br>
+            <input type="checkbox" id="fascia5" name="fascia5" class="checkbox-form">
+            <label for="fascia5">Fascia 5</label>
+            <br>
+
+            <br>
+
+            <label for="note"><b>Note</b></label>
+            <input type="text" id="note" name="note" class="inputform">
+
             <button type="submit" class="outline_md_btn">
                 Crea
             </button>

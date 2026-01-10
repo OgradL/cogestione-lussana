@@ -29,7 +29,7 @@ createApp({
 
                 this.results = await res.json();
                 this.loading = false;
-            }, 300);
+            }, 0);
         },
 
         clear() {

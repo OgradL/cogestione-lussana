@@ -111,7 +111,8 @@ h1{
 }
 
 .checkbox-form {
-    height: 100px;
+    width: 18px;
+    height: 18px;
 }
 
 /* Overwrite default styles of hr */
@@ -470,15 +471,24 @@ tr:nth-child(odd) .app-gray {
 }
 
 .students-list {
-	width: 100%;
-	padding: 15px;
-	margin: 5px 0 22px 0;
-	display: inline-block;
-	border: none;
-	background: #f1f1f1;
+    padding: 0px;
+    align-items: center;
 }
 
-.students-list:focus {
-	background-color: #ddd;
-	outline: none;
+.students-list-el {
+    width: 90%;
+    padding: 0px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+.students-list-el:hover {
+    background-color: #ddd;
+    outline: none;
+}
+
+.search-bar {
+    display: grid;
 }
