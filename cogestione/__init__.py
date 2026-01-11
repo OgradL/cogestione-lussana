@@ -29,9 +29,11 @@ def create_app():
 
     from . import auth
     from . import core
+    from . import admin
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(core.bp)
+    app.register_blueprint(admin.bp)
 
     @app.route("/ping")
     def ping():
