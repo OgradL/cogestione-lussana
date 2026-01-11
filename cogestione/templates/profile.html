@@ -3,7 +3,7 @@
 
 {% block content %}
 
-	<h3> <strong> RIEPILOGO ISCRIZIONI {{ utente.cognome }} {{ utente.nome }} {{ utente.classe }}</strong> </h3>
+	<h3> <strong> RIEPILOGO CORSI {{ utente.cognome }} {{ utente.nome }} {{ utente.classe }}</strong> </h3>
 	<br> <br>
 	<div class="table-container">
 		<table>
@@ -11,7 +11,7 @@
 				<th> Fascia </th>
 				<th> Corso </th>
 				<th> Organizzatori </th>
-				<th> Aula </th>
+				<th> Elimina </th>
 				<!-- <th> Appello </th> -->
 			</tr>
 			{% for i in range(1, 6) %}
@@ -33,7 +33,8 @@
 							<!-- <th> Non organizzi questo corso </th> -->
 						{% endif %}
 					{% else %}
-						<th> <a class="iscriviti" href="/lista-corsi/{{i}}"> Iscriviti! </a> </th>
+						<!-- <th> <a class="iscriviti" href="/lista-corsi/{{i}}"> Iscriviti! </a> </th> -->
+                        <th> </th>
 						<th> <a class="iscriviti" href="/create-corso/"> Crea un corso! </a> </th>
 						<th> </th>
 						<!-- <th> </th> -->

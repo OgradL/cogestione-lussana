@@ -12,6 +12,7 @@ def home():
     return render_template("homepage.html")
 
 @bp.route("/lista-corsi/<n_fascia>", methods=["GET"])
+@utils.admin_access
 def lista_corsi(n_fascia):
     try:
         n_fascia = int(n_fascia)
@@ -99,11 +100,21 @@ def annulla_iscrizione():
     return Response("Iscrizione rimossa", 200)
 
 @bp.route("/corso/<id_corso>", methods=["GET"])
+@utils.login_required
 def info_corso(id_corso):
+
+    try:
+        id_corso = int(id_corso)
+    except ValueError:
+        return redirect(url_for("core.home"))
 
     db = database.get_db()
 
     corso = db.session.scalar(db.select(database.corso).filter_by(id=id_corso))
+    org = db.session.scalar(db.select(database.organizza).where(database.organizza.corso_id == id_corso, database.organizza.user_id == session["user_id"]))
+
+    if org is None:
+        return redirect(url_for("core.home"))
 
     referenti = " - ".join(list(map(lambda x : f"{x.user.nome} {x.user.cognome} {x.user.classe}", corso.organizzatori)))
 
