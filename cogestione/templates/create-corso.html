@@ -22,32 +22,54 @@
                 <br>
 
 
-                <div id="search-bar" class="search-bar">
-                    <label for="organizzatori"><b>Altri organizzatori</b></label>
-                    <input v-model="selection_str" type="text" id="organizzatori" name="organizzatori" class="very-hidden">
+            <div id="search-bar" class="search-bar">
+                <label><b>Altri organizzatori</b></label>
 
+                <!-- input nascosto per submit -->
+                <input v-model="selection_str" type="text" name="organizzatori" class="very-hidden">
+
+                <!-- STUDENTI SELEZIONATI -->
+                <div id="selected-students">
                     <label><b>Selezionati:</b></label>
-                    <ul v-if="selected.length">
-                        <li v-for="user in selected" :key="user.id" style="display:flex">
-                            <p> [[ user.full_name ]] </p>
-                            <button @click="deselect([[ user.email ]])">
-                                <span aria-hidden="true"> &times; </span>
-                            </button>
+
+                    <div v-if="selected.length" id="selected-chips">
+                        <div v-for="user in selected" :key="user.id" class="student-chip">
+                            [[ user.full_name ]]
+                            <button type="button" @click="deselect(user.email)">×</button>
+                        </div>
+                    </div>
+
+                    <p v-if="selected.length == 0">
+                        Non hai ancora scelto altri organizzatori oltre a te
+                    </p>
+                </div>
+
+                <!-- INPUT RICERCA -->
+                <div id="autocomplete-wrapper">
+                    <input
+                        v-model="query"
+                        @input="search"
+                        placeholder="Cerca studenti..."
+                        class="inputform"
+                        autocomplete="off"
+                    />
+
+                    <!-- DROPDOWN RISULTATI -->
+                    <ul v-if="results.length" id="autocomplete-results">
+                        <li
+                            v-for="user in results"
+                            :key="user.id"
+                            @click="select(user.email)"
+                            class="autocomplete-item"
+                        >
+                            [[ user.full_name ]]
                         </li>
                     </ul>
-                    <p v-if="selected.length == 0"> Non hai ancora scelto altri organizzatori oltre a te </p>
 
-                    <input v-model="query" @input="search" placeholder="Cerca studenti..." class="inputform" />
-
-                    <p v-if="results.length != 0"> Risultati: </p>
-
-                    <ul v-if="results.length" class="students-list">
-                        <li @click="select([[ user.email ]])" v-for="user in results" :key="user.id" class="students-list-el">
-                            <p> [[ user.full_name ]] </p>
-                        </li>
-                    </ul>
-
-                    <p v-if="results.length == 0 && query.length >= 2 && !loading"> Non ci sono studenti ([[ query ]]) </p>
+                    <p v-if="results.length == 0 && query.length >= 2 && !loading">
+                        Nessun risultato per "[[ query ]]"
+                    </p>
+                </div>
             </div>
 
             <label for="fascia"><b>Fasce</b></label>
