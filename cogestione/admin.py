@@ -1,5 +1,5 @@
 
-from flask import Blueprint, render_template, request, jsonify, json
+from flask import Blueprint, render_template, request, jsonify, json, redirect, url_for
 from io import StringIO
 from contextlib import redirect_stdout
 
@@ -16,15 +16,23 @@ def execute():
         return render_template("admin.html")
 
     dati = json.loads(request.data)
+
+    cmd = ""
+    if "comando" in dati:
+        cmd = dati["comando"]
+
     res = ""
 
     f = StringIO()
     with redirect_stdout(f):
         try:
-            exec(dati["comando"])
+            exec(cmd)
             res = f.getvalue().strip()
         except Exception as e:
             res = str(e)
 
     return jsonify({"res" : res})
 
+@bp.route("/")
+def admin():
+    return redirect(url_for("admin.execute"))

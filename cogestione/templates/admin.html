@@ -5,8 +5,10 @@
 
 <h3> <strong> admin </strong> </h3>
 <br> <br>
-<input type="text" name="cmd" id="comando" placeholder="cmd" required>
-<button onclick="send_comando()"> submit </button>
-<p id="result"> risultato </p> 
+<form style="max-width:1000000px" onsubmit="return false;">
+    <input class="inputform" type="text" name="cmd" id="comando" placeholder="cmd">
+    <button class="outline_md_btn" onclick="send_comando()"> submit </button>
+</form>
+<p style="background-color: #e0e0e0; padding: 5px" id="result"> risultato </p> 
 
 {% endblock %}
