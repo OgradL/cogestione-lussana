@@ -151,8 +151,6 @@ def create_corso():
     organizzatori.append(session["email"])
     organizzatori = list(set(organizzatori))
 
-    print(organizzatori)
-
     for f in fasce:
         corso = database.corso(titolo, descrizione, 30, 0, "non ancora assegnata", f, organizzatori_str, note)
         db.session.add(corso)
@@ -161,7 +159,6 @@ def create_corso():
         for org_email in organizzatori:
             user_org = db.session.scalar(db.select(database.user).filter_by(email = org_email))
             if user_org is None:
-                print("wrong:", org_email)
                 continue
 
             prv_org = db.session.scalars(db.select(database.organizza).join(database.user).join(database.corso).where(database.user.id == session["user_id"], database.corso.fascia == f)).all()
