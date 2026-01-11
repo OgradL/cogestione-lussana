@@ -37,7 +37,6 @@ createApp({
             this.query = "";
             this.loading = false;
             this.timeout = null;
-            this.selection_str = "";
         },
 
         select(email) {
