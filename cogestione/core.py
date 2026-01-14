@@ -172,7 +172,7 @@ def create_corso():
             if user_org is None:
                 continue
 
-            prv_org = db.session.scalars(db.select(database.organizza).join(database.user).join(database.corso).where(database.user.id == session["user_id"], database.corso.fascia == f)).all()
+            prv_org = db.session.scalars(db.select(database.organizza).join(database.user).join(database.corso).where(database.user.id == user_org.id, database.corso.fascia == f)).all()
 
             if len(prv_org) != 0:
                 continue
