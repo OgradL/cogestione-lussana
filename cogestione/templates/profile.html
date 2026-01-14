@@ -16,7 +16,7 @@
 			</tr>
 			{% for i in range(1, 6) %}
 				<tr>
-                    <th class="fasce"> {{ i }} ( ORARIO FASCIA {{ i }} ) </th>
+                    <th class="fasce"> {{ i }} ({{ orari_fasce[i] }}) </th>
 					{% if corsi[i] %}
 						{% if corsi[i]["organizzato"] %}
 							<th> <a class="iscriviti" href="{{ url_for("core.info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>

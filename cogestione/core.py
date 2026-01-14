@@ -276,5 +276,5 @@ def profile():
         d["organizzato"] = True
 
 
-    return render_template("profile.html", corsi=corsi, utente=user)
+    return render_template("profile.html", corsi=corsi, utente=user, orari_fasce=utils.orari_fasce)
 
