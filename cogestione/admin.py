@@ -16,6 +16,7 @@ def execute():
         return render_template("admin.html")
 
     dati = json.loads(request.data)
+    db = database.get_db()
 
     cmd = ""
     if "comando" in dati:
