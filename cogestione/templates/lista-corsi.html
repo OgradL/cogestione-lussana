@@ -5,26 +5,26 @@
 	<h1><strong>Elenco Corsi Fascia {{fascia}}</strong></h1>
 	<ul class="corsi">
 	{% for corso in corsi %}
-			<li > <b>{{ corso.id }} {{ corso.titolo }}</b> <a class="dettagli" href="/corso/{{corso.id}}"> Dettagli </a> </li>
-			<p class="corsis"> {{ corso.descrizione }} </p>
-			<p class="spazio"> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </p> 
+        <li > <b>{{ corso.id }} {{ corso.titolo }}</b> <a class="dettagli" href="{{url_for('core.info_corso', id_corso=corso.id)}}"> Dettagli </a> </li>
+        <p class="corsis"> {{ corso.descrizione }} </p>
+        <p class="spazio"> posti: {{ corso.posti_occupati }} / {{ corso.posti_totali }} </p> 
 					
 	{% endfor %}
 
 	</ul>
 	<center>
 		{% if fascia!=1 %}
-			<a class="pagine" href="/lista-corsi/{{fascia-1}}"><<</a> 
+            <a class="pagine" href="{{url_for('lista_corsi', n_fascia=fascia-1)}}"><<</a> 
 		{% endif %}
 		{% for i in range(1, 6) %}
 			{% if i == fascia %}
-				<a class="primo" href="/lista-corsi/{{i}}">{{i}}</a>
+                <a class="primo" href="{{url_for('lista_corsi', n_fascia=i)}}"><<</a> 
 			{% else %}
-				<a class="pagine" href="/lista-corsi/{{i}}">{{i}}</a>
+                <a class="pagine" href="{{url_for('lista_corsi', n_fascia=i)}}"><<</a> 
 			{% endif %}
 		{% endfor %}
 		{% if fascia !=5 %}
-			<a class="pagine" href="/lista-corsi/{{fascia+1}}">>></a> 
+            <a class="pagine" href="{{url_for('lista_corsi', n_fascia=fascia+1)}}"><<</a> 
 		{% endif %}
 	</center>
 {% endblock %}

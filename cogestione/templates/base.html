@@ -15,25 +15,24 @@
 	</head>
 	<body>
 		<div class="topnav">
-				<div class="title">
-					<strong class="Nav"> 
-						<a class="null" href="/">COGESTIONE <span style="color: #00C199;">LUSSANA</span> 2026 <img class="logo" src="{{url_for('static', filename='LogoLussana-1.png')}}"></a>
-					</strong>
-				</div>
-				<div class="links">
-					
-					<a href="/create-corso">CREA CORSO</a>
-					{% if session["logged"] %}
-						<a href="/profile">PROFILO</a>
-					{% else %}
-						<!-- <a href="/auth/register">REGISTRATI</a> -->
-						<a href="/auth/login">LOGIN</a>
-					{% endif %}
-			
-					{% if session["logged"] %}
-						<a href="/auth/logout">LOGOUT</a>
-					{% endif %}
-				</div>
+            <div class="title">
+                <strong class="Nav"> 
+                    <a class="null" href="{{url_for('core.home')}}">COGESTIONE <span style="color: #00C199;">LUSSANA</span> 2026 <img class="logo" src="{{url_for('static', filename='LogoLussana-1.png')}}"></a>
+                </strong>
+            </div>
+            <div class="links">
+
+                <a href="{{url_for('core.create_corso')}}">CREA CORSO</a>
+                {% if session["logged"] %}
+                    <a href="{{url_for('core.profile')}}">PROFILO</a>
+                {% else %}
+                    <a href="{{url_for('auth.login')}}">LOGIN</a>
+                {% endif %}
+
+                {% if session["logged"] %}
+                    <a href="{{url_for('auth.logout')}}">LOGOUT</a>
+                {% endif %}
+            </div>
 		</div>
 
 		

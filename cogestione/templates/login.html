@@ -8,14 +8,14 @@
 			<h1> Login </h1>
 			<div class="input_fields">
                 <label> Email: {{ user_email }} </label>
-                <a href="/auth/prelogin/"> Cambia email </a>
+                <a href="{{url_for('auth.prelogin')}}"> Cambia email </a>
 				<br>
 				<!-- <label for="email"><b>Email</b></label> -->
 				<!-- <input type="text" name="email" id="email" class="inputform" placeholder="Email" required> -->
 				<label for="password"><b>Password</b></label>
 				<input type="password" name="password" id="password" class="inputform" placeholder="Password" required>
 				<br>
-				<u><a class="iscriviti" href="/reset-password/"> Ho dimenticato la password </a></u>
+                <u><a class="iscriviti" href="{{url_for('auth.reset_password')}}"> Ho dimenticato la password </a></u>
 			</div>
 			<button type="submit" class="outline_md_btn">
 				Entra
