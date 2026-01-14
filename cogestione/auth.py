@@ -2,6 +2,9 @@
 from flask import Blueprint, Response, render_template, flash, redirect, url_for, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
+import requests
+import os
+import dotenv
 
 
 from cogestione import utils
@@ -79,22 +82,17 @@ def login():
 
 
 def send_email(to_email, subject, content):
-    print(f"""To: <{to_email}>
-Subject: {subject}
-
-{content}""")
-    return to_email, subject, content
-    # dotenv.load_dotenv()
-    # res = requests.post(
-    #     "https://api.eu.mailgun.net/v3/cogestione-lussana.eu/messages",
-    #     auth=("api", os.getenv('API_KEY', 'API_KEY')),
-    #     data={"from": "Iscrizioni Cogestione Lussana <iscrizioni@cogestione-lussana.eu>",
-    #         "to": to_email,
-    #         "subject": subject,
-    #         "text": content
-    #         })
-    # 
-    # # print(to_email, res)
+    dotenv.load_dotenv()
+    res = requests.post(
+        "https://api.eu.mailgun.net/v3/cogestione-lussana.eu/messages",
+        auth=("api", os.getenv('API_KEY', 'API_KEY')),
+        data={"from": "Iscrizioni Cogestione Lussana <iscrizioni@cogestione-lussana.eu>",
+            "to": to_email,
+            "subject": subject,
+            "text": content
+            })
+    # print(res.status_code, res.content)
+    return res
 
 def send_auth_verification_email(email):
     testo = f"""Questo è il tuo codice di verififca:\n\t{session["auth_code"]}\n\nInseriscilo nella pagina di registrazione!"""
