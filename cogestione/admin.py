@@ -5,6 +5,7 @@ from contextlib import redirect_stdout
 
 from cogestione import utils
 from cogestione import db as database
+from cogestione.admin_actions import carica_utenti
 
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
