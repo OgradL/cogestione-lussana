@@ -82,10 +82,12 @@ def login():
 
 
 def send_email(to_email, subject, content):
-    dotenv.load_dotenv()
+    api_key = os.getenv("MAILGUN_API")
+    if api_key is None:
+        return
     res = requests.post(
         "https://api.eu.mailgun.net/v3/cogestione-lussana.eu/messages",
-        auth=("api", os.getenv('API_KEY', 'API_KEY')),
+        auth=("api", api_key),
         data={"from": "Iscrizioni Cogestione Lussana <iscrizioni@cogestione-lussana.eu>",
             "to": to_email,
             "subject": subject,
