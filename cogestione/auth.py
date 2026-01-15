@@ -86,6 +86,17 @@ def send_email(to_email, subject, content):
     api_key = os.getenv("MAILGUN_API")
     if api_key is None:
         return
+    os.makedirs("logs/", exist_ok=True)
+    with open("logs/log.txt", "+a") as f:
+        f.writelines(f"""{datetime.now().isoformat()}:
+\tFrom: iscrizioni@cogestione-lussana-lussana.eu
+\tTo: {to_email}
+\tSubject: {subject}
+\tContent: {content}
+
+----------------------------------------------
+""")
+    return
     res = requests.post(
         "https://api.eu.mailgun.net/v3/cogestione-lussana.eu/messages",
         auth=("api", api_key),
