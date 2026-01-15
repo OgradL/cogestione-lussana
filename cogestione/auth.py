@@ -4,7 +4,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 import requests
 import os
-import dotenv
 
 
 from cogestione import utils
@@ -15,7 +14,9 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route("/prelogin/", methods=["GET", "POST"])
 def prelogin():
+    flashes = session.get("_flashes", [])
     session.clear()
+    session["_flashes"] = flashes
 
     if request.method == "GET":
         return render_template("prelogin.html")
@@ -148,7 +149,7 @@ def verification():
     db.session.commit()
 
     flash("Registrato con successo", 'success')
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("auth.prelogin"))
 
 @bp.route("/register/", methods=["GET", "POST"])
 @utils.is_loggin
@@ -253,18 +254,20 @@ def verification_reset_pwd():
     session.clear()
 
     flash("Password modificata con successo", 'success')
-    return redirect(url_for("auth.login"))
+    return redirect(url_for("auth.prelogin"))
 
 @bp.route("/reset-password/", methods=["GET", "POST"])
+@utils.is_loggin
 def reset_password():
     if request.method == "GET":
-        return render_template("reset-pwd.html")
+        return render_template("reset-pwd.html", user_email=session["email"])
 
     failed = False
 
     db = database.get_db()
 
-    email = request.form.get("email")
+    email = session["email"]
+    # email = request.form.get("email")
     password1 = request.form.get("password1")
     password2 = request.form.get("password2")
 

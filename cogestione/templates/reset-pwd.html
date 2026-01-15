@@ -7,9 +7,11 @@
 		<form class="register-form" method="POST">
 			<h1> Reset Password </h1>
 			<div class="input_fields">
-				<label for="email"><b>Email</b></label>
-				<input type="text" name="email" id="email" class="inputform" placeholder="Email" required>
-				<br>
+                <label> Email: {{ user_email }} -</label>
+                <a class="iscriviti" href="{{url_for('auth.prelogin')}}"> Cambia email </a>
+				<br> <br>
+				<!-- <label for="email"><b>Email</b></label> -->
+				<!-- <input type="text" name="email" id="email" class="inputform" placeholder="Email" required> -->
 				<label for="pssw"><b>Password</b></label>
 				<input type="password" name="password1" id="password1" class="inputform" placeholder="Password" required>
 				<br>
