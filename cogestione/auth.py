@@ -165,7 +165,7 @@ def verification():
 
     db.session.commit()
 
-    flash("Registrato con successo", 'success')
+    flash("Registrato con successo. Adesso fai il login con la password appena impostata", 'success')
     return redirect(url_for("auth.prelogin"))
 
 @bp.route("/register/", methods=["GET", "POST"])
@@ -270,7 +270,7 @@ def verification_reset_pwd():
 
     session.clear()
 
-    flash("Password modificata con successo", 'success')
+    flash("Password modificata con successo. Adesso rifai il login con la nuova password", 'success')
     return redirect(url_for("auth.prelogin"))
 
 @bp.route("/reset-password/", methods=["GET", "POST"])

@@ -125,7 +125,7 @@ def info_corso(id_corso):
 @utils.login_required
 def create_corso():
     if request.method == "GET":
-        return render_template("create-corso.html")
+        return render_template("create-corso.html", orario_fascia=utils.orari_fasce)
 
     db = database.get_db()
 

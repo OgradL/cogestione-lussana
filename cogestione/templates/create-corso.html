@@ -12,11 +12,13 @@
             <div class="input_fields">
 
                 <label for="titolo"><b>Titolo</b></label>
+                <p> Inserisci il titolo che vuoi dare al tuo corso. </p>
                 <input type="text" id="titolo" name="titolo" class="inputform" required>
 
                 <br>
 
                 <label for="descrizione"><b>Descrizione</b></label>
+                <p> Inserisci tutto quello che vuoi che gli studenti sappiano. Descrivi l'argomento del corso e come si svolgerà. </p>
                 <input type="text" id="descrizione" name="descrizione" class="inputform" required>
 
                 <br>
@@ -24,6 +26,7 @@
 
             <div id="search-bar" class="search-bar">
                 <label><b>Altri organizzatori</b></label>
+                <p> Scegli chi organizza il corso insieme a te. </p>
 
                 <!-- input nascosto per submit -->
                 <input v-model="selection_str" type="text" name="organizzatori" class="very-hidden">
@@ -49,7 +52,7 @@
                     <input
                         v-model="query"
                         @input="search"
-                        placeholder="Cerca studenti..."
+                        placeholder="Cerca studenti... (Inserisci 'cognome nome classe' o parte di questi dati)"
                         class="inputform"
                         autocomplete="off"
                     />
@@ -73,31 +76,25 @@
             </div>
 
             <label for="fascia"><b>Fasce</b></label>
-            <br><br>
+            <p> Scegli in quale fasce vuoi organizzare il tuo corso. Se uno degli organizzatori del corso è già occupato in un altro corso non verrà inserito tra i referenti. </p>
+            <br>
 
-            <input type="checkbox" id="fascia1" name="fascia1" class="checkbox-form">
-            <label for="fascia1">Fascia 1</label>
-            <br>
-            <input type="checkbox" id="fascia2" name="fascia2" class="checkbox-form">
-            <label for="fascia2">Fascia 2</label>
-            <br>
-            <input type="checkbox" id="fascia3" name="fascia3" class="checkbox-form">
-            <label for="fascia3">Fascia 3</label>
-            <br>
-            <input type="checkbox" id="fascia4" name="fascia4" class="checkbox-form">
-            <label for="fascia4">Fascia 4</label>
-            <br>
-            <input type="checkbox" id="fascia5" name="fascia5" class="checkbox-form">
-            <label for="fascia5">Fascia 5</label>
-            <br>
+            <div>
+            {% for i in range(1, 6) %}
+                <input type="checkbox" id="fascia{{i}}" name="fascia{{i}}" class="checkbox-form">
+                <label for="fascia{{i}}">Fascia {{i}} ({{ orario_fascia[i] }})</label>
+                <br>
+            {% endfor %}
+            </div>
 
             <br>
 
             <label for="note"><b>Note</b></label>
+            <p> Note per i rappresentanti, non visibili agli studenti quando si iscriveranno. Inserire richieste particolari come aula, materiale, ... </p>
             <input type="text" id="note" name="note" class="inputform">
 
             <button type="submit" class="outline_md_btn">
-                Crea
+                Crea corso
             </button>
         </form>
     </center>
