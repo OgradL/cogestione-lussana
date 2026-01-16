@@ -83,29 +83,35 @@ def login():
 
 
 def send_email(to_email, subject, content):
-    api_key = os.getenv("MAILGUN_API")
-    if api_key is None:
-        return
+    local_api_key = os.getenv("LOCAL_API_KEY")
+    relay_url = os.getenv("RELAY_URL")
+
+    from_email = "iscrizioni@cogestione-lussana-lussana.eu"
+
     os.makedirs("logs/", exist_ok=True)
     with open("logs/log.txt", "+a") as f:
         f.writelines(f"""{datetime.now().isoformat()}:
-\tFrom: iscrizioni@cogestione-lussana-lussana.eu
+\tFrom: {from_email}
 \tTo: {to_email}
 \tSubject: {subject}
 \tContent: {content}
 
 ----------------------------------------------
 """)
-    return
+
+    if local_api_key is None or relay_url is None:
+        return
+
     res = requests.post(
-        "https://api.eu.mailgun.net/v3/cogestione-lussana.eu/messages",
-        auth=("api", api_key),
-        data={"from": "Iscrizioni Cogestione Lussana <iscrizioni@cogestione-lussana.eu>",
-            "to": to_email,
-            "subject": subject,
-            "text": content
-            })
-    # print(res.status_code, res.content)
+        relay_url,
+        json={"api_key": local_api_key,
+              "from_email": from_email,
+              "to_email": to_email,
+              "subject": subject,
+              "content": content
+              }
+    )
+
     return res
 
 def send_auth_verification_email(email):
