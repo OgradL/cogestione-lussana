@@ -86,7 +86,7 @@ def send_email(to_email, subject, content):
     local_api_key = os.getenv("LOCAL_API_KEY")
     relay_url = os.getenv("RELAY_URL")
 
-    from_email = "iscrizioni@cogestione-lussana-lussana.eu"
+    from_email = "iscrizioni@cogestione-lussana.eu"
 
     os.makedirs("logs/", exist_ok=True)
     with open("logs/log.txt", "+a") as f:
