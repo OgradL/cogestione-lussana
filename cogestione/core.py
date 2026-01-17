@@ -218,13 +218,26 @@ def delete_corso(id):
 @utils.login_required
 def get_students(query : str):
 
-
     db = database.get_db()
 
-    query = query.replace(" ", "%")
-    query = "%" + query + "%"
+    if len(query) > 100:
+        return jsonify({})
 
-    users = db.session.scalars(db.select(database.user).where(database.user.full_name.ilike(query)).limit(10)).all()
+    split_query = [f"%{x}%" for x in query.split(" ") if x != ""]
+
+    users = set()
+    first = True
+    for qry in split_query:
+        curr_users = db.session.scalars(db.select(database.user).where(database.user.full_name.ilike(qry))).all()
+
+        users = users.intersection(set(curr_users))
+
+        if first:
+            first = False
+            users = set(curr_users)
+
+    while len(users) > 10:
+        users.pop()
 
     return jsonify([
         {"id" : user.id, "email" : user.email, "full_name" : user.full_name} for user in users
