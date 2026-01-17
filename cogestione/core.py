@@ -113,7 +113,7 @@ def info_corso(id_corso):
     corso = db.session.scalar(db.select(database.corso).filter_by(id=id_corso))
     org = db.session.scalar(db.select(database.organizza).where(database.organizza.corso_id == id_corso, database.organizza.user_id == session["user_id"]))
 
-    if org is None:
+    if org is None and not utils.is_admin(session["email"]):
         return redirect(url_for("core.home"))
 
     referenti = " - ".join(list(map(lambda x : f"{x.user.nome} {x.user.cognome} {x.user.classe}", corso.organizzatori)))
