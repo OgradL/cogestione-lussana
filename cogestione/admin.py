@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, request, jsonify, json, redirect, url_for
 from io import StringIO
 from contextlib import redirect_stdout
+from datetime import datetime
 
 from cogestione import utils
 from cogestione import db as database
@@ -33,6 +34,8 @@ def execute():
         except Exception as e:
             res = str(e)
 
+
+    res = f"{datetime.now().isoformat()}:\n\n" + res
     return jsonify({"res" : res})
 
 @bp.route("/")

@@ -1,36 +1,28 @@
 
 async function send_comando() {
     let input = document.getElementById("comando");
-	console.log(input.value);
 	let comando = input.value;
-	// console.log(document.URL);
+	document.getElementById("result").innerText = "";
+
 	const response = await fetch(document.URL, {
 		method:"POST",
 		body: JSON.stringify({"comando" : comando})
 	});
 
-	console.log(await response.headers)
-	// console.log(await response.text())
 	body = await response.json();
 
-	console.log(body.res);
-
-	// document.getElementById("result").innerText = await response.headers.get("result");
 	document.getElementById("result").innerText = body.res;
-
 }
 
 async function iscrizione(corso_id) {
 	let url = "/iscrizione/";
-	// console.log(document.URL, url);
+
 	await fetch(url, {
 		method: "POST",
 		body: JSON.stringify({id_corso : corso_id})
 	}).then((res) => {
 		window.location.reload();
 	});
-
-	// console.log(response.status);
 }
 
 async function annulla_iscrizione(corso_id) {
@@ -99,7 +91,6 @@ async function salva_presenze(){
 	objRes = Object.fromEntries(result);
 
 	let url = window.location.href;
-	console.log(url);
 
 	await fetch(url, {
 		method: "POST",
