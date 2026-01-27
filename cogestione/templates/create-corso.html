@@ -13,13 +13,13 @@
 
                 <label for="titolo"><b>Titolo</b></label>
                 <p> Inserisci il titolo che vuoi dare al tuo corso. </p>
-                <input type="text" id="titolo" name="titolo" class="inputform" required>
+                <input type="text" id="titolo" name="titolo" class="inputform" placeholder="Inserisci titolo" required>
 
                 <br>
 
                 <label for="descrizione"><b>Descrizione</b></label>
                 <p> Inserisci tutto quello che vuoi che gli studenti sappiano. Descrivi l'argomento del corso e come si svolgerà. </p>
-                <input type="text" id="descrizione" name="descrizione" class="inputform" required>
+                <input type="text" id="descrizione" name="descrizione" class="inputform" placeholder="Inserisci descrizione" required>
 
                 <br>
 
@@ -52,7 +52,7 @@
                     <input
                         v-model="query"
                         @input="search"
-                        placeholder=""
+                        placeholder="Cerca studenti o professori"
                         class="inputform"
                         autocomplete="off"
                     />
@@ -91,7 +91,7 @@
 
             <label for="note"><b>Note</b></label>
             <p> Note per i rappresentanti, non visibili agli studenti quando si iscriveranno. Inserire richieste particolari come aula, materiale, ... </p>
-            <input type="text" id="note" name="note" class="inputform">
+            <input type="text" id="note" name="note" class="inputform" placeholder="Inserisci note (facoltativo)">
 
             <button type="submit" class="outline_md_btn">
                 Crea corso
