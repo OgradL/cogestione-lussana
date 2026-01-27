@@ -48,7 +48,7 @@ def carica_prof(path):
             email = str(value[1].value),
             nome = "",
             cognome = str(value[0].value),
-            classe = "docente",
+            classe = "",
             password = ""
         ))
         db.session.commit()
