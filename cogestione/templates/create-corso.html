@@ -13,13 +13,13 @@
 
                 <label for="titolo"><b>Titolo</b></label>
                 <p> Inserisci il titolo che vuoi dare al tuo corso. </p>
-                <input type="text" id="titolo" name="titolo" class="inputform" placeholder="Inserisci titolo" required>
+                <textarea type="text" id="titolo" name="titolo" class="inputform input-textarea" placeholder="Inserisci titolo" required rows="1"></textarea>
 
                 <br>
 
                 <label for="descrizione"><b>Descrizione</b></label>
                 <p> Inserisci tutto quello che vuoi che gli studenti sappiano. Descrivi l'argomento del corso e come si svolgerà. </p>
-                <input type="text" id="descrizione" name="descrizione" class="inputform" placeholder="Inserisci descrizione" required>
+                <textarea type="text" id="descrizione" name="descrizione" class="inputform input-textarea" placeholder="Inserisci descrizione" required rows="1"></textarea>
 
                 <br>
 
@@ -91,7 +91,7 @@
 
             <label for="note"><b>Note</b></label>
             <p> Note per i rappresentanti, non visibili agli studenti quando si iscriveranno. Inserire richieste particolari come aula, materiale, ... </p>
-            <input type="text" id="note" name="note" class="inputform" placeholder="Inserisci note (facoltativo)">
+            <textarea type="text" id="note" name="note" class="inputform input-textarea" placeholder="Inserisci note (facoltativo)" rows="1"></textarea>
 
             <button type="submit" class="outline_md_btn">
                 Crea corso
@@ -100,4 +100,19 @@
     </center>
 
     <script src="{{url_for('static', filename='vue_logic.js')}}"> </script>
+
+    <script>
+        const textArea = document.getElementsByClassName('input-textarea');
+
+        [].forEach.call(textArea, (textArea) => {
+            textArea.style.height = textArea.scrollHeight + "px";
+            textArea.style.overflowY = "hidden";
+
+            textArea.addEventListener("input", function () {
+                this.style.height = "auto";
+                this.style.height = this.scrollHeight + "px";
+            });
+        })
+
+    </script>
 {% endblock %}
