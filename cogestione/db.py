@@ -62,7 +62,7 @@ class corso(db.Model):
     __tablename__ = "corso"
 
     id : Mapped[int] = mapped_column(Integer, primary_key=True)
-    titolo : Mapped[str] = mapped_column(String(200))
+    titolo : Mapped[str] = mapped_column(String(1000))
     descrizione : Mapped[str] = mapped_column(String(10000))
     posti_totali : Mapped[int] = mapped_column(Integer)
     posti_occupati : Mapped[int] = mapped_column(Integer)
