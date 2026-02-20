@@ -40,15 +40,22 @@ def prelogin():
     session["email"] = email
 
     if user.password == "":
+        session["register"] = "register"
         return redirect(url_for("auth.register"))
 
+    session["register"] = "login"
     return redirect(url_for("auth.login"))
 
 @bp.route("/login/", methods=["GET", "POST"])
 @utils.is_loggin
 def login():
     if request.method == "GET":
+        if session["register"] == "register":
+            return redirect(url_for("auth.register"))
         return render_template("login.html", user_email = session["email"])
+
+    if session["register"] == "register":
+        return Response("bad request", 400)
 
     db = database.get_db()
 
@@ -172,7 +179,12 @@ def verification():
 @utils.is_loggin
 def register():
     if request.method == "GET":
+        if session["register"] == "login":
+            return redirect(url_for("auth.login"))
         return render_template("register.html", user_email = session["email"])
+
+    if session["register"] == "login":
+        return Response("bad request", 400)
 
     failed = False
 
@@ -277,7 +289,12 @@ def verification_reset_pwd():
 @utils.is_loggin
 def reset_password():
     if request.method == "GET":
+        if session["register"] == "register":
+            return redirect(url_for("auth.register"))
         return render_template("reset-pwd.html", user_email=session["email"])
+
+    if session["register"] == "register":
+        return Response("bad request", 400)
 
     failed = False
 
