@@ -36,10 +36,22 @@ def login_required(f):
 def is_admin(email):
     return email in os.getenv("admin_emails")
 
+def is_super_admin(email):
+    return email in os.getenv("super_admin_emails")
+
 def admin_access(f):
     def wrapped(*args, **kwargs):
         if 'email' in session:
-            if is_admin(session['email']):
+            if is_admin(session['email']) or is_super_admin(session['email']):
+                return f(*args, **kwargs)
+        return redirect(url_for('core.home'))
+    wrapped.__name__ = f.__name__
+    return wrapped
+
+def super_admin_access(f):
+    def wrapped(*args, **kwargs):
+        if 'email' in session:
+            if is_super_admin(session['email']):
                 return f(*args, **kwargs)
         return redirect(url_for('core.home'))
     wrapped.__name__ = f.__name__

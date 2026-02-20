@@ -12,7 +12,7 @@ from cogestione.admin_actions import carica_utenti, carica_prof
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 @bp.route("/execute/", methods=["GET", "POST"])
-@utils.admin_access
+@utils.super_admin_access
 def execute():
     if request.method == "GET":
         return render_template("admin.html")
