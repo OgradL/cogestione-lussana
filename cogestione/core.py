@@ -1,6 +1,7 @@
 
 from flask import Blueprint, Response, flash, jsonify, render_template, redirect, request, session, url_for
 from flask import json
+from sqlalchemy import func
 
 from cogestione import utils
 from cogestione import db as database
@@ -290,4 +291,19 @@ def profile():
 
 
     return render_template("profile.html", corsi=corsi, utente=user, orari_fasce=utils.orari_fasce)
+
+
+@bp.route("/progresso/", methods=["GET"])
+def progresso():
+
+    corsi_per_fascia = []
+    db = database.get_db()
+
+    for i in range(1, 6):
+
+        cnt = db.session.scalar(db.select(func.count(database.corso.id)).where(database.corso.fascia == i))
+
+        corsi_per_fascia.append(cnt)
+
+    return render_template("progresso.html", fasce=corsi_per_fascia, totale=sum(corsi_per_fascia))
 

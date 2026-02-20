@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %} Progresso creazione corsi {% endblock %}
+
+{% block content %}
+
+    <h3> <strong> PROGRESSO CREAZIONE CORSI</strong> </h3>
+    <br> <br>
+
+    {% for i in range(0, 5) %}
+        <p> <strong>Fascia {{ i+1 }}:</strong> {{fasce[i]}} </p>
+    {% endfor %}
+
+    <br>
+    <p> <strong>Totale:</strong> {{ totale }} </p>
+
+{% endblock %}
