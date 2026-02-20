@@ -27,7 +27,7 @@ def prelogin():
     if email is None:
         return Response("bad request", 400)
 
-    email = email.strip()
+    email = email.strip().lower()
 
     user = db.session.scalar(db.select(database.user).filter_by(email=email))
 
