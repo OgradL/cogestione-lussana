@@ -21,6 +21,10 @@ def execute():
     db = database.get_db()
 
     cmd = ""
+    cmd_id = -1
+
+    if "cmd_id" in dati:
+        cmd_id = dati["cmd_id"]
     if "comando" in dati:
         cmd = dati["comando"]
 
@@ -34,8 +38,11 @@ def execute():
         except Exception as e:
             res = str(e)
 
+    cmd_line = f"{datetime.now().isoformat()} > {cmd}"
 
-    res = f"{datetime.now().isoformat()}:\n\n" + res
+    html_format_cmd = f"<span class=\"cmd_line\" onclick=\"recall_cmd({cmd_id})\">{cmd_line}</span>"
+
+    res = html_format_cmd + "<br>" + res
     return jsonify({"res" : res})
 
 @bp.route("/")

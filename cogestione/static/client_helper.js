@@ -1,17 +1,29 @@
 
+lista_cmd = []
+
 async function send_comando() {
     let input = document.getElementById("comando");
 	let comando = input.value;
-	document.getElementById("result").innerText = "";
+	document.getElementById("result").innerHTML = "<br><br><br>" + document.getElementById("result").innerHTML;
+
+    cmd_id = lista_cmd.length
+    lista_cmd.push(comando)
 
 	const response = await fetch(document.URL, {
 		method:"POST",
-		body: JSON.stringify({"comando" : comando})
+		body: JSON.stringify({"comando" : comando, "cmd_id" : cmd_id})
 	});
 
 	body = await response.json();
 
-	document.getElementById("result").innerText = body.res;
+	document.getElementById("result").innerHTML = body.res + document.getElementById("result").innerHTML;
+}
+
+function recall_cmd(cmd_id) {
+    if (cmd_id >= lista_cmd.length || cmd_id < 0)
+        return;
+
+    document.getElementById("comando").value = lista_cmd[cmd_id];
 }
 
 async function iscrizione(corso_id) {

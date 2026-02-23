@@ -628,3 +628,7 @@ form {
 .checkbox-form:focus + label::before {
     outline: 2px solid #04AA6D;
 }
+
+.cmd_line {
+    background-color: #a0a0a0;
+}
