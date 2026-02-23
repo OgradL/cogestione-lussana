@@ -44,6 +44,9 @@ createApp({
             if (this.results.length == 0)
                 return;
 
+            if (this.selected.find(x => x.email == email))
+                return;
+
             element = this.results[0];
             this.results.forEach((el) => {
                 if (el.email == email)
