@@ -226,22 +226,15 @@ def get_students(query : str):
 
     split_query = [f"%{x}%" for x in query.split(" ") if x != ""]
 
-    users = set()
-    first = True
+    sel = db.select(database.user)
     for qry in split_query:
-        curr_users = db.session.scalars(db.select(database.user).where(database.user.full_name.ilike(qry))).all()
+        sel = sel.where(database.user.full_name.ilike(qry))
+    sel = sel.limit(10)
 
-        users = users.intersection(set(curr_users))
-
-        if first:
-            first = False
-            users = set(curr_users)
-
-    while len(users) > 10:
-        users.pop()
+    result = db.session.scalars(sel)
 
     return jsonify([
-        {"id" : user.id, "email" : user.email, "full_name" : user.full_name} for user in users
+        {"id" : user.id, "email" : user.email, "full_name" : user.full_name} for user in result
     ])
 
 
