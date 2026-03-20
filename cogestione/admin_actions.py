@@ -3,6 +3,7 @@ import os
 import openpyxl
 
 from cogestione import db as database
+from cogestione import utils
 
 
 def carica_utenti(path):
@@ -52,4 +53,3 @@ def carica_prof(path):
             password = ""
         ))
         db.session.commit()
-

@@ -29,8 +29,7 @@
 						{% else %}
 							<th> <a class="iscriviti" href="{{ url_for("core.info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
 							<th> {{ corsi[i]["organizzatori"] }} </th>
-							<th> {{ corsi[i]["aula"] }} </th>
-							<!-- <th> Non organizzi questo corso </th> -->
+                            <th> <button class="sub" onclick="annulla_iscrizione({{corsi[i]["id"]}})"> Annulla </button> </th>
 						{% endif %}
 					{% else %}
                         <!-- <th> <a class="iscriviti" href="{{url_for('core.lista_corsi', n_fascia=i)}}"> Iscriviti! </a> </th> -->

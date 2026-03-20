@@ -71,6 +71,10 @@ class corso(db.Model):
     organizzatori_str : Mapped[str] = mapped_column(String(200))
     note : Mapped[str] = mapped_column(String(1000))
 
+    aula_id : Mapped[int] = mapped_column(Integer, ForeignKey('aula.id', name="fk_aula_id"), nullable=True)
+    aula_fissata : Mapped[bool] = mapped_column(Integer, nullable=True)
+    aula_assegnata = db.relationship("aula", back_populates="corsi_svolti", lazy="joined")
+
     iscrizioni = db.relationship('iscrizione', back_populates="corso")
     organizzatori = db.relationship('organizza', back_populates="corso")
     appello = db.relationship('presenza', back_populates="corso")
@@ -130,3 +134,15 @@ class presenza(db.Model):
     corso_id : Mapped[int] = mapped_column(Integer, ForeignKey('corso.id'))
     corso = db.relationship("corso", back_populates="appello")
 
+class aula(db.Model):
+    __tablename__ = "aula"
+
+    id : Mapped[int] = mapped_column(Integer, primary_key=True)
+    nome : Mapped[str] = mapped_column(String(100))
+    posti_totali : Mapped[int] = mapped_column(Integer)
+
+    corsi_svolti = db.relationship("corso", back_populates="aula_assegnata")
+
+    def __init__(self, nome : str, posti_totali : int):
+        self.nome = nome
+        self.posti_totali = posti_totali

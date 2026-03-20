@@ -35,6 +35,7 @@ def lista_corsi_help():
 
 @bp.route("/iscrizione/", methods=["POST"])
 @utils.login_required
+@utils.admin_access
 def iscrizione():
 
     db = database.get_db()
@@ -74,11 +75,14 @@ def iscrizione():
     corso.posti_occupati += 1
     db.session.commit()
 
+    utils.riassegna_aule()
+
     flash("Iscritto con successo", 'success')
     return Response("Iscritto con successo", 200)
 
 @bp.route("/annulla-iscrizione/", methods=["POST"])
 @utils.login_required
+@utils.admin_access
 def annulla_iscrizione():
 
     db = database.get_db()
@@ -98,6 +102,8 @@ def annulla_iscrizione():
     corso.posti_occupati -= 1
     db.session.commit()
 
+    utils.riassegna_aule()
+
     return Response("Iscrizione rimossa", 200)
 
 @bp.route("/corso/<id_corso>", methods=["GET"])
@@ -113,13 +119,19 @@ def info_corso(id_corso):
 
     corso = db.session.scalar(db.select(database.corso).filter_by(id=id_corso))
     org = db.session.scalar(db.select(database.organizza).where(database.organizza.corso_id == id_corso, database.organizza.user_id == session["user_id"]))
+    isc = db.session.scalar(db.select(database.iscrizione).where(database.iscrizione.corso_id == id_corso, database.iscrizione.user_id == session["user_id"]))
 
-    if org is None and not utils.is_admin(session["email"]):
+    is_organizzatore = org is not None
+    already_subscribed = isc is not None
+
+    if not is_organizzatore and not utils.is_admin(session["email"]):
         return redirect(url_for("core.home"))
 
     referenti = " - ".join(list(map(lambda x : f"{x.user.nome} {x.user.cognome} {x.user.classe}", corso.organizzatori)))
 
-    return render_template("corso.html", corso=corso, referenti=referenti)
+    can_subscribe = utils.is_admin(session["email"]) and not already_subscribed
+
+    return render_template("corso.html", corso=corso, referenti=referenti, allowed_to_subscribe=can_subscribe, is_organizzatore=is_organizzatore, unsubscribe=already_subscribed)
 
 
 @bp.route("/create-corso/", methods=["GET", "POST"])
@@ -299,4 +311,3 @@ def progresso():
         corsi_per_fascia.append(cnt)
 
     return render_template("progresso.html", fasce=corsi_per_fascia, totale=sum(corsi_per_fascia))
-
