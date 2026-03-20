@@ -91,7 +91,7 @@ def riassegna_aule():
             if c.aula_fissata or aule[idx_aule].id in aule_fissate:
                 continue
             c.aula_id = aule[idx_aule].id
-            c.aula = aule[idx_aule].nome
+            # c.aula = aule[idx_aule].nome
             c.posti_totali = aule[idx_aule].posti_totali
             idx_aule += 1
         db.session.commit()
