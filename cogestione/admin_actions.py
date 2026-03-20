@@ -3,7 +3,30 @@ import os
 import openpyxl
 
 from cogestione import db as database
-from cogestione import utils
+
+
+def carica_aule(path):
+
+    if not os.path.exists(path):
+        print("path does not exists")
+        return
+
+    wb = openpyxl.load_workbook(path)
+    ws = wb.active
+
+    if ws is None:
+        return
+
+    db = database.get_db()
+    for value in ws.iter_rows(min_row=2):
+        nome = f"Edificio {value[0].value}, piano {value[1].value}, aula {value[2].value}"
+        posti = int(str(value[3].value))
+        db.session.add(database.aula(
+            nome = nome,
+            posti_totali=posti,
+        ))
+        db.session.commit()
+
 
 
 def carica_utenti(path):
