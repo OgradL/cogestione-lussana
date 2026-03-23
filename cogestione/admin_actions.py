@@ -1,10 +1,11 @@
 
 import os
-import openpyxl
-from os import path
 from datetime import datetime
-from xlsxwriter import Workbook
+from os import path
+from random import choice, randint
 
+import openpyxl
+from xlsxwriter import Workbook
 
 from cogestione import db as database
 
@@ -149,3 +150,51 @@ def students_sheet():
     create_xlsx_file(file_name, headers, items)
 
     print("Done!")
+
+
+def randomizzato(lista : list, func):
+    if len(lista) == 0:
+        raise BaseException("List is empty")
+
+    totale = sum(list(map(func, lista)))
+    n = randint(0, totale+1)
+
+    contatore = 0
+    for x in lista:
+        contatore += func(x)
+        if contatore >= n:
+            return x
+    return choice(lista)
+
+def forza_iscrizioni():
+
+    db = database.get_db()
+
+    utenti = db.session.scalars(db.select(database.user)).all()
+
+    for i in range(1, 6):
+        corsi = list(db.session.scalars(db.select(database.corso).where(database.corso.fascia == i, database.corso.posti_occupati != database.corso.posti_totali)).all())
+        print(f"fascia {i}:")
+
+        for user in utenti:
+
+            if user.classe == "": # docente
+                continue
+
+            isc = db.session.scalar(db.select(database.iscrizione).join(database.corso).join(database.user).where(database.corso.fascia == i, database.user.id == user.id))
+            org = db.session.scalar(db.select(database.organizza).join(database.corso).join(database.user).where(database.corso.fascia == i, database.user.id == user.id))
+
+            if isc is None and org is None:
+                corso = randomizzato(corsi, lambda x : x.posti_totali - x.posti_occupati)
+
+                db.session.add(database.iscrizione(user_id = user.id, corso_id = corso.id))
+                corso.posti_occupati += 1
+
+                if corso.posti_occupati == corso.posti_totali:
+                    corsi.remove(corso)
+
+            print(f"user {user.id} / {i}")
+
+        db.session.commit()
+
+    print("Fatto!")
