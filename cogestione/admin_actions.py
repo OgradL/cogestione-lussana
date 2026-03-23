@@ -1,6 +1,10 @@
 
 import os
 import openpyxl
+from os import path
+from datetime import datetime
+from xlsxwriter import Workbook
+
 
 from cogestione import db as database
 
@@ -76,3 +80,72 @@ def carica_prof(path):
             password = ""
         ))
         db.session.commit()
+
+
+def create_xlsx_file(file_path: str, headers: dict, items: list):
+    with Workbook(file_path) as workbook:
+        worksheet = workbook.add_worksheet()
+        worksheet.write_row(row=0, col=0, data=headers.values())
+        header_keys = list(headers.keys())
+        for index, item in enumerate(items):
+            row = map(lambda field_id: item.get(field_id, ''), header_keys)
+            worksheet.write_row(row=index + 1, col=0, data=row)
+
+def students_sheet():
+    date = str(datetime.now().time())
+    date = date[:date.find('.')]
+
+    dir_path = path.join(os.path.dirname(__file__), "output-data")
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+    file_name = path.join(os.path.dirname(__file__), "output-data", "dati-finali" + ".xlsx")
+    # file_name = "dati-" + date + ".xlsx"
+
+    headers = {
+        "nome" : "Nome",
+        "cognome" : "Cognome",
+        "classe" : "Classe",
+        "titolo_corso" : "Titolo Corso",
+        "aula" : "Aula",
+        "fascia" : "Fascia",
+        "organizza" : "Organizza",
+    }
+
+    db = database.get_db()
+
+    items = []
+    iscrizioni = db.session.scalars(db.select(database.iscrizione)).all()
+    organizzazioni = db.session.scalars(db.select(database.organizza)).all()
+
+
+    for iscrizione in iscrizioni:
+        if iscrizione.user is None:
+            continue
+        items.append({
+            "nome" : iscrizione.user.nome,
+            "cognome" : iscrizione.user.cognome,
+            "classe" : iscrizione.user.classe,
+            "titolo_corso" : iscrizione.corso.titolo,
+            "aula" : iscrizione.corso.aula,
+            "fascia" : iscrizione.corso.fascia,
+            "organizza" : ""
+        })
+
+    for iscrizione in organizzazioni:
+        if iscrizione.user is None:
+            continue
+        items.append({
+            "nome" : iscrizione.user.nome,
+            "cognome" : iscrizione.user.cognome,
+            "classe" : iscrizione.user.classe,
+            "titolo_corso" : iscrizione.corso.titolo,
+            "aula" : iscrizione.corso.aula,
+            "fascia" : iscrizione.corso.fascia,
+            "organizza" : "Organizzatore"
+        })
+
+
+    create_xlsx_file(file_name, headers, items)
+
+    print("Done!")
