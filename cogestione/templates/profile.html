@@ -21,7 +21,8 @@
 						{% if corsi[i]["organizzato"] %}
 							<th> <a class="iscriviti" href="{{ url_for("core.info_corso", id_corso=corsi[i]["id"]) }}"> {{ corsi[i]["titolo"] }} </a> </th>
 							<th> {{ corsi[i]["organizzatori"] }} </th>
-                            <th> <a class="iscriviti" href="{{ url_for("core.delete_corso", id=corsi[i]["id"]) }}"> Elimina corso </a> </th>
+                            <!-- <th> <a class="iscriviti" href="{{ url_for("core.delete_corso", id=corsi[i]["id"]) }}"> Elimina corso </a> </th> -->
+                            <th> </th>
 							<!-- <th> {{ corsi[i]["aula"] }} </th> -->
 							<!-- <th>
 								<a class="iscriviti" href="{#url_for("core.appello", id_corso=corsi[i]["id"]#}}"> APPELLO CORSO </a>
@@ -34,7 +35,8 @@
 					{% else %}
                         <!-- <th> <a class="iscriviti" href="{{url_for('core.lista_corsi', n_fascia=i)}}"> Iscriviti! </a> </th> -->
                         <th> </th>
-                        <th> <a class="iscriviti" href="{{url_for('core.create_corso')}}"> Crea un corso! </a> </th>
+                        <th> </th>
+                        <!-- <th> <a class="iscriviti" href="{{url_for('core.create_corso')}}"> Crea un corso! </a> </th> -->
 						<th> </th>
 						<!-- <th> </th> -->
 					{% endif %}

@@ -138,7 +138,9 @@ def info_corso(id_corso):
 @utils.login_required
 def create_corso():
     if request.method == "GET":
+        return redirect(url_for("core.home"))
         return render_template("create-corso.html", orario_fascia=utils.orari_fasce)
+    return Response("non si possono più fare corsi", 405)
 
     db = database.get_db()
 
@@ -205,6 +207,7 @@ def create_corso():
 @bp.route("/delete-corso/<id>", methods=["GET"])
 @utils.login_required
 def delete_corso(id):
+    return redirect(url_for("core.home"))
 
     try:
         id = int(id)

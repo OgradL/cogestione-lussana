@@ -11,18 +11,18 @@
 
         {% block extra_head %}
         {% endblock %}
-		
+
 	</head>
 	<body>
 		<div class="topnav">
             <div class="title">
-                <strong class="Nav"> 
+                <strong class="Nav">
                     <a class="null" href="{{url_for('core.home')}}">COGESTIONE <span style="color: #00C199;">LUSSANA</span> 2026 <img class="logo" src="{{url_for('static', filename='LogoLussana-1.png')}}"></a>
                 </strong>
             </div>
             <div class="links">
 
-                <a href="{{url_for('core.create_corso')}}">CREA CORSO</a>
+                <!-- <a href="{{url_for('core.create_corso')}}">CREA CORSO</a> -->
                 {% if session["logged"] %}
                     <a href="{{url_for('core.profile')}}">PROFILO</a>
                 {% else %}
@@ -35,12 +35,12 @@
             </div>
 		</div>
 
-		
+
 		<div class="content">
 			<div class="flashed-messages">
 				{% with messages = get_flashed_messages(with_categories=true) %}
 					{% if messages %}
-						{% for category, message in messages %}	
+						{% for category, message in messages %}
 							<div class="alert alert-{{ category }}">
 								<p class="alert-text"> {{ message }} </p>
 								<button type="button" class="close alert-dismiss" onclick="del_flashed_message(this)">
@@ -56,6 +56,6 @@
 			{% endblock %}
 		</div>
 
-		
+
 	</body>
 </html>
