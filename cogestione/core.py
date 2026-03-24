@@ -13,7 +13,6 @@ def home():
     return render_template("homepage.html")
 
 @bp.route("/lista-corsi/<n_fascia>", methods=["GET"])
-@utils.admin_access
 def lista_corsi(n_fascia):
     try:
         n_fascia = int(n_fascia)
