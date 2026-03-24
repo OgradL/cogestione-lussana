@@ -75,7 +75,13 @@ def generate_auth_code(len : int = 6):
 
 def riassegna_aule():
 
-    aule_spente = [{}, {}, {}, {}, {}, {}]
+    aule_spente = [{},
+                   {70, 74, 76, 78, 79, 80, 81},
+                   {70, 79, 80, 81},
+                   {70, 76, 77, 78},
+                   {70, 74, 77, 78, 80},
+                   {71, 72, 76, 77, 78, 79, 80, 81}]
+
     db = database.get_db()
     aule = db.session.scalars(db.select(database.aula).order_by(database.aula.posti_totali.desc())).all()
     for fascia in range(1, 6):
@@ -93,7 +99,7 @@ def riassegna_aule():
                 c.posti_totali = c.aula_assegnata.posti_totali
                 continue
 
-            while idx_aule < len(aule) and (aule[idx_aule].id in aule_fissate or aule[idx_aule].id in aule_spente[fascia]):
+            while idx_aule < len(aule) and ((aule[idx_aule].id in aule_fissate) or (aule[idx_aule].id in aule_spente[fascia])):
                 idx_aule += 1
 
             if idx_aule >= len(aule):
