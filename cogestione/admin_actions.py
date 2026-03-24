@@ -9,6 +9,55 @@ from xlsxwriter import Workbook
 
 from cogestione import db as database
 
+def delete_corso(id):
+    try:
+        id = int(id)
+    except ValueError:
+        print("not int")
+
+    db = database.get_db()
+
+    corso = db.session.scalar(db.select(database.corso).where(database.corso.id == id))
+    organizzazioni = db.session.scalars(db.select(database.organizza).join(database.corso).where(database.corso.id == id)).all()
+
+    if corso is None:
+        print("not ok")
+
+    for org in organizzazioni:
+        db.session.delete(org)
+    db.session.delete(corso)
+    db.session.commit()
+
+    print("ok")
+
+
+
+def fissa_aula(id_corso, id_aula):
+    db = database.get_db()
+    id_corso = int(id_corso)
+    id_aula = int(id_aula)
+
+    corso = db.session.scalar(db.select(database.corso).where(database.corso.id == id_corso))
+
+    corso.aula_id = id_aula
+    corso.aula_fissata = True
+
+    db.session.commit()
+
+    print("ok")
+
+
+def add_aula(nome, posti):
+    db = database.get_db()
+
+    db.session.add(database.aula(
+        nome = nome,
+        posti_totali = posti,
+    ))
+    db.session.commit()
+
+    print("ok")
+
 
 def carica_aule(path):
 
@@ -28,7 +77,7 @@ def carica_aule(path):
         posti = int(str(value[3].value))
         db.session.add(database.aula(
             nome = nome,
-            posti_totali=posti,
+            posti_totali = posti,
         ))
         db.session.commit()
 
