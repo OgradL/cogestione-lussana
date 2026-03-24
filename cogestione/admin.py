@@ -6,7 +6,7 @@ from datetime import datetime
 
 from cogestione import utils
 from cogestione import db as database
-from cogestione.admin_actions import carica_utenti, carica_prof, carica_aule, delete_corso, students_sheet, forza_iscrizioni, add_aula, forza_iscrizioni, delete_corso, create_corso, fissa_aula
+from cogestione.admin_actions import carica_utenti, carica_prof, carica_aule, delete_corso, students_sheet, forza_iscrizioni, add_aula, forza_iscrizioni, delete_corso, create_corso, fissa_aula, fix_emails
 
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
