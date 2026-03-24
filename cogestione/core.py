@@ -35,7 +35,6 @@ def lista_corsi_help():
 
 @bp.route("/iscrizione/", methods=["POST"])
 @utils.login_required
-@utils.admin_access
 def iscrizione():
 
     db = database.get_db()
@@ -82,7 +81,6 @@ def iscrizione():
 
 @bp.route("/annulla-iscrizione/", methods=["POST"])
 @utils.login_required
-@utils.admin_access
 def annulla_iscrizione():
 
     db = database.get_db()
@@ -124,12 +122,9 @@ def info_corso(id_corso):
     is_organizzatore = org is not None
     already_subscribed = isc is not None
 
-    if not is_organizzatore and not utils.is_admin(session["email"]):
-        return redirect(url_for("core.home"))
-
     referenti = " - ".join(list(map(lambda x : f"{x.user.nome} {x.user.cognome} {x.user.classe}", corso.organizzatori)))
 
-    can_subscribe = utils.is_admin(session["email"]) and not already_subscribed
+    can_subscribe = not already_subscribed
 
     return render_template("corso.html", corso=corso, referenti=referenti, allowed_to_subscribe=can_subscribe, is_organizzatore=is_organizzatore, unsubscribe=already_subscribed)
 
