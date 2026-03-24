@@ -72,8 +72,8 @@ def create_corso(titolo, descrizione, organizzatori, note, fascia):
             cnt_ref += 1
             db.session.add(organizza)
 
-        if cnt_ref == 0:
-            db.session.delete(corso)
+        # if cnt_ref == 0:
+        #     db.session.delete(corso)
 
 
     db.session.commit()
