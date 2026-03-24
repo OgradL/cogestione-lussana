@@ -2,6 +2,8 @@
 from flask import Blueprint, Response, flash, jsonify, render_template, redirect, request, session, url_for
 from flask import json
 from sqlalchemy import func
+import os
+import openpyxl
 
 from cogestione import utils
 from cogestione import db as database
@@ -308,3 +310,66 @@ def progresso():
         corsi_per_fascia.append(cnt)
 
     return render_template("progresso.html", fasce=corsi_per_fascia, totale=sum(corsi_per_fascia))
+
+@bp.route("/report/", methods=["GET"])
+def report():
+    dati = {}
+    info_classe = {}
+
+    db = database.get_db()
+
+    lista_classi = list(set(db.session.scalars(db.select(database.user.classe)).all()))
+    lista_classi.sort()
+
+
+    sel = db.select(database.iscrizione)
+    iscrizioni = db.session.scalars(sel).all()
+
+    sel = db.select(database.organizza)
+    organizzazioni = db.session.scalars(sel).all()
+
+    sel = db.select(database.user)
+    utenti = db.session.scalars(sel).all()
+
+    for classe in lista_classi:
+        dati.setdefault(classe, dict())
+
+    for iscrizione in iscrizioni:
+        if iscrizione.user is None or iscrizione.corso is None:
+            continue
+        if iscrizione.corso.id == 44:
+            dati.setdefault(iscrizione.user.classe, dict())
+            dati[iscrizione.user.classe].setdefault(iscrizione.corso.fascia+1, 0)
+            dati[iscrizione.user.classe][iscrizione.corso.fascia+1] += 1
+
+        dati.setdefault(iscrizione.user.classe, dict())
+        dati[iscrizione.user.classe].setdefault(iscrizione.corso.fascia, 0)
+        dati[iscrizione.user.classe][iscrizione.corso.fascia] += 1
+
+    for organizza in organizzazioni:
+        if organizza.user is None:
+            continue
+        if organizza.corso.id == 44:
+            dati.setdefault(organizza.user.classe, dict())
+            dati[organizza.user.classe].setdefault(organizza.corso.fascia+1, 0)
+            dati[organizza.user.classe][organizza.corso.fascia+1] += 1
+
+        dati.setdefault(organizza.user.classe, dict())
+        dati[organizza.user.classe].setdefault(organizza.corso.fascia, 0)
+        dati[organizza.user.classe][organizza.corso.fascia] += 1
+
+    for utente in utenti:
+        info_classe.setdefault(utente.classe, 0)
+        info_classe[utente.classe] += 1
+
+    for classe in lista_classi:
+        dati.setdefault(classe, dict())
+        d = dati[classe]
+        # print(classe, d)
+        for i in range(1, 6):
+            dati[classe].setdefault(i, 0)
+            dati[classe][i] = round(dati[classe][i] / info_classe[classe] * 100)
+
+
+
+    return render_template("report.html", dati=dati)
