@@ -74,6 +74,8 @@ def generate_auth_code(len : int = 6):
     return "".join([str(randint(0, 9)) for _ in range(len)])
 
 def riassegna_aule():
+
+    aule_spente = [{}, {}, {}, {}, {}, {}]
     db = database.get_db()
     aule = db.session.scalars(db.select(database.aula).order_by(database.aula.posti_totali.desc())).all()
     for fascia in range(1, 6):
@@ -89,6 +91,10 @@ def riassegna_aule():
             if idx_aule >= len(aule):
                 break
             if c.aula_fissata or aule[idx_aule].id in aule_fissate:
+                idx_aule += 1
+                continue
+            if aule[idx_aule].id in aule_spente[fascia]:
+                idx_aule += 1
                 continue
             c.aula_id = aule[idx_aule].id
             # c.aula = aule[idx_aule].nome
