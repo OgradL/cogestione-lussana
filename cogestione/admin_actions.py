@@ -297,3 +297,18 @@ def forza_iscrizioni():
         db.session.commit()
 
     print("Fatto!")
+
+
+def fix_emails(userid, email):
+    db = database.get_db()
+    userid = int(userid)
+
+    sel = db.select(database.user).where(database.user.id == userid)
+    u = db.session.scalar(sel)
+    if u is None:
+        print("not ok")
+        return
+
+    u.email = email
+    db.session.commit()
+    print("ok")
