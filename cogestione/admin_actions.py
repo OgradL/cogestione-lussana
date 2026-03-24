@@ -30,6 +30,56 @@ def delete_corso(id):
 
     print("ok")
 
+def create_corso(titolo, descrizione, organizzatori, note, fascia):
+    fascia = int(fascia)
+
+    db = database.get_db()
+
+    fascia1 = fascia == 1
+    fascia2 = fascia == 2
+    fascia3 = fascia == 3
+    fascia4 = fascia == 4
+    fascia5 = fascia == 5
+
+    fasce = [fascia1, fascia2, fascia3, fascia4, fascia5]
+
+    fasce = [i+1 for i, el in enumerate(fasce) if el]
+
+    if len(fasce) == 0:
+        print("no fascia")
+        return
+
+    organizzatori_str = organizzatori
+    organizzatori = [x for x in organizzatori.split(";") if x not in ["", None]]
+    organizzatori = list(set(organizzatori))
+
+    for f in fasce:
+        corso = database.corso(titolo, descrizione, 30, 0, "non ancora assegnata", f, organizzatori_str, note)
+        db.session.add(corso)
+
+        cnt_ref = 0
+        for org_email in organizzatori:
+            user_org = db.session.scalar(db.select(database.user).filter_by(email = org_email))
+            if user_org is None:
+                continue
+
+            prv_org = db.session.scalars(db.select(database.organizza).join(database.user).join(database.corso).where(database.user.id == user_org.id, database.corso.fascia == f)).all()
+
+            if len(prv_org) != 0:
+                continue
+
+            organizza = database.organizza(user_org.id, corso.id)
+            cnt_ref += 1
+            db.session.add(organizza)
+
+        if cnt_ref == 0:
+            db.session.delete(corso)
+
+
+    db.session.commit()
+
+    print("ok")
+
 
 
 def fissa_aula(id_corso, id_aula):
