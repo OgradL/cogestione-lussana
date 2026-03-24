@@ -337,10 +337,6 @@ def report():
     for iscrizione in iscrizioni:
         if iscrizione.user is None or iscrizione.corso is None:
             continue
-        if iscrizione.corso.id == 44:
-            dati.setdefault(iscrizione.user.classe, dict())
-            dati[iscrizione.user.classe].setdefault(iscrizione.corso.fascia+1, 0)
-            dati[iscrizione.user.classe][iscrizione.corso.fascia+1] += 1
 
         dati.setdefault(iscrizione.user.classe, dict())
         dati[iscrizione.user.classe].setdefault(iscrizione.corso.fascia, 0)
@@ -349,10 +345,6 @@ def report():
     for organizza in organizzazioni:
         if organizza.user is None:
             continue
-        if organizza.corso.id == 44:
-            dati.setdefault(organizza.user.classe, dict())
-            dati[organizza.user.classe].setdefault(organizza.corso.fascia+1, 0)
-            dati[organizza.user.classe][organizza.corso.fascia+1] += 1
 
         dati.setdefault(organizza.user.classe, dict())
         dati[organizza.user.classe].setdefault(organizza.corso.fascia, 0)
@@ -364,12 +356,8 @@ def report():
 
     for classe in lista_classi:
         dati.setdefault(classe, dict())
-        d = dati[classe]
-        # print(classe, d)
         for i in range(1, 6):
             dati[classe].setdefault(i, 0)
             dati[classe][i] = round(dati[classe][i] / info_classe[classe] * 100)
-
-
 
     return render_template("report.html", dati=dati)
