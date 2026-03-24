@@ -88,16 +88,19 @@ def riassegna_aule():
 
         idx_aule = 0
         for c in corsi:
+            if c.aula_fissata:
+                c.aula = c.aula_assegnata.nome
+                c.posti_totali = c.aula_assegnata.posti_totali
+                continue
+
+            while idx_aule < len(aule) and (aule[idx_aule].id in aule_fissate or aule[idx_aule].id in aule_spente[fascia]):
+                idx_aule += 1
+
             if idx_aule >= len(aule):
                 break
-            if c.aula_fissata or aule[idx_aule].id in aule_fissate:
-                idx_aule += 1
-                continue
-            if aule[idx_aule].id in aule_spente[fascia]:
-                idx_aule += 1
-                continue
+
             c.aula_id = aule[idx_aule].id
-            # c.aula = aule[idx_aule].nome
+            c.aula = aule[idx_aule].nome
             c.posti_totali = aule[idx_aule].posti_totali
             idx_aule += 1
         db.session.commit()
