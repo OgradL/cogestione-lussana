@@ -2,8 +2,6 @@
 from flask import Blueprint, Response, flash, jsonify, render_template, redirect, request, session, url_for
 from flask import json
 from sqlalchemy import func
-import os
-import openpyxl
 
 from cogestione import utils
 from cogestione import db as database
@@ -37,6 +35,7 @@ def lista_corsi_help():
 @bp.route("/iscrizione/", methods=["POST"])
 @utils.login_required
 def iscrizione():
+    return Response("Iscrizioni chiuse", 400)
 
     db = database.get_db()
 
@@ -83,6 +82,7 @@ def iscrizione():
 @bp.route("/annulla-iscrizione/", methods=["POST"])
 @utils.login_required
 def annulla_iscrizione():
+    return Response("Iscrizioni chiuse", 400)
 
     db = database.get_db()
 

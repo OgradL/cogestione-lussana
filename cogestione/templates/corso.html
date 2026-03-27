@@ -17,20 +17,4 @@
 		<li> ORGANIZZATORI INTERNI: {{ referenti }} </li>
 	</ul>
 
-    {% if not is_organizzatore %}
-        {% if allowed_to_subscribe %}
-            <button onclick="iscrizione({{ corso.id }})" class="sub"> <b>ISCRIVITI AL CORSO!!!</b> </button>
-        {% else %}
-            {% if unsubscribe %}
-                <th> <button class="sub" onclick="annulla_iscrizione({{ corso.id }})"> <b>ANNULLA ISCRIZIONE</b></button> </th>
-            {% else %}
-                <u>
-                    <a href="{{url_for('auth.login')}}" class="iscriviti"> Devi fare il login prima di iscriverti! </a>
-                </u>
-            {% endif %}
-        {% endif%}
-    {% endif %}
-
-
-
 {% endblock %}
