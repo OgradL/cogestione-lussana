@@ -191,16 +191,11 @@ def create_xlsx_file(file_path: str, headers: dict, items: list):
             row = map(lambda field_id: item.get(field_id, ''), header_keys)
             worksheet.write_row(row=index + 1, col=0, data=row)
 
-def students_sheet():
-    date = str(datetime.now().time())
-    date = date[:date.find('.')]
-
+def students_sheet(nome_file):
     dir_path = path.join(os.path.dirname(__file__), "output-data")
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
+    os.makedirs(dir_path, exist_ok=True)
 
-    file_name = path.join(os.path.dirname(__file__), "output-data", "dati-finali" + ".xlsx")
-    # file_name = "dati-" + date + ".xlsx"
+    file_name = path.join(os.path.dirname(__file__), "output-data", nome_file)
 
     headers = {
         "nome" : "Nome",
@@ -245,6 +240,37 @@ def students_sheet():
             "organizza" : "Organizzatore"
         })
 
+
+    create_xlsx_file(file_name, headers, items)
+
+    print("Done!")
+
+
+def corsi_sheet(nome_file):
+    dir_path = path.join(os.path.dirname(__file__), "output-data")
+    os.makedirs(dir_path, exist_ok=True)
+
+    file_name = path.join(os.path.dirname(__file__), "output-data", nome_file)
+
+    headers = {
+        "id" : "Id",
+        "titolo_corso" : "Titolo Corso",
+        "aula" : "Aula",
+        "fascia" : "Fascia",
+    }
+
+    db = database.get_db()
+
+    items = []
+    corsi = db.session.scalars(db.select(database.corso)).all()
+
+    for c in corsi:
+        items.append({
+            "id" : c.id,
+            "titolo_corso" : c.titolo,
+            "aula" : c.aula,
+            "fascia" : c.fascia,
+        })
 
     create_xlsx_file(file_name, headers, items)
 
@@ -319,9 +345,10 @@ def forza_iscrizioni():
     utenti = db.session.scalars(db.select(database.user)).all()
 
     for i in range(1, 6):
-        corsi = list(db.session.scalars(db.select(database.corso).where(database.corso.fascia == i, database.corso.posti_occupati != database.corso.posti_totali)).all())
+        corsi = list(db.session.scalars(db.select(database.corso).where(database.corso.fascia == i, database.corso.posti_occupati < database.corso.posti_totali)).all())
         print(f"fascia {i}:")
 
+        over = 0
         for user in utenti:
 
             if user.classe == "": # docente
@@ -331,16 +358,24 @@ def forza_iscrizioni():
             org = db.session.scalar(db.select(database.organizza).join(database.corso).join(database.user).where(database.corso.fascia == i, database.user.id == user.id))
 
             if isc is None and org is None:
-                corso = randomizzato(corsi, lambda x : x.posti_totali - x.posti_occupati)
+                if len(corsi) == 0:
+                    corso = randomizzato(list(db.session.scalars(db.select(database.corso).where(database.corso.fascia == i)).all()), lambda x : 1)
+                    db.session.add(database.iscrizione(user.id, corso.id))
+                    corso.posti_occupati += 1
 
-                db.session.add(database.iscrizione(user_id = user.id, corso_id = corso.id))
-                corso.posti_occupati += 1
+                    over += 1
+                else:
+                    corso = randomizzato(corsi, lambda x : x.posti_totali - x.posti_occupati)
 
-                if corso.posti_occupati >= corso.posti_totali:
-                    corsi.remove(corso)
+                    db.session.add(database.iscrizione(user.id, corso.id))
+                    corso.posti_occupati += 1
+
+                    if corso.posti_occupati >= corso.posti_totali:
+                        corsi.remove(corso)
 
             print(f"user {user.id} / {i}")
 
+        print(f"overbooking {i}: {over}")
         db.session.commit()
 
     print("Fatto!")
