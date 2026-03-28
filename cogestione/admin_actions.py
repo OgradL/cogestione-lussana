@@ -277,6 +277,48 @@ def riassegna_posti_occupati():
 
     db.session.commit()
 
+
+def assegna_sorveglianza(fascia : int, emails : str):
+
+    # corso = database.corso(f"sorveglianza {fascia}", "sorveglianza", 100, 0, "", fascia, "", "")
+
+    users = emails.split(";")
+    db = database.get_db()
+
+    for u in users:
+        email = u
+
+        user = db.session.scalars(db.select(database.user).where(database.user.email == email)).first()
+
+        if user is None:
+            print(email)
+            continue
+
+        iscrizioni = db.session.scalar(db.select(database.iscrizione).join(database.user).join(database.corso).where(database.user.id == user.id, database.corso.fascia == fascia))
+        organizzazioni = db.session.scalar(db.select(database.organizza).join(database.user).join(database.corso).where(database.user.id == user.id, database.corso.fascia == fascia))
+        # print(user)
+        # print(iscrizioni, organizzazioni)
+        # print([x.corsoref for x in iscrizioni])
+        # print(user.id)
+
+        print(email, iscrizioni is None or organizzazioni is None)
+
+        # for x in iscrizioni:
+        #     db.session.delete(x)
+
+        # db.session.commit()
+        # fasce_iscrizioni = [x.corsoref.fascia for x in iscrizioni if x.corsoref is not None]
+        # fasce_organizzazioni = [x.corsoref.fascia for x in organizzazioni if x.corsoref is not None]
+
+        # if i+1 in fasce_iscrizioni or i+1 in fasce_organizzazioni:
+        #     # print(f"user {user.id} is already busy in fascia {i}")
+        #     continue
+
+        # db.session.add(database.iscrizione(user.id, corso.id))
+        # db.session.commit()
+
+    print("ok!")
+
 def forza_iscrizioni():
 
     db = database.get_db()
