@@ -301,7 +301,8 @@ def assegna_sorveglianza(fascia : int, emails : str):
         # print([x.corsoref for x in iscrizioni])
         # print(user.id)
 
-        print(email, iscrizioni is None or organizzazioni is None)
+        print(email, iscrizioni is None and organizzazioni is None)
+        print("<br>")
 
         # for x in iscrizioni:
         #     db.session.delete(x)
