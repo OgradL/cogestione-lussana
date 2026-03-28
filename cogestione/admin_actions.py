@@ -265,6 +265,18 @@ def randomizzato(lista : list, func):
             return x
     return choice(lista)
 
+def riassegna_posti_occupati():
+
+    db = database.get_db()
+
+    corsi = db.session.scalars(db.select(database.corso)).all()
+
+    for corso in corsi:
+        cnt = len(db.session.scalars(db.select(database.iscrizione).where(database.iscrizione.corso_id == corso.id)).all())
+        corso.posti_occupati = cnt
+
+    db.session.commit()
+
 def forza_iscrizioni():
 
     db = database.get_db()
@@ -289,7 +301,7 @@ def forza_iscrizioni():
                 db.session.add(database.iscrizione(user_id = user.id, corso_id = corso.id))
                 corso.posti_occupati += 1
 
-                if corso.posti_occupati == corso.posti_totali:
+                if corso.posti_occupati >= corso.posti_totali:
                     corsi.remove(corso)
 
             print(f"user {user.id} / {i}")
