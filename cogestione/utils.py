@@ -80,7 +80,7 @@ def riassegna_aule():
                    {70, 79, 80, 81, 82},
                    {70, 76, 77, 78},
                    {70, 74, 77, 78, 80},
-                   {71, 72, 76, 77, 78, 79, 80, 81, 82}]
+                   {71, 72, 76, 77, 78, 79, 80, 81, 82, 83}]
 
     db = database.get_db()
     aule = db.session.scalars(db.select(database.aula).order_by(database.aula.posti_totali.desc())).all()
