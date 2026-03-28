@@ -282,8 +282,12 @@ def assegna_sorveglianza(fascia : int, emails : str):
 
     corso = database.corso(f"sorveglianza {fascia}", "sorveglianza", 100, 0, "", fascia, "", "")
 
+
     users = emails.split(";")
     db = database.get_db()
+
+    db.session.add(corso)
+    db.session.commit()
 
     for u in users:
         email = u
