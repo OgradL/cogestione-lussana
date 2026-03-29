@@ -202,6 +202,7 @@ def students_sheet(nome_file):
         "cognome" : "Cognome",
         "classe" : "Classe",
         "titolo_corso" : "Titolo Corso",
+        "id_corso" : "Id Corso",
         "aula" : "Aula",
         "fascia" : "Fascia",
         "organizza" : "Organizza",
@@ -222,6 +223,7 @@ def students_sheet(nome_file):
             "cognome" : iscrizione.user.cognome,
             "classe" : iscrizione.user.classe,
             "titolo_corso" : iscrizione.corso.titolo,
+            "id_corso" : iscrizione.corso.id,
             "aula" : iscrizione.corso.aula,
             "fascia" : iscrizione.corso.fascia,
             "organizza" : ""
@@ -235,6 +237,7 @@ def students_sheet(nome_file):
             "cognome" : iscrizione.user.cognome,
             "classe" : iscrizione.user.classe,
             "titolo_corso" : iscrizione.corso.titolo,
+            "id_corso" : iscrizione.corso.id,
             "aula" : iscrizione.corso.aula,
             "fascia" : iscrizione.corso.fascia,
             "organizza" : "Organizzatore"
