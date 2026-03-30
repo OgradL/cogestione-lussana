@@ -76,11 +76,11 @@ def generate_auth_code(len : int = 6):
 def riassegna_aule():
 
     aule_spente = [{},
-                   {70, 74, 76, 78, 79, 80, 81, 82},
-                   {70, 79, 80, 81, 82},
+                   {70, 74, 76, 78, 79, 80, 81, 82, 84},
+                   {70, 79, 80, 81, 82, 84},
                    {70, 76, 77, 78, 80},
                    {70, 74, 77, 78, 80},
-                   {71, 72, 76, 77, 78, 79, 80, 81, 82, 83}]
+                   {71, 72, 76, 77, 78, 79, 80, 81, 82, 83, 84}]
 
     db = database.get_db()
     aule = db.session.scalars(db.select(database.aula).order_by(database.aula.posti_totali.desc())).all()
