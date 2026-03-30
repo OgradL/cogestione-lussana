@@ -6,9 +6,25 @@
 <h3> <strong> admin </strong> </h3>
 <br> <br>
 <form style="max-width:1000000px" onsubmit="return false;">
-    <input class="inputform" type="text" name="cmd" id="comando" placeholder="cmd">
+    <!-- <input class="inputform" type="text" name="cmd" id="comando" placeholder="cmd"> -->
+    <textarea type="text" id="comando" name="cmd" class="inputform input-textarea" placeholder="cmd" required rows="1"></textarea>
     <button class="outline_md_btn" onclick="send_comando()"> submit </button>
 </form>
 <p style="background-color: #e0e0e0; padding: 5px" id="result"></p>
+
+<script>
+    const textArea = document.getElementsByClassName('input-textarea');
+
+    [].forEach.call(textArea, (textArea) => {
+        textArea.style.height = textArea.scrollHeight + "px";
+        textArea.style.overflowY = "hidden";
+
+        textArea.addEventListener("input", function () {
+            this.style.height = "auto";
+            this.style.height = this.scrollHeight + "px";
+        });
+    })
+
+</script>
 
 {% endblock %}
